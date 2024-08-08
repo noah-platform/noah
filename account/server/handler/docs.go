@@ -24,7 +24,7 @@ func (s *Server) Docs(c echo.Context) error {
 	})
 
 	if err != nil {
-		log.Error().Err(err).Msg("failed to serve docs")
+		log.Error().Err(err).Msg("[Server.Docs] failed to serve docs")
 
 		return response.Error(c, http.StatusInternalServerError, "failed to serve docs")
 	}

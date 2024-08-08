@@ -25,7 +25,7 @@ func (s *Server) InternalGetAccount(c echo.Context) error {
 
 	userID := c.Param("userID")
 
-	l := log.With().Str("requestID", c.Response().Header().Get(echo.HeaderXRequestID)).Str("userID", userID).Logger()
+	l := log.With().Str("requestId", c.Response().Header().Get(echo.HeaderXRequestID)).Str("userId", userID).Logger()
 	ctx = l.WithContext(ctx)
 
 	account, err := s.service.GetAccount(ctx, userID)

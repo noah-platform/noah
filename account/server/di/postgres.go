@@ -16,13 +16,13 @@ func newPgxClient(cfg PostgresConfig) *pgxpool.Pool {
 
 	pool, err := pgxpool.New(ctx, cfg.DatabaseUrl)
 	if err != nil {
-		log.Panic().Err(err).Msg("failed to connect to postgres")
+		log.Fatal().Err(err).Msg("failed to connect to postgres")
 	}
 	// TODO: Close connection pool on shutdown
 	// defer pool.Close()
 
 	if err := pool.Ping(ctx); err != nil {
-		log.Panic().Err(err).Msg("failed to ping postgres")
+		log.Fatal().Err(err).Msg("failed to ping postgres")
 	}
 
 	return pool

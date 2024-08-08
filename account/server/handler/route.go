@@ -14,6 +14,7 @@ import (
 
 func (s *Server) Start() {
 	e := echo.New()
+	e.HideBanner = true
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
@@ -25,7 +26,6 @@ func (s *Server) Start() {
 	e.GET("/internal/v1/accounts/:userID", s.InternalGetAccount)
 
 	s.RunWithGracefulShutdown(e)
-
 }
 
 func (s *Server) RunWithGracefulShutdown(e *echo.Echo) {

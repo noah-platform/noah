@@ -16,15 +16,17 @@ func (s *Service) GetAccount(ctx context.Context, id string) (*core.Account, err
 	if err != nil {
 		switch {
 		case errors.Is(err, core.ErrAccountNotFound):
-			l.Info().Err(err).Msg("[Server.GetAccount] account not found")
+			l.Info().Err(err).Msg("[Service.GetAccount] account not found")
 
 			return nil, core.ErrAccountNotFound
 		default:
-			l.Error().Err(err).Msgf("[Server.GetAccount] failed to get account")
+			l.Error().Err(err).Msgf("[Service.GetAccount] failed to get account")
 
 			return nil, errors.Wrap(err, "failed to get account")
 		}
 	}
+
+	l.Debug().Interface("account", account).Msg("[Service.GetAccount] got account")
 
 	return account, nil
 }

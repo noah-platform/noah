@@ -5,6 +5,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/noah-platform/noah/account/server/di"
+	"github.com/noah-platform/noah/pkg/logging"
 )
 
 type Config struct {
@@ -13,6 +14,10 @@ type Config struct {
 	Port        string `env:"PORT,required"`
 	JWTSecret   string `env:"JWT_SECRET,required"`
 	DatabaseUrl string `env:"DATABASE_URL,required"`
+}
+
+func init() {
+	logging.Init()
 }
 
 func main() {

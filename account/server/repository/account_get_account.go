@@ -24,11 +24,11 @@ func (r *AccountRepository) GetAccount(ctx context.Context, id string) (*core.Ac
 		default:
 			l.Error().Err(err).Msgf("[AccountRepository.GetAccount] failed to get account")
 
-			return nil, errors.Wrap(err, "[AccountRepository.GetAccount] failed to get account")
+			return nil, errors.Wrap(err, "failed to get account")
 		}
 	}
 
-	l.Info().Bool("isVerified", account.IsVerified).Time("updatedAt", account.UpdatedAt.Time).Msg("[AccountRepository.GetAccount] account found")
+	l.Info().Bool("isVerified", account.IsVerified).Time("updatedAt", account.UpdatedAt.Time).Msg("[AccountRepository.GetAccount] account loaded")
 
 	return &core.Account{
 		ID:              account.UserID,
