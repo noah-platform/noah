@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: postgres:16.3
+    environment:
+      - POSTGRES_USER=example
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=example
+    ports:
+      - 5432:5432
