@@ -6,7 +6,7 @@ import (
 	"github.com/noah-platform/noah/example/server/client"
 )
 
-const exampleID = "bank"
+const exampleID = "1"
 
 func main() {
 	client := client.New(client.Config{

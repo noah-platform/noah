@@ -14,16 +14,22 @@ type Config struct {
 	ServerConfig   ServerConfig
 	ServiceConfig  ServiceConfig
 	PostgresConfig PostgresConfig
+	MongoConfig    MongoConfig
 }
 
 func New(cfg Config) *handler.Server {
-	pgx := newPgxClient(cfg.PostgresConfig)
-	exampleRepo := repository.NewExamplePostgresRepository(repository.ExamplePostgresRepoDependencies{
-		PgxClient: pgx,
+	// pgx := newPgxClient(cfg.PostgresConfig)
+	// examplePostgresRepo = repository.NewExamplePostgresRepository(repository.ExamplePostgresRepoDependencies{
+	// 	PgxClient: pgx,
+	// })
+
+	db := newMongoClient(cfg.MongoConfig)
+	exampleMongoRepo := repository.NewExampleMongoRepository(repository.ExampleMongoRepoDependencies{
+		Example: db.Collection("example"),
 	})
 
 	service := service.New(service.Dependencies{
-		ExampleRepository: exampleRepo,
+		ExampleRepository: exampleMongoRepo,
 	}, cfg.ServiceConfig)
 
 	server := handler.New(handler.Dependencies{

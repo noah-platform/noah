@@ -13,7 +13,9 @@ type Config struct {
 
 	Port        string `env:"PORT,required"`
 	JWTSecret   string `env:"JWT_SECRET,required"`
-	DatabaseUrl string `env:"DATABASE_URL,required"`
+	PostgresUrl string `env:"POSTGRES_URL,required"`
+	MongoUrl    string `env:"MONGO_URL,required"`
+	MongoDBName string `env:"MONGO_DB_NAME,required"`
 }
 
 func init() {
@@ -35,7 +37,11 @@ func main() {
 		},
 		ServiceConfig: di.ServiceConfig{},
 		PostgresConfig: di.PostgresConfig{
-			DatabaseUrl: cfg.DatabaseUrl,
+			DatabaseUrl: cfg.PostgresUrl,
+		},
+		MongoConfig: di.MongoConfig{
+			DatabaseUrl:  cfg.MongoUrl,
+			DatabaseName: cfg.MongoDBName,
 		},
 	})
 
