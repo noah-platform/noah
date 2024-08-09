@@ -1,21 +1,22 @@
 package handler
 
 import (
-	"github.com/go-playground/validator/v10"
+	"github.com/labstack/echo/v4"
 
 	"github.com/noah-platform/noah/example/server/core/port"
 )
 
 type Server struct {
 	service   port.Service
-	validator *validator.Validate
+	validator echo.Validator
 
 	port      string
 	jwtSecret string
 }
 
 type Dependencies struct {
-	Service port.Service
+	Service   port.Service
+	Validator echo.Validator
 }
 
 type Config struct {
@@ -26,7 +27,7 @@ type Config struct {
 func New(deps Dependencies, cfg Config) *Server {
 	return &Server{
 		service:   deps.Service,
-		validator: validator.New(),
+		validator: deps.Validator,
 
 		port:      cfg.Port,
 		jwtSecret: cfg.JWTSecret,
