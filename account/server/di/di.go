@@ -1,6 +1,8 @@
 package di
 
 import (
+	"github.com/noah-platform/noah/pkg/validator"
+
 	"github.com/noah-platform/noah/account/server/core/service"
 	"github.com/noah-platform/noah/account/server/handler"
 	"github.com/noah-platform/noah/account/server/repository"
@@ -27,7 +29,8 @@ func New(cfg Config) *handler.Server {
 	}, cfg.ServiceConfig)
 
 	server := handler.New(handler.Dependencies{
-		Service: service,
+		Service:   service,
+		Validator: validator.NewValidator(),
 	}, cfg.ServerConfig)
 
 	return server
