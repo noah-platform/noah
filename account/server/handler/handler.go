@@ -1,13 +1,14 @@
 package handler
 
 import (
+	"github.com/labstack/echo/v4"
+
 	"github.com/noah-platform/noah/account/server/core/port"
-	"github.com/noah-platform/noah/pkg/validator"
 )
 
 type Server struct {
 	service   port.Service
-	validator *validator.Validator
+	validator echo.Validator
 
 	port      string
 	jwtSecret string
@@ -15,7 +16,7 @@ type Server struct {
 
 type Dependencies struct {
 	Service   port.Service
-	Validator *validator.Validator
+	Validator echo.Validator
 }
 
 type Config struct {
