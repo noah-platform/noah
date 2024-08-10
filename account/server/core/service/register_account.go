@@ -30,7 +30,14 @@ func (s *Service) RegisterAccount(ctx context.Context, email, name, password str
 	}
 	passwordHash := string(hash)
 
-	err = s.accountRepo.CreateAccount(ctx, core.Account{
+	tx, err := s.accountRepo.BeginTransaction(ctx)
+	if err != nil {
+		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to begin transaction")
+
+		return errors.Wrap(err, "failed to begin transaction")
+	}
+
+	err = s.accountRepo.CreateAccount(ctx, tx, core.Account{
 		ID:         userID,
 		Email:      email,
 		Name:       name,
@@ -49,6 +56,26 @@ func (s *Service) RegisterAccount(ctx context.Context, email, name, password str
 
 			return errors.Wrap(err, "failed to create account")
 		}
+	}
+
+	// TODO: Generate and store email verification token
+	url := "https://noah.example.com/verify/mock"
+	if err := s.emailRepo.ProduceEmailVerificationRequest(ctx, email, url); err != nil {
+		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to produce email verification request")
+
+		if err := s.accountRepo.RollbackTransaction(ctx, tx); err == nil {
+			l.Warn().Msg("[Service.RegisterAccount] transaction rolled back")
+		} else {
+			l.Error().Err(err).Msg("[Service.RegisterAccount] failed to rollback transaction")
+		}
+
+		return errors.Wrap(err, "failed to produce email verification request")
+	}
+
+	if err := s.accountRepo.CommitTransaction(ctx, tx); err != nil {
+		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to commit transaction")
+
+		return errors.Wrap(err, "failed to commit transaction")
 	}
 
 	l.Info().Msg("[Service.RegisterAccount] account created")

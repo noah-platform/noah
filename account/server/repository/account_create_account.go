@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/pkg/errors"
@@ -13,7 +14,7 @@ import (
 	"github.com/noah-platform/noah/account/server/generated/sqlc"
 )
 
-func (r *AccountRepository) CreateAccount(ctx context.Context, account core.Account) error {
+func (r *AccountRepository) CreateAccount(ctx context.Context, tx pgx.Tx, account core.Account) error {
 	l := log.Ctx(ctx)
 	*l = l.With().Str("userId", account.ID).
 		Str("email", account.Email).
@@ -35,7 +36,7 @@ func (r *AccountRepository) CreateAccount(ctx context.Context, account core.Acco
 		params.Password = pgtype.Text{String: *account.Password, Valid: true}
 	}
 
-	err := r.queries.CreateAccount(ctx, params)
+	err := r.queries.WithTx(tx).CreateAccount(ctx, params)
 	if err != nil {
 		var pgErr *pgconn.PgError
 		switch {

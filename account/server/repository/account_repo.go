@@ -7,6 +7,7 @@ import (
 )
 
 type AccountRepository struct {
+	db      *pgxpool.Pool
 	queries *sqlc.Queries
 }
 
@@ -18,6 +19,7 @@ func NewAccountRepository(deps AccountRepoDependencies) *AccountRepository {
 	queries := sqlc.New(deps.PgxClient)
 
 	return &AccountRepository{
+		db:      deps.PgxClient,
 		queries: queries,
 	}
 }
