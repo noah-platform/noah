@@ -1,0 +1,13 @@
+services:
+  consumer:
+    container_name: notification-consumer-email
+    build:
+      context: ./
+      dockerfile: ../../docker/Dockerfile.dev
+    working_dir: /app/notification/consumer-email
+    command: air -c .air.toml
+    volumes:
+      - ../../:/app
+      - $GOPATH/pkg/mod:/go/pkg/mod
+    env_file:
+      - .env.generated
