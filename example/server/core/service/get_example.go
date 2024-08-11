@@ -20,7 +20,7 @@ func (s *Service) GetExample(ctx context.Context, id int) (*core.Example, error)
 
 			return nil, core.ErrExampleNotFound
 		default:
-			l.Error().Err(err).Msgf("[Service.GetExample] failed to get example")
+			l.Error().Err(err).Msg("[Service.GetExample] failed to get example")
 
 			return nil, errors.Wrap(err, "failed to get example")
 		}

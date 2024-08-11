@@ -15,6 +15,7 @@ import (
 func (s *Server) Start() {
 	e := echo.New()
 	e.HideBanner = true
+	e.Validator = s.validator
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())

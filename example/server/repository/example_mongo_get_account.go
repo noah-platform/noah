@@ -22,7 +22,7 @@ func (r *ExampleMongoRepository) GetExample(ctx context.Context, id int) (*core.
 
 			return nil, core.ErrExampleNotFound
 		default:
-			l.Error().Err(err).Msgf("[ExampleMongoRepository.GetExample] failed to fetch example")
+			l.Error().Err(err).Msg("[ExampleMongoRepository.GetExample] failed to fetch example")
 
 			return nil, errors.Wrap(err, "failed to fetch example")
 		}

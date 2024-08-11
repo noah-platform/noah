@@ -45,7 +45,7 @@ func (s *Server) InternalGetExample(c echo.Context) error {
 
 			return response.NotFound(c, "example not found")
 		default:
-			l.Error().Err(err).Msgf("[Server.InternalGetExample] failed to get example")
+			l.Error().Err(err).Msg("[Server.InternalGetExample] failed to get example")
 
 			return response.InternalServerError(c, "failed to get example")
 		}
