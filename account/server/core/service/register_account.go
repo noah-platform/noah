@@ -36,6 +36,15 @@ func (s *Service) RegisterAccount(ctx context.Context, email, name, password str
 
 		return errors.Wrap(err, "failed to begin transaction")
 	}
+	defer func() {
+		if err != nil {
+			if err := s.accountRepo.RollbackTransaction(ctx, tx); err == nil {
+				l.Warn().Msg("[Service.RegisterAccount] transaction rolled back")
+			} else {
+				l.Error().Err(err).Msg("[Service.RegisterAccount] failed to rollback transaction")
+			}
+		}
+	}()
 
 	err = s.accountRepo.CreateAccount(ctx, tx, core.Account{
 		ID:         userID,
@@ -62,12 +71,6 @@ func (s *Service) RegisterAccount(ctx context.Context, email, name, password str
 	url := "https://noah.example.com/verify/mock"
 	if err := s.emailRepo.ProduceEmailVerificationRequest(ctx, email, url); err != nil {
 		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to produce email verification request")
-
-		if err := s.accountRepo.RollbackTransaction(ctx, tx); err == nil {
-			l.Warn().Msg("[Service.RegisterAccount] transaction rolled back")
-		} else {
-			l.Error().Err(err).Msg("[Service.RegisterAccount] failed to rollback transaction")
-		}
 
 		return errors.Wrap(err, "failed to produce email verification request")
 	}
