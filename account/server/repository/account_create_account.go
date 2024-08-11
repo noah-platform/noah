@@ -41,11 +41,11 @@ func (r *AccountRepository) CreateAccount(ctx context.Context, tx pgx.Tx, accoun
 		var pgErr *pgconn.PgError
 		switch {
 		case errors.As(err, &pgErr) && pgErr.Code == "23505":
-			l.Info().Err(err).Msgf("[AccountRepository.CreateAccount] account already exists")
+			l.Info().Err(err).Msg("[AccountRepository.CreateAccount] account already exists")
 
 			return core.ErrAccountAlreadyExists
 		default:
-			l.Error().Err(err).Msgf("[AccountRepository.CreateAccount] failed to create account")
+			l.Error().Err(err).Msg("[AccountRepository.CreateAccount] failed to create account")
 
 			return errors.Wrap(err, "failed to create account")
 		}

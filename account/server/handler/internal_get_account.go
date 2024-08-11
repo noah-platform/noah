@@ -36,7 +36,7 @@ func (s *Server) InternalGetAccount(c echo.Context) error {
 
 			return response.NotFound(c, "account not found")
 		default:
-			l.Error().Err(err).Msgf("[Server.InternalGetAccount] failed to get account")
+			l.Error().Err(err).Msg("[Server.InternalGetAccount] failed to get account")
 
 			return response.InternalServerError(c, "failed to get account")
 		}
@@ -44,7 +44,7 @@ func (s *Server) InternalGetAccount(c echo.Context) error {
 
 	l.Info().Msg("[Server.InternalGetAccount] get account successfully")
 
-	return response.Data(c, GetAccountResponse{
+	return response.Ok(c, GetAccountResponse{
 		ID:              account.ID,
 		Email:           account.Email,
 		Name:            account.Name,

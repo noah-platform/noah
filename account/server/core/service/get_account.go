@@ -20,7 +20,7 @@ func (s *Service) GetAccount(ctx context.Context, id string) (*core.Account, err
 
 			return nil, core.ErrAccountNotFound
 		default:
-			l.Error().Err(err).Msgf("[Service.GetAccount] failed to get account")
+			l.Error().Err(err).Msg("[Service.GetAccount] failed to get account")
 
 			return nil, errors.Wrap(err, "failed to get account")
 		}

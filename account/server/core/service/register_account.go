@@ -12,7 +12,7 @@ import (
 	"github.com/noah-platform/noah/account/server/core"
 )
 
-func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, password string) error {
+func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, password string) (err error) {
 	l := log.Ctx(ctx)
 
 	userID, err := cuid.NewCrypto(rand.Reader)
@@ -61,7 +61,7 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 			return errors.Wrap(err, "account already exists")
 
 		default:
-			l.Error().Err(err).Msgf("[Service.RegisterAccount] failed to create account")
+			l.Error().Err(err).Msg("[Service.RegisterAccount] failed to create account")
 
 			return errors.Wrap(err, "failed to create account")
 		}
