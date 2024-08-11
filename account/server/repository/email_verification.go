@@ -8,14 +8,16 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (e *EmailRepository) ProduceEmailVerificationRequest(ctx context.Context, to string, url string) error {
+func (e *EmailRepository) ProduceEmailVerificationRequest(ctx context.Context, to, name, url string) error {
 	l := log.Ctx(ctx)
 
 	payload := messaging.OutgoingEmailMessage{
-		From:    e.emailFrom,
-		To:      to,
-		Subject: "Verify your email",
-		Body:    "Please verify your email address by clicking on the link below.\n\n" + url, // TODO: Use a template
+		From:          e.emailFrom,
+		SenderName:    "Noah Platform",
+		To:            to,
+		RecipientName: name,
+		Subject:       "Verify your email",
+		Body:          "Hello " + name + ",\n\n" + "Please verify your email address by clicking the following link: " + url + "\n\n" + "Thank you,\n" + "Noah Platform", // TODO: Use a template
 	}
 	partition, offset, err := e.producer.SendMessage(e.topic, messaging.EventOutgoingEmail, payload, "TODO")
 	if err != nil {

@@ -34,7 +34,7 @@ func (h *Handler) OutgoingEmail(ctx context.Context, payload json.RawMessage) er
 		return errors.Wrap(err, "failed to send email")
 	}
 
-	l.Info().Msg("[Handler.OutgoingEmail] email sent")
+	l.Info().Msg("[Handler.OutgoingEmail] outgoing email processed")
 
 	return nil
 }

@@ -69,7 +69,7 @@ func (s *Service) RegisterAccount(ctx context.Context, email, name, password str
 
 	// TODO: Generate and store email verification token
 	url := "https://noah.example.com/verify/mock"
-	if err := s.emailRepo.ProduceEmailVerificationRequest(ctx, email, url); err != nil {
+	if err := s.emailRepo.ProduceEmailVerificationRequest(ctx, email, name, url); err != nil {
 		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to produce email verification request")
 
 		return errors.Wrap(err, "failed to produce email verification request")

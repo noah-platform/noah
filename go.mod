@@ -14,6 +14,7 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/samber/lo v1.46.0
 	github.com/swaggo/swag v1.16.3
+	github.com/wneessen/go-mail v0.4.2
 	golang.org/x/crypto v0.26.0
 )
 
