@@ -44,7 +44,8 @@ func (s *Server) RegisterAccount(c echo.Context) error {
 		return response.BadRequest(c, "invalid request body")
 	}
 
-	err := s.service.RegisterAccount(ctx, req.Email, req.Name, req.Password)
+	traceID := c.Response().Header().Get(echo.HeaderXRequestID)
+	err := s.service.RegisterAccount(ctx, traceID, req.Email, req.Name, req.Password)
 	if err != nil {
 		switch {
 		case errors.Is(err, core.ErrAccountAlreadyExists):
