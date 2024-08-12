@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -14,7 +17,7 @@ const sessionCookieName = "noahses"
 const authRequestIdHeaderName = "X-Noah-Auth-Request-Id"
 const userIdHeaderName = "X-Noah-User-Id"
 
-func (s *Server) VerifySession(c echo.Context) error {
+func (s *Server) ExtAuth(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	l := log.With().Str("requestId", c.Response().Header().Get(echo.HeaderXRequestID)).Str("path", c.Request().URL.Path).Logger()
@@ -22,7 +25,7 @@ func (s *Server) VerifySession(c echo.Context) error {
 
 	sessionID, err := c.Cookie(sessionCookieName)
 	if err != nil {
-		l.Info().Err(err).Msg("[Server.VerifySession] session cookie not found")
+		l.Info().Err(err).Msg("[Server.ExtAuth] session cookie not found")
 
 		return response.Unauthorized(c, "no session")
 	}
@@ -31,11 +34,22 @@ func (s *Server) VerifySession(c echo.Context) error {
 	if err != nil {
 		switch {
 		case errors.Is(err, core.ErrSessionNotFound):
-			l.Warn().Msg("[Server.VerifySession] invalid session")
+			l.Warn().Msg("[Server.ExtAuth] invalid session")
+
+			// Expire the invalid session cookie
+			cookie := &http.Cookie{
+				Name:     sessionCookieName,
+				Value:    "",
+				Path:     "/",
+				Expires:  time.Unix(0, 0),
+				HttpOnly: true,
+				Secure:   true,
+			}
+			c.SetCookie(cookie)
 
 			return response.Unauthorized(c, "invalid session")
 		default:
-			l.Error().Err(err).Msg("[Server.VerifySession] failed to verify session")
+			l.Error().Err(err).Msg("[Server.ExtAuth] failed to verify session")
 
 			return response.InternalServerError(c, "failed to verify session")
 		}
@@ -44,7 +58,7 @@ func (s *Server) VerifySession(c echo.Context) error {
 	c.Response().Header().Set(authRequestIdHeaderName, c.Response().Header().Get(echo.HeaderXRequestID))
 	c.Response().Header().Set(userIdHeaderName, userID)
 
-	l.Info().Str("userId", userID).Msg("[Server.VerifySession] session verified")
+	l.Info().Str("userId", userID).Msg("[Server.ExtAuth] session verified")
 
-	return response.Ok(c, "session verified")
+	return response.Ok(c, "ok")
 }

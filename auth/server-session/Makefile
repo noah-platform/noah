@@ -10,3 +10,7 @@ dev.down:
 
 dev.generate:
 	docker compose exec server go generate ./...
+
+dev.build:
+	docker build -f ../../docker/Dockerfile --build-arg="APP_DIR=auth/server-session" -t k3d-noah.localhost:5500/auth-server-session:latest ../../
+	docker push k3d-noah.localhost:5500/auth-server-session:latest

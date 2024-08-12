@@ -1,0 +1,8 @@
+apiVersion: getambassador.io/v3alpha1
+kind: Mapping
+metadata:
+  name: quote
+spec:
+  hostname: "localhost"
+  prefix: /quote/
+  service: quote

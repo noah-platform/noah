@@ -28,8 +28,10 @@ func (s *Server) Start() {
 	e.POST("/internal/v1/sessions", s.InternalCreateSession)
 	e.DELETE("/internal/v1/sessions/:sessionID", s.InternalDeleteSession)
 
-	e.Any("/verify", s.VerifySession)
-	e.Any("/verify/*", s.VerifySession)
+	e.POST("/internal/v1/sessions/verify", s.InternalVerifySession)
+
+	e.Any("/extauth", s.ExtAuth)
+	e.Any("/extauth/*", s.ExtAuth)
 
 	s.RunWithGracefulShutdown(e)
 }

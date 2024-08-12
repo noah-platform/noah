@@ -1,0 +1,10 @@
+apiVersion: getambassador.io/v3alpha1
+kind: AuthService
+metadata:
+  name: extauth
+spec:
+  auth_service: "http://host.k3d.internal:8080"
+  path_prefix: "/extauth"
+  allowed_authorization_headers:
+    - "X-Noah-Auth-Request-Id"
+    - "X-Noah-User-Id"
