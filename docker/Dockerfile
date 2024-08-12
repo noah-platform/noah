@@ -10,20 +10,19 @@ RUN go install github.com/swaggo/swag/cmd/swag@latest
 WORKDIR /app
 
 COPY go.mod go.sum ./
-
 RUN go mod download
-
 COPY . .
 
 WORKDIR $APP_DIR
 
 RUN go generate ./...
-
 RUN go build -o main .
 
 ####################################################################################################
 
 FROM alpine:3.20
+
+ARG APP_DIR
 
 WORKDIR /app
 
