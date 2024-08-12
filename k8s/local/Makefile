@@ -33,7 +33,7 @@ cluster.setup:
 	kubectl scale deployment emissary-apiext -n emissary-system --replicas=1
 	kubectl wait --for=condition=available --timeout=300s -n emissary deployment -l app.kubernetes.io/instance=emissary-ingress
 
-	kubectl apply -f https://app.getambassador.io/yaml/v2-docs/3.9.1/quickstart/qotm.yam
+	kubectl apply -f https://app.getambassador.io/yaml/v2-docs/3.9.1/quickstart/qotm.yaml
 
 cluster.apply:
 	kubectl apply -f ./manifests/
