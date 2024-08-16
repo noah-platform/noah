@@ -1,0 +1,4 @@
+tmp/
+generated/
+
+.env.generated

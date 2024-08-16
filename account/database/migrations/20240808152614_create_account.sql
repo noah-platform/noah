@@ -1,0 +1,2 @@
+-- Create "account" table
+CREATE TABLE "account" ("user_id" character varying(30) NOT NULL, "email" text NOT NULL, "name" text NOT NULL, "password" character varying(72) NULL, "google_account_id" character varying(255) NULL, "is_verified" boolean NOT NULL DEFAULT false, "created_at" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, "updated_at" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY ("user_id"));
