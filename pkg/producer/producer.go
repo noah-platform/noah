@@ -44,7 +44,7 @@ func NewProducer(deps Dependencies, cfg Config) (*Producer, error) {
 	}, nil
 }
 
-func (p *Producer) SendMessage(topic string, event messaging.Event, payload any, traceID string) (int, int, error) {
+func (p *Producer) SendMessage(topic string, event messaging.Event, traceID string, payload any) (int, int, error) {
 	l := log.With().Str("topic", topic).Str("event", string(event)).Str("traceID", traceID).Logger()
 
 	message := messaging.ProducerMessage{

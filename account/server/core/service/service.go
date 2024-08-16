@@ -9,6 +9,7 @@ type Service struct {
 }
 
 type Config struct {
+	EmailFrom string
 }
 
 type Dependencies struct {

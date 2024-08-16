@@ -28,7 +28,7 @@ func (m *Mailer) Send(ctx context.Context, email core.OutgoingEmailMessage) erro
 		return errors.Wrap(err, "failed to set To address")
 	}
 	message.Subject(email.Subject)
-	message.SetBodyString(mail.TypeTextPlain, email.Body)
+	message.SetBodyString(mail.TypeTextHTML, email.Body)
 
 	if err := m.mailer.DialAndSendWithContext(ctx, message); err != nil {
 		log.Error().Err(err).Msg("[MailerRepository.Send] failed to send mail")
