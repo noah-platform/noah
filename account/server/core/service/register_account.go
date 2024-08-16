@@ -16,7 +16,7 @@ import (
 	"github.com/noah-platform/noah/account/server/core"
 )
 
-func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, password string) error {
+func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, password string) (err error) {
 	l := log.Ctx(ctx)
 
 	userID, err := cuid.NewCrypto(rand.Reader)
