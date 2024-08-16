@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"crypto/rand"
-	"html/template"
 
 	"github.com/lucsky/cuid"
 	"github.com/pkg/errors"
@@ -71,15 +70,8 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 		}
 	}
 
-	tmpl, err := template.New("email_verification").Parse(emailVerificationTemplate)
-	if err != nil {
-		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to parse email verification template")
-
-		return errors.Wrap(err, "failed to parse email verification template")
-	}
-
 	var body bytes.Buffer
-	if err = tmpl.Execute(&body, EmailVerificationTemplateData{
+	if err = emailVerificationTemplate.Execute(&body, EmailVerificationTemplateData{
 		Name:            name,
 		VerificationURL: "https://noah.example.com/verify/mock", // TODO: Generate and store email verification token
 	}); err != nil {
