@@ -5,6 +5,8 @@ metadata:
 spec:
   auth_service: "http://host.k3d.internal:8080"
   path_prefix: "/extauth"
+  status_on_error:
+    code: 503
   allowed_authorization_headers:
     - "X-Noah-Auth-Request-Id"
     - "X-Noah-User-Id"
