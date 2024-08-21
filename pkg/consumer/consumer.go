@@ -140,7 +140,7 @@ func (c *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim saram
 				return nil
 			}
 
-			var event messaging.Message
+			var event messaging.ConsumerMessage
 			if err := json.Unmarshal(message.Value, &event); err != nil {
 				log.Fatal().Err(err).Str("topic", message.Topic).Int32("partition", message.Partition).Int64("offset", message.Offset).Msg("failed to unmarshal message")
 
