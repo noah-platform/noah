@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 
-	"github.com/noah-platform/noah/account/server/core/port"
+	"github.com/noah-platform/noah/example/server/core/port"
 )
 
 type Server struct {
