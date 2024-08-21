@@ -40,6 +40,10 @@ func NotFound(c echo.Context, msg string) error {
 	return Error(c, http.StatusNotFound, msg)
 }
 
+func Conflict(c echo.Context, msg string) error {
+	return Error(c, http.StatusConflict, msg)
+}
+
 func InternalServerError(c echo.Context, msg string) error {
 	return Error(c, http.StatusInternalServerError, msg)
 }

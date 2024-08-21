@@ -15,6 +15,7 @@ import (
 func (s *Server) Start() {
 	e := echo.New()
 	e.HideBanner = true
+	e.Validator = s.validator
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
@@ -22,6 +23,8 @@ func (s *Server) Start() {
 
 	e.GET("/health", s.Health)
 	e.GET("/docs", s.Docs)
+
+	e.POST("/v1/register", s.RegisterAccount)
 
 	e.GET("/internal/v1/accounts/:userID", s.InternalGetAccount)
 

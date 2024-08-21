@@ -34,4 +34,12 @@ table "account" {
   primary_key {
     columns = [column.user_id]
   }
+  index "idx_email" {
+    columns = [column.email]
+    unique = true
+  }
+  index "idx_google_account_id" {
+    columns = [column.google_account_id]
+    unique = true
+  }
 }
