@@ -1,0 +1,15 @@
+services:
+  server:
+    container_name: example-server
+    build:
+      context: ./
+      dockerfile: ../../docker/Dockerfile.dev
+    working_dir: /app/example/server
+    command: air -c .air.toml
+    volumes:
+      - ../../:/app
+      - $GOPATH/pkg/mod:/go/pkg/mod
+    ports:
+      - 8080:8080
+    env_file:
+      - .env.generated

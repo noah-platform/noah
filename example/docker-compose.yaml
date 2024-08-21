@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:16.3
+    environment:
+      - POSTGRES_USER=example
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=example
+    ports:
+      - 5432:5432
+
+  mongo:
+    image: mongo:7.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=example
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - 27017:27017
