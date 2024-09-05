@@ -15,6 +15,10 @@ type Config struct {
 	KafkaBrokers []string `env:"KAFKA_BROKERS,required"`
 	KafkaTopics  []string `env:"KAFKA_TOPICS,required,"`
 	KafkaGroupID string   `env:"KAFKA_GROUP_ID,required"`
+
+	SMTPHost                 string   `env:"SMTP_HOST,required"`
+	SMTPPort                 int      `env:"SMTP_PORT,required"`
+	SMTPAllowedFromAddresses []string `env:"SMTP_ALLOWED_FROM_ADDRESSES,required"`
 }
 
 func init() {
@@ -36,7 +40,13 @@ func main() {
 			Topics:   cfg.KafkaTopics,
 			GroupID:  cfg.KafkaGroupID,
 		},
-		ServiceConfig: di.ServiceConfig{},
+		ServiceConfig: di.ServiceConfig{
+			AllowedFromAddresses: cfg.SMTPAllowedFromAddresses,
+		},
+		MailerConfig: di.MailerConfig{
+			SMTPHost: cfg.SMTPHost,
+			SMTPPort: cfg.SMTPPort,
+		},
 	})
 
 	consumer.Start()

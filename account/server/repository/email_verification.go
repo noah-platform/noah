@@ -3,28 +3,23 @@ package repository
 import (
 	"context"
 
+	"github.com/noah-platform/noah/account/server/core"
 	"github.com/noah-platform/noah/pkg/messaging"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 )
 
-func (e *EmailRepository) ProduceEmailVerificationRequest(ctx context.Context, to string, url string) error {
+func (e *EmailRepository) ProduceOutgoingEmail(ctx context.Context, traceID string, message core.OutgoingEmailMessage) error {
 	l := log.Ctx(ctx)
 
-	payload := messaging.OutgoingEmailMessage{
-		From:    e.emailFrom,
-		To:      to,
-		Subject: "Verify your email",
-		Body:    "Please verify your email address by clicking on the link below.\n\n" + url, // TODO: Use a template
-	}
-	partition, offset, err := e.producer.SendMessage(e.topic, messaging.EventOutgoingEmail, payload, "TODO")
+	partition, offset, err := e.producer.SendMessage(e.topic, messaging.EventOutgoingEmail, traceID, message)
 	if err != nil {
-		l.Error().Err(err).Msg("[EmailRepository.ProduceEmailVerificationRequest] failed to produce message")
+		l.Error().Err(err).Msg("[EmailRepository.ProduceOutgoingEmail] failed to produce outgoing email")
 
-		return errors.Wrap(err, "failed to produce message")
+		return errors.Wrap(err, "failed to produce outgoing email")
 	}
 
-	l.Info().Int("partition", partition).Int("offset", offset).Msg("[EmailRepository.ProduceEmailVerificationRequest] produced email verification request")
+	l.Info().Int("partition", partition).Int("offset", offset).Msg("[EmailRepository.ProduceOutgoingEmail] produced outgoing email")
 
 	return nil
 }

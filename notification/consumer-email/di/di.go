@@ -6,6 +6,7 @@ import (
 
 	"github.com/noah-platform/noah/notification/consumer-email/core/service"
 	"github.com/noah-platform/noah/notification/consumer-email/handler"
+	"github.com/noah-platform/noah/notification/consumer-email/repository"
 )
 
 type ConsumerConfig = consumer.Config
@@ -18,10 +19,18 @@ type Config struct {
 	ConsumerConfig ConsumerConfig
 	HandlerConfig  HandlerConfig
 	ServiceConfig  ServiceConfig
+	MailerConfig   MailerConfig
 }
 
 func New(cfg Config) *consumer.Consumer {
-	service := service.New(service.Dependencies{}, cfg.ServiceConfig)
+	mailer := newMailer(cfg.MailerConfig)
+	mailerRepo := repository.NewMailer(repository.MailerDependencies{
+		Mailer: mailer,
+	})
+
+	service := service.New(service.Dependencies{
+		Mailer: mailerRepo,
+	}, cfg.ServiceConfig)
 
 	handler := handler.New(handler.Dependencies{
 		Service:   service,

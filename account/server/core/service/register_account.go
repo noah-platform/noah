@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"crypto/rand"
 
@@ -12,7 +13,7 @@ import (
 	"github.com/noah-platform/noah/account/server/core"
 )
 
-func (s *Service) RegisterAccount(ctx context.Context, email, name, password string) error {
+func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, password string) (err error) {
 	l := log.Ctx(ctx)
 
 	userID, err := cuid.NewCrypto(rand.Reader)
@@ -67,9 +68,25 @@ func (s *Service) RegisterAccount(ctx context.Context, email, name, password str
 		}
 	}
 
-	// TODO: Generate and store email verification token
-	url := "https://noah.example.com/verify/mock"
-	if err := s.emailRepo.ProduceEmailVerificationRequest(ctx, email, url); err != nil {
+	var body bytes.Buffer
+	if err = emailVerificationTemplate.Execute(&body, EmailVerificationTemplateData{
+		Name:            name,
+		VerificationURL: "https://noah.example.com/verify/mock", // TODO: Generate and store email verification token
+	}); err != nil {
+		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to execute email verification template")
+
+		return errors.Wrap(err, "failed to execute email verification template")
+	}
+
+	message := core.OutgoingEmailMessage{
+		From:          s.config.EmailFrom,
+		SenderName:    "Noah Platform",
+		To:            email,
+		RecipientName: name,
+		Subject:       "Verify your email",
+		Body:          body.String(),
+	}
+	if err := s.emailRepo.ProduceOutgoingEmail(ctx, traceID, message); err != nil {
 		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to produce email verification request")
 
 		return errors.Wrap(err, "failed to produce email verification request")

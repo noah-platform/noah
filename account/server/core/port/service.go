@@ -8,5 +8,5 @@ import (
 
 type Service interface {
 	GetAccount(ctx context.Context, id string) (*core.Account, error)
-	RegisterAccount(ctx context.Context, email, name, password string) error
+	RegisterAccount(ctx context.Context, traceID, email, name, password string) error
 }

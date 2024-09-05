@@ -16,8 +16,8 @@ type Config struct {
 	DatabaseUrl  string   `env:"DATABASE_URL,required"`
 	KafkaBrokers []string `env:"KAFKA_BROKERS,required"`
 
-	EmailKafkaTopic string `env:"EMAIL_KAFKA_TOPIC,required"`
 	EmailFrom       string `env:"EMAIL_FROM,required"`
+	EmailKafkaTopic string `env:"EMAIL_KAFKA_TOPIC,required"`
 }
 
 func init() {
@@ -37,7 +37,9 @@ func main() {
 			Port:      cfg.Port,
 			JWTSecret: cfg.JWTSecret,
 		},
-		ServiceConfig: di.ServiceConfig{},
+		ServiceConfig: di.ServiceConfig{
+			EmailFrom: cfg.EmailFrom,
+		},
 		PostgresConfig: di.PostgresConfig{
 			DatabaseUrl: cfg.DatabaseUrl,
 		},
@@ -47,7 +49,6 @@ func main() {
 		},
 		EmailRepoConfig: di.EmailRepoConfig{
 			KafkaTopic: cfg.EmailKafkaTopic,
-			EmailFrom:  cfg.EmailFrom,
 		},
 	})
 
