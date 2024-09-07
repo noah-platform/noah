@@ -10,4 +10,5 @@ type Service interface {
 	GetAccount(ctx context.Context, id string) (*core.Account, error)
 	RegisterAccount(ctx context.Context, traceID, email, name, password string) error
 	ResetPassword(ctx context.Context, traceID, email string) error
+	ConfirmPasswordReset(ctx context.Context, token, password string) error
 }
