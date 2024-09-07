@@ -28,6 +28,7 @@ func (s *Server) Start() {
 	e.POST("/v1/reset-password", s.ResetPassword)
 
 	e.GET("/internal/v1/accounts/:userID", s.InternalGetAccount)
+	e.GET("/internal/v1/accounts", s.InternalGetAccountByEmail)
 
 	s.RunWithGracefulShutdown(e)
 }
