@@ -25,6 +25,7 @@ func (s *Server) Start() {
 	e.GET("/docs", s.Docs)
 
 	e.POST("/v1/register", s.RegisterAccount)
+	e.POST("/v1/reset-password", s.ResetPassword)
 
 	e.GET("/internal/v1/accounts/:userID", s.InternalGetAccount)
 
