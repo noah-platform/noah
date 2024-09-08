@@ -14,12 +14,9 @@ import (
 	"github.com/noah-platform/noah/account/server/generated/sqlc"
 )
 
-func (r *AccountRepository) CreateAccount(ctx context.Context, tx pgx.Tx, account core.Account) error {
+func (r *AccountRepository) CreateAccount(ctx context.Context, tx *pgx.Tx, account core.Account) error {
 	l := log.Ctx(ctx)
-	*l = l.With().Str("userId", account.ID).
-		Str("email", account.Email).
-		Str("googleAccountId", lo.TernaryF(account.GoogleAccountID != nil, func() string { return *account.GoogleAccountID }, func() string { return "" })).
-		Logger()
+	*l = l.With().Str("userId", account.ID).Str("email", account.Email).Str("googleAccountId", lo.FromPtr(account.GoogleAccountID)).Logger()
 
 	params := sqlc.CreateAccountParams{
 		UserID:          account.ID,
@@ -36,7 +33,12 @@ func (r *AccountRepository) CreateAccount(ctx context.Context, tx pgx.Tx, accoun
 		params.Password = pgtype.Text{String: *account.Password, Valid: true}
 	}
 
-	err := r.queries.WithTx(tx).CreateAccount(ctx, params)
+	var err error
+	if tx != nil {
+		err = r.queries.WithTx(*tx).CreateAccount(ctx, params)
+	} else {
+		err = r.queries.CreateAccount(ctx, params)
+	}
 	if err != nil {
 		var pgErr *pgconn.PgError
 		switch {

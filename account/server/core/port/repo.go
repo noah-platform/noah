@@ -12,7 +12,8 @@ type AccountRepository interface {
 	GetAccount(ctx context.Context, id string) (*core.Account, error)
 	GetAccountByEmail(ctx context.Context, email string) (*core.Account, error)
 	GetPasswordResetToken(ctx context.Context, token string) (*core.PasswordResetToken, error)
-	CreateAccount(ctx context.Context, tx transaction.Tx, account core.Account) error
+	GetAccountByGoogleAccountID(ctx context.Context, googleAccountID string) (*core.Account, error)
+	CreateAccount(ctx context.Context, tx *transaction.Tx, account core.Account) error
 	CreatePasswordResetToken(ctx context.Context, token core.PasswordResetToken) error
 	UpdateAccountPassword(ctx context.Context, id, password string) error
 	DeletePasswordResetToken(ctx context.Context, token string) error

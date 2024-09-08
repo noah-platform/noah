@@ -23,8 +23,10 @@ type Config struct {
 
 func New(cfg Config) *handler.Server {
 	accountClient := accountClient.New(cfg.AccountClientConfig)
+	googleIDTokenValidator := newGoogleIDTokenValidator()
 	service := service.New(service.Dependencies{
-		AccountClient: accountClient,
+		AccountClient:          accountClient,
+		GoogleIDTokenValidator: googleIDTokenValidator,
 	}, cfg.ServiceConfig)
 
 	server := handler.New(handler.Dependencies{

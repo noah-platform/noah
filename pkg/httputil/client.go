@@ -97,6 +97,8 @@ func requestWithBody[R, B, Q any](c *Client, method string, path string, body *B
 
 	req.URL.RawQuery = q.Encode()
 
+	req.Header.Set("Content-Type", "application/json")
+
 	resp, status, err := do[R](c.client, req)
 	if err != nil {
 		return nil, status, errors.Wrap(err, "failed to do request")
@@ -114,7 +116,7 @@ func do[R any](c *http.Client, req *http.Request) (*R, int, error) {
 	defer r.Body.Close()
 
 	if r.StatusCode < http.StatusOK || r.StatusCode >= http.StatusBadRequest {
-		log.Error().
+		log.Debug().
 			Str("method", req.Method).
 			Str("url", req.URL.String()).
 			Int("status", r.StatusCode).
