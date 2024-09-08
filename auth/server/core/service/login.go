@@ -30,12 +30,6 @@ func (s *Service) Login(ctx context.Context, email, password string) (string, er
 
 	*l = l.With().Str("userId", account.ID).Logger()
 
-	if account.GoogleAccountID != nil {
-		l.Info().Msg("[Service.Login] account is a Google account, login by email is denied")
-
-		return "", core.ErrInvalidCredentials
-	}
-
 	if account.Password == nil {
 		l.Error().Msg("[Service.Login] account has no password")
 
@@ -63,6 +57,8 @@ func (s *Service) Login(ctx context.Context, email, password string) (string, er
 	}
 
 	// TODO: call auth session server to create a new session
+
+	l.Info().Str("sessionId", "TODO").Msg("[Service.Login] login successfully")
 
 	return "", nil
 }

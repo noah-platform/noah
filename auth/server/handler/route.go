@@ -25,6 +25,7 @@ func (s *Server) Start() {
 	e.GET("/docs", s.Docs)
 
 	e.POST("/v1/login", s.Login)
+	e.POST("/v1/login/google", s.LoginWithGoogle)
 	e.POST("/v1/logout", s.Logout)
 
 	s.RunWithGracefulShutdown(e)
