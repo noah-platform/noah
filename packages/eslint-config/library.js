@@ -1,4 +1,5 @@
 const { resolve } = require("node:path");
+const { rules } = require("./react");
 
 const project = resolve(process.cwd(), "tsconfig.json");
 
@@ -10,7 +11,7 @@ module.exports = {
   parserOptions: {
     project,
   },
-  plugins: ["only-warn"],
+  plugins: ["only-warn", "simple-import-sort"],
   globals: {
     React: true,
     JSX: true,
@@ -23,4 +24,17 @@ module.exports = {
     },
   },
   ignorePatterns: ["node_modules/", "dist/"],
+  overrides: [
+    {
+      files: ["*.config.js"],
+      env: {
+        node: true,
+      },
+    },
+  ],
+  rules: {
+    "import/order": "off",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+  },
 };

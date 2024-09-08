@@ -11,7 +11,7 @@ module.exports = {
   parserOptions: {
     project,
   },
-  plugins: ["only-warn"],
+  plugins: ["only-warn", "simple-import-sort"],
   globals: {
     JSX: true,
   },
@@ -23,7 +23,18 @@ module.exports = {
     },
   },
   ignorePatterns: ["node_modules/", "dist/", ".eslintrc.js", "**/*.css"],
+  overrides: [
+    {
+      files: ["*.config.js"],
+      env: {
+        node: true,
+      },
+    },
+  ],
   rules: {
+    "import/order": "off",
     "import/no-default-export": "off",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
   },
 };

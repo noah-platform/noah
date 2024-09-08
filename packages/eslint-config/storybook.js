@@ -16,7 +16,7 @@ module.exports = {
   parserOptions: {
     project,
   },
-  plugins: ["only-warn"],
+  plugins: ["only-warn", "simple-import-sort"],
   globals: {
     React: true,
     JSX: true,
@@ -29,7 +29,18 @@ module.exports = {
     },
   },
   ignorePatterns: ["node_modules/", "dist/"],
+  overrides: [
+    {
+      files: ["*.config.js"],
+      env: {
+        node: true,
+      },
+    },
+  ],
   rules: {
+    "import/order": "off",
     "import/no-default-export": "off",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
   },
 };

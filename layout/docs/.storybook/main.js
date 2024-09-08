@@ -14,9 +14,7 @@ const config = {
     name: getAbsolutePath("@storybook/react-vite"),
     options: {},
   },
-
   core: {},
-
   async viteFinal(config, { configType }) {
     return {
       ...config,
@@ -31,7 +29,6 @@ const config = {
       },
     };
   },
-
   docs: {
     autodocs: true,
   },

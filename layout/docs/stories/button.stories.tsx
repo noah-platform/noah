@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "@noah/ui/button";
 import "@noah/ui/styles.css";
+
+import { Button } from "@noah/ui/button";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof Button> = {
   component: Button,
