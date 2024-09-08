@@ -11,12 +11,12 @@ import (
 	"github.com/noah-platform/noah/pkg/response"
 )
 
-type GetAccountByEmailResponse = handler.GetAccountByEmailResponse
+type GetAccountByGoogleAccountIDResponse = handler.GetAccountByGoogleAccountIDResponse
 
-func (c *Client) FetchAccountByEmail(email string) (*GetAccountByEmailResponse, error) {
-	path := fmt.Sprintf("/internal/v1/accounts/email/%s", url.PathEscape(email))
+func (c *Client) FetchAccountByGoogleAccountID(googleAccountID string) (*GetAccountByGoogleAccountIDResponse, error) {
+	path := fmt.Sprintf("/internal/v1/accounts/google/%s", url.PathEscape(googleAccountID))
 
-	account, status, err := httputil.Get[response.DataResponse[GetAccountByEmailResponse]](c.client, path)
+	account, status, err := httputil.Get[response.DataResponse[GetAccountByGoogleAccountIDResponse]](c.client, path)
 	if err != nil {
 		switch status {
 		case 404:

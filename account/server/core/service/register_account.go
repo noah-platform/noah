@@ -47,7 +47,7 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 		}
 	}()
 
-	err = s.accountRepo.CreateAccount(ctx, tx, core.Account{
+	err = s.accountRepo.CreateAccount(ctx, &tx, core.Account{
 		ID:         userID,
 		Email:      email,
 		Name:       name,
@@ -62,7 +62,7 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 			return errors.Wrap(err, "account already exists")
 
 		default:
-			l.Error().Err(err).Msgf("[Service.RegisterAccount] failed to create account")
+			l.Error().Err(err).Msg("[Service.RegisterAccount] failed to create account")
 
 			return errors.Wrap(err, "failed to create account")
 		}

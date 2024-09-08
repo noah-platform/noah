@@ -28,7 +28,9 @@ func (s *Server) Start() {
 	e.POST("/v1/reset-password", s.ResetPassword)
 
 	e.GET("/internal/v1/accounts/:userID", s.InternalGetAccount)
-	e.GET("/internal/v1/accounts", s.InternalGetAccountByEmail)
+	e.GET("/internal/v1/accounts/email/:email", s.InternalGetAccountByEmail)
+	e.GET("/internal/v1/accounts/google/:googleAccountID", s.InternalGetAccountByGoogleAccountID)
+	e.POST("/internal/v1/accounts/google", s.InternalRegisterAccountByGoogleAccount)
 
 	s.RunWithGracefulShutdown(e)
 }

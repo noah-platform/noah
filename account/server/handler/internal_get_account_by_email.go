@@ -15,8 +15,8 @@ type GetAccountByEmailResponse = core.Account
 //
 //	@Summary	Get account by email
 //	@Tags		internal
-//	@Router		/internal/v1/accounts [get]
-//	@Param		email	query		string	true	"email"
+//	@Router		/internal/v1/accounts/email/{email} [get]
+//	@Param		email	path		string	true	"Email"
 //	@Success	200		{object}	response.DataResponse[GetAccountByEmailResponse]
 //	@Failure	400		{object}	response.ErrorResponse
 //	@Failure	404		{object}	response.ErrorResponse
@@ -24,12 +24,7 @@ type GetAccountByEmailResponse = core.Account
 func (s *Server) InternalGetAccountByEmail(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	email := c.QueryParam("email")
-	if email == "" {
-		log.Info().Str("requestId", c.Response().Header().Get(echo.HeaderXRequestID)).Msg("[Server.InternalGetAccountByEmail] email is required")
-
-		return response.BadRequest(c, "email is required")
-	}
+	email := c.Param("email")
 
 	l := log.With().Str("requestId", c.Response().Header().Get(echo.HeaderXRequestID)).Str("email", email).Logger()
 	ctx = l.WithContext(ctx)
@@ -42,7 +37,7 @@ func (s *Server) InternalGetAccountByEmail(c echo.Context) error {
 
 			return response.NotFound(c, "account not found")
 		default:
-			l.Error().Err(err).Msgf("[Server.InternalGetAccountByEmail] failed to get account")
+			l.Error().Err(err).Msg("[Server.InternalGetAccountByEmail] failed to get account")
 
 			return response.InternalServerError(c, "failed to get account")
 		}
