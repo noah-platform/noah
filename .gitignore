@@ -1,8 +1,11 @@
 node_modules
 
+.turbo
+
 tmp/
 generated/
 dist/
+storybook-static/
 
 .env
 .env.generated
@@ -10,6 +13,3 @@ dist/
 *.log
 *.local
 .DS_Store
-
-.turbo
-storybook-static/
