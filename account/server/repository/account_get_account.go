@@ -22,7 +22,7 @@ func (r *AccountRepository) GetAccount(ctx context.Context, id string) (*core.Ac
 
 			return nil, core.ErrAccountNotFound
 		default:
-			l.Error().Err(err).Msgf("[AccountRepository.GetAccount] failed to get account")
+			l.Error().Err(err).Msg("[AccountRepository.GetAccount] failed to get account")
 
 			return nil, errors.Wrap(err, "failed to get account")
 		}

@@ -53,7 +53,7 @@ func (s *Server) RegisterAccount(c echo.Context) error {
 
 			return response.Conflict(c, "account already exists")
 		default:
-			l.Error().Err(err).Msgf("[Server.RegisterAccount] failed to register account")
+			l.Error().Err(err).Msg("[Server.RegisterAccount] failed to register account")
 
 			return response.InternalServerError(c, "failed to register account")
 		}
