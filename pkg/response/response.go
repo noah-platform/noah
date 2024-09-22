@@ -36,6 +36,10 @@ func BadRequest(c echo.Context, msg string) error {
 	return Error(c, http.StatusBadRequest, msg)
 }
 
+func Forbidden(c echo.Context, msg string) error {
+	return Error(c, http.StatusForbidden, msg)
+}
+
 func NotFound(c echo.Context, msg string) error {
 	return Error(c, http.StatusNotFound, msg)
 }

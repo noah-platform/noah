@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"time"
 
+	"github.com/noah-platform/noah/account/server/core"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/bcrypt"
@@ -13,20 +15,26 @@ func (s *Service) ConfirmPasswordReset(ctx context.Context, token, password stri
 	*l = l.With().Str("token", token).Logger()
 	ctx = l.WithContext(ctx)
 
-	// validate token, check if token exists and not expired
-	err = s.accountRepo.ValidatePasswordResetToken(ctx, token)
-	if err != nil {
-		l.Error().Err(err).Msg("[Service.ConfirmPasswordReset] failed to validate password reset token")
-
-		return errors.Wrap(err, "failed to validate password reset token")
-	}
-
 	// get account using token > just GetPasswordResetToken
 	passwordResetToken, err := s.accountRepo.GetPasswordResetToken(ctx, token)
 	if err != nil {
-		l.Error().Err(err).Msg("[Service.ConfirmPasswordReset] failed to get password reset token")
+		switch {
+		case errors.Is(err, core.ErrTokenNotFound):
+			l.Info().Msg("[Service.ConfirmPasswordReset] password reset token not found")
 
-		return errors.Wrap(err, "failed to get password reset token")
+			return core.ErrTokenNotFound
+		default:
+			l.Error().Err(err).Msg("[Service.ConfirmPasswordReset] failed to get password reset token")
+
+			return errors.Wrap(err, "failed to get password reset token")
+		}
+	}
+
+	// validate token, check if token not expired
+	if passwordResetToken.ExpiresAt.Before(time.Now()) {
+		l.Info().Msg("[Service.ConfirmPasswordReset] password reset token expired")
+
+		return core.ErrTokenExpired
 	}
 
 	// hash password

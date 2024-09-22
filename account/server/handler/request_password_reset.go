@@ -18,7 +18,7 @@ type ResetPasswordRequest struct {
 //	@Param		request	body	ResetPasswordRequest	true	"Reset Password request"
 //	@Success	204		"Password reset request processed"
 //	@Failure	500		{object}	response.ErrorResponse
-func (s *Server) ResetPassword(c echo.Context) error {
+func (s *Server) RequestPasswordReset(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	l := log.With().Str("requestId", c.Response().Header().Get(echo.HeaderXRequestID)).Logger()
@@ -38,7 +38,7 @@ func (s *Server) ResetPassword(c echo.Context) error {
 	}
 
 	traceID := c.Response().Header().Get(echo.HeaderXRequestID)
-	err := s.service.ResetPassword(ctx, traceID, req.Email)
+	err := s.service.RequestPasswordReset(ctx, traceID, req.Email)
 	if err != nil {
 		l.Error().Err(err).Msgf("[Server.ResetPassword] failed to reset password")
 

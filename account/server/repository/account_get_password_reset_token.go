@@ -19,7 +19,7 @@ func (r *AccountRepository) GetPasswordResetToken(ctx context.Context, token str
 		case errors.Is(err, pgx.ErrNoRows):
 			l.Info().Msg("[AccountRepository.GetPasswordResetToken] password reset token not exist")
 
-			return nil, errors.New("password reset token does not exist")
+			return nil, core.ErrTokenNotFound
 		default:
 			l.Error().Err(err).Msg("[AccountRepository.GetPasswordResetToken] failed to get password reset token")
 

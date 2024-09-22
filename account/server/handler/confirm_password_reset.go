@@ -2,7 +2,9 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/noah-platform/noah/account/server/core"
 	"github.com/noah-platform/noah/pkg/response"
+	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 )
 
@@ -43,9 +45,20 @@ func (s *Server) ConfirmPasswordReset(c echo.Context) error {
 
 	err := s.service.ConfirmPasswordReset(ctx, token, req.Password)
 	if err != nil {
-		l.Error().Err(err).Msg("[Server.ConfirmPasswordReset] failed to confirm password reset")
+		switch {
+		case errors.Is(err, core.ErrTokenNotFound):
+			l.Info().Msg("[Server.ConfirmPasswordReset] password reset token not found")
 
-		return response.InternalServerError(c, "failed to confirm password reset")
+			return response.BadRequest(c, "invalid password reset token")
+		case errors.Is(err, core.ErrTokenExpired):
+			l.Info().Msg("[Server.ConfirmPasswordReset] password reset token expired")
+
+			return response.Forbidden(c, "expired password reset token")
+		default:
+			l.Error().Err(err).Msg("[Server.ConfirmPasswordReset] failed to confirm password reset")
+
+			return response.InternalServerError(c, "failed to confirm password reset")
+		}
 	}
 
 	l.Info().Msg("[Server.ConfirmPasswordReset] password reset confirmed")
