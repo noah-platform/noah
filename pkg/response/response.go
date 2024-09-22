@@ -14,11 +14,18 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
-func Data[T any](c echo.Context, data T) error {
+func Ok[T any](c echo.Context, data T) error {
 	res := DataResponse[T]{
 		Data: data,
 	}
 	return c.JSON(http.StatusOK, res)
+}
+
+func Created[T any](c echo.Context, data T) error {
+	res := DataResponse[T]{
+		Data: data,
+	}
+	return c.JSON(http.StatusCreated, res)
 }
 
 func Success(c echo.Context) error {
@@ -38,6 +45,10 @@ func BadRequest(c echo.Context, msg string) error {
 
 func Forbidden(c echo.Context, msg string) error {
 	return Error(c, http.StatusForbidden, msg)
+}
+
+func Unauthorized(c echo.Context, msg string) error {
+	return Error(c, http.StatusUnauthorized, msg)
 }
 
 func NotFound(c echo.Context, msg string) error {

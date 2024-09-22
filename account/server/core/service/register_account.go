@@ -10,8 +10,6 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/noah-platform/noah/pkg/messaging"
-
 	"github.com/noah-platform/noah/account/server/core"
 )
 
@@ -64,7 +62,7 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 			return errors.Wrap(err, "account already exists")
 
 		default:
-			l.Error().Err(err).Msgf("[Service.RegisterAccount] failed to create account")
+			l.Error().Err(err).Msg("[Service.RegisterAccount] failed to create account")
 
 			return errors.Wrap(err, "failed to create account")
 		}
@@ -80,7 +78,7 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 		return errors.Wrap(err, "failed to execute email verification template")
 	}
 
-	message := messaging.OutgoingEmailMessage{
+	message := core.OutgoingEmailMessage{
 		From:          s.config.EmailFrom,
 		SenderName:    "Noah Platform",
 		To:            email,
@@ -88,7 +86,7 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 		Subject:       "Verify your email",
 		Body:          body.String(),
 	}
-	if err := s.emailRepo.ProduceOutgoingEmailVerificationMessage(ctx, traceID, message); err != nil {
+	if err := s.emailRepo.ProduceOutgoingEmail(ctx, traceID, message); err != nil {
 		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to produce email verification request")
 
 		return errors.Wrap(err, "failed to produce email verification request")

@@ -17,6 +17,7 @@ type ResetPasswordRequest struct {
 //	@Router		/v1/reset-password [post]
 //	@Param		request	body	ResetPasswordRequest	true	"Reset Password request"
 //	@Success	204		"Password reset request processed"
+//	@Failure	400     {object}	response.ErrorResponse
 //	@Failure	500		{object}	response.ErrorResponse
 func (s *Server) RequestPasswordReset(c echo.Context) error {
 	ctx := c.Request().Context()

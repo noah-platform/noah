@@ -19,5 +19,5 @@ type AccountRepository interface {
 }
 
 type EmailRepository interface {
-	ProduceOutgoingEmailVerificationMessage(ctx context.Context, traceID string, message core.OutgoingEmailMessage) error
+	ProduceOutgoingEmail(ctx context.Context, traceID string, message core.OutgoingEmailMessage) error
 }
