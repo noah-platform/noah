@@ -1,4 +1,15 @@
+node_modules
+
+.turbo
+
 tmp/
 generated/
+dist/
+storybook-static/
 
+.env
 .env.generated
+
+*.log
+*.local
+.DS_Store

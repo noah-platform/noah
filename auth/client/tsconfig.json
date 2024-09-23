@@ -1,0 +1,9 @@
+{
+  "extends": "@noah/typescript-config/react-app.json",
+  "include": ["."],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist"
+  }
+}

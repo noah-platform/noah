@@ -1,0 +1,19 @@
+{
+  "name": "noah",
+  "packageManager": "pnpm@8.15.6",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo typecheck",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "turbo": "^2.1.1",
+    "eslint": "^8.57.0",
+    "typescript": "^5.5.0"
+  }
+}
