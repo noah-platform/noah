@@ -10,7 +10,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (s *Service) ResetPassword(ctx context.Context, traceID, email string) (err error) {
+func (s *Service) RequestPasswordReset(ctx context.Context, traceID, email string) (err error) {
 	l := log.Ctx(ctx)
 	*l = l.With().Str("traceID", traceID).Str("email", email).Logger()
 	ctx = l.WithContext(ctx)
