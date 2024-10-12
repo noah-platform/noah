@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"time"
 
@@ -45,6 +46,30 @@ func (s *Service) RequestPasswordReset(ctx context.Context, traceID, email strin
 		l.Error().Err(err).Msg("[Service.ResetPassword] failed to create password reset token")
 
 		return errors.Wrap(err, "failed to create password reset token")
+	}
+
+	var body bytes.Buffer
+	if err = emailPasswordResetTemplate.Execute(&body, EmailPasswordResetTemplateData{
+		Name:             account.Name,
+		PasswordResetURL: "https://noah.example.com/reset-password/" + token,
+	}); err != nil {
+		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to execute email password reset template")
+
+		return errors.Wrap(err, "failed to execute email password reset template")
+	}
+
+	message := core.OutgoingEmailMessage{
+		From:          s.config.EmailFrom,
+		SenderName:    "Noah Platform",
+		To:            email,
+		RecipientName: account.Name,
+		Subject:       "Reset your password",
+		Body:          body.String(),
+	}
+	if err := s.emailRepo.ProduceOutgoingEmail(ctx, traceID, message); err != nil {
+		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to produce email password reset request")
+
+		return errors.Wrap(err, "failed to produce email password reset request")
 	}
 
 	l.Info().Msg("[Service.ResetPassword] password reset token created")
