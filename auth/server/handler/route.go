@@ -24,12 +24,8 @@ func (s *Server) Start() {
 	e.GET("/health", s.Health)
 	e.GET("/docs", s.Docs)
 
-	e.POST("/v1/register", s.RegisterAccount)
-	e.POST("/v1/reset-password", s.RequestPasswordReset)
-	e.POST("/v1/reset-password/:token", s.ConfirmPasswordReset)
-
-	e.GET("/internal/v1/accounts/:userID", s.InternalGetAccount)
-	e.GET("/internal/v1/accounts", s.InternalGetAccountByEmail)
+	e.POST("/v1/login", s.Login)
+	e.POST("/v1/logout", s.Logout)
 
 	s.RunWithGracefulShutdown(e)
 }
