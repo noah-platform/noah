@@ -62,7 +62,7 @@ func (s *Server) InternalRegisterAccountByGoogleAccount(c echo.Context) error {
 
 	l.Info().Msg("[Server.InternalRegisterAccountByGoogleAccount] account registered")
 
-	return response.Data(c, RegisterAccountByGoogleAccountResponse{
+	return response.Ok(c, RegisterAccountByGoogleAccountResponse{
 		ID:              account.ID,
 		Email:           account.Email,
 		Name:            account.Name,

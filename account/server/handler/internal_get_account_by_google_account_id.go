@@ -45,7 +45,7 @@ func (s *Server) InternalGetAccountByGoogleAccountID(c echo.Context) error {
 
 	l.Info().Msg("[Server.InternalGetAccountByGoogleAccountID] get account successfully")
 
-	return response.Data(c, GetAccountByGoogleAccountIDResponse{
+	return response.Ok(c, GetAccountByGoogleAccountIDResponse{
 		ID:              account.ID,
 		Email:           account.Email,
 		Name:            account.Name,
