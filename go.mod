@@ -16,7 +16,6 @@ require (
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/rs/zerolog v1.33.0
 	github.com/samber/lo v1.46.0
-	github.com/swaggo/swag v1.16.3
 	github.com/swaggo/swag/v2 v2.0.0-rc4
 	github.com/wneessen/go-mail v0.4.2
 	go.mongodb.org/mongo-driver v1.16.1

@@ -53,7 +53,7 @@ func (s *Server) InternalGetExample(c echo.Context) error {
 
 	l.Info().Msg("[Server.InternalGetExample] get example successfully")
 
-	return response.Data(c, GetExampleResponse{
+	return response.Ok(c, GetExampleResponse{
 		ID:    example.ID,
 		Title: example.Title,
 	})

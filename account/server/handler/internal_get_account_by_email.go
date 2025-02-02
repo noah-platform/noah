@@ -45,7 +45,7 @@ func (s *Server) InternalGetAccountByEmail(c echo.Context) error {
 
 	l.Info().Msg("[Server.InternalGetAccountByEmail] get account successfully")
 
-	return response.Data(c, GetAccountByEmailResponse{
+	return response.Ok(c, GetAccountByEmailResponse{
 		ID:              account.ID,
 		Email:           account.Email,
 		Name:            account.Name,
