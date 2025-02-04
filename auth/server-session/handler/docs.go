@@ -14,7 +14,6 @@ import (
 //
 //	@title			auth-server-session
 //	@version		1.0.0
-//	@host			localhost:8080
 //	@contact.name	Noah Platform
 //	@contact.email	noah-platform@googlegroups.com
 //	@license.name	Proprietary
