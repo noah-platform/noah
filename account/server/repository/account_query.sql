@@ -4,6 +4,9 @@ SELECT * FROM account WHERE user_id=$1 LIMIT 1;
 -- name: GetAccountByEmail :one
 SELECT * FROM account WHERE email=$1 LIMIT 1;
 
+-- name: GetAccountByVerificationToken :one
+SELECT * FROM account WHERE verification_token=$1 LIMIT 1;
+
 -- name: GetPasswordResetToken :one
 SELECT * FROM password_reset WHERE token=$1 LIMIT 1;
 
@@ -18,6 +21,9 @@ INSERT INTO password_reset (token, user_id, expires_at) VALUES ($1, $2, $3);
 
 -- name: UpdateAccountPassword :exec
 UPDATE account SET password=$2 WHERE user_id=$1;
+
+-- name: UpdateAccountVerificationStatus :exec
+UPDATE account SET is_verified=$2, verification_token=$3 WHERE user_id=$1;
 
 -- name: DeletePasswordResetToken :exec
 DELETE FROM password_reset WHERE token=$1;
