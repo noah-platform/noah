@@ -56,7 +56,7 @@ func (s *Service) Login(ctx context.Context, email, password string) (string, er
 		return "", core.ErrAccountNotVerified
 	}
 
-	// TODO: call auth session server to create a new session
+	// TODO: call auth session-server to create a new session
 
 	l.Info().Str("sessionId", "TODO").Msg("[Service.Login] login successfully")
 

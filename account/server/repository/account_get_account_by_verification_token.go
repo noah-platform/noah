@@ -31,13 +31,14 @@ func (r *AccountRepository) GetAccountByVerificationToken(ctx context.Context, t
 	l.Info().Msg("[AccountRepository.GetAccountByVerificationToken] account loaded")
 
 	return &core.Account{
-		ID:              account.UserID,
-		Email:           account.Email,
-		Name:            account.Name,
-		GoogleAccountID: lo.TernaryF(account.GoogleAccountID.Valid, func() *string { return &account.GoogleAccountID.String }, func() *string { return nil }),
-		Password:        lo.TernaryF(account.Password.Valid, func() *string { return &account.Password.String }, func() *string { return nil }),
-		IsVerified:      account.IsVerified,
-		CreatedAt:       account.CreatedAt.Time,
-		UpdatedAt:       account.UpdatedAt.Time,
+		ID:                account.UserID,
+		Email:             account.Email,
+		Name:              account.Name,
+		GoogleAccountID:   lo.TernaryF(account.GoogleAccountID.Valid, func() *string { return &account.GoogleAccountID.String }, func() *string { return nil }),
+		Password:          lo.TernaryF(account.Password.Valid, func() *string { return &account.Password.String }, func() *string { return nil }),
+		IsVerified:        account.IsVerified,
+		VerificationToken: account.VerificationToken.String,
+		CreatedAt:         account.CreatedAt.Time,
+		UpdatedAt:         account.UpdatedAt.Time,
 	}, nil
 }
