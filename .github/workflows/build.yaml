@@ -1,16 +1,36 @@
 name: Build
 
 on:
-  workflow_dispatch:
-    inputs:
-      APP_DIR:
-        description: "Directory of the service to build"
-        required: true
-        type: string
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  changes:
     runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.filter.outputs.changes }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Filter changed paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            account/server:
+              - 'account/server/**'
+            auth/server:
+              - 'auth/server/**'
+
+  build:
+    needs: changes
+    runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.apps != '' && toJson(fromJson(needs.changes.outputs.apps)) != '[]' }}
+    strategy:
+      matrix:
+        APP_DIR: ${{ fromJSON(needs.changes.outputs.apps) }}
     permissions:
       contents: read
       packages: write
@@ -34,8 +54,8 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          tags: ghcr.io/noah-platform/noah/${{ github.event.inputs.APP_DIR }}:latest
+          tags: ghcr.io/noah-platform/noah/${{ matrix.APP_DIR }}:latest
           build-args: |
-            APP_DIR=${{ github.event.inputs.APP_DIR }}
+            APP_DIR=${{ matrix.APP_DIR }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

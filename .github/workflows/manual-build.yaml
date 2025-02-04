@@ -1,0 +1,41 @@
+name: Manual Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      APP_DIR:
+        description: "Directory of the service to build"
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to the Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: true
+          tags: ghcr.io/noah-platform/noah/${{ github.event.inputs.APP_DIR }}:latest
+          build-args: |
+            APP_DIR=${{ github.event.inputs.APP_DIR }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
