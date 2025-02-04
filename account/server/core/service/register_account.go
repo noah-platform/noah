@@ -11,6 +11,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/noah-platform/noah/account/server/core"
+	"github.com/noah-platform/noah/pkg/random"
 )
 
 func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, password string) (err error) {
@@ -31,6 +32,13 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 	}
 	passwordHash := string(hash)
 
+	token, err := random.GenerateRandomString(64)
+	if err != nil {
+		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to generate token")
+
+		return errors.Wrap(err, "failed to generate token")
+	}
+
 	tx, err := s.accountRepo.BeginTransaction(ctx)
 	if err != nil {
 		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to begin transaction")
@@ -48,11 +56,12 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 	}()
 
 	err = s.accountRepo.CreateAccount(ctx, &tx, core.Account{
-		ID:         userID,
-		Email:      email,
-		Name:       name,
-		Password:   &passwordHash,
-		IsVerified: false,
+		ID:                userID,
+		Email:             email,
+		Name:              name,
+		Password:          &passwordHash,
+		IsVerified:        false,
+		VerificationToken: token,
 	})
 	if err != nil {
 		switch {
@@ -71,7 +80,7 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 	var body bytes.Buffer
 	if err = emailVerificationTemplate.Execute(&body, EmailVerificationTemplateData{
 		Name:            name,
-		VerificationURL: "https://noah.example.com/verify/mock", // TODO: Generate and store email verification token
+		VerificationURL: "https://noah.example.com/verify/mock" + token,
 	}); err != nil {
 		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to execute email verification template")
 

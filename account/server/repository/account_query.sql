@@ -11,7 +11,7 @@ SELECT * FROM password_reset WHERE token=$1 LIMIT 1;
 SELECT * FROM account WHERE google_account_id=$1 LIMIT 1;
 
 -- name: CreateAccount :exec
-INSERT INTO account (user_id, email, name, password, google_account_id, is_verified) VALUES ($1, $2, $3, $4, $5, $6);
+INSERT INTO account (user_id, email, name, password, google_account_id, is_verified, verification_token) VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 -- name: CreatePasswordResetToken :exec
 INSERT INTO password_reset (token, user_id, expires_at) VALUES ($1, $2, $3);

@@ -19,12 +19,13 @@ func (r *AccountRepository) CreateAccount(ctx context.Context, tx *pgx.Tx, accou
 	*l = l.With().Str("userId", account.ID).Str("email", account.Email).Str("googleAccountId", lo.FromPtr(account.GoogleAccountID)).Logger()
 
 	params := sqlc.CreateAccountParams{
-		UserID:          account.ID,
-		Email:           account.Email,
-		Name:            account.Name,
-		Password:        pgtype.Text{Valid: false},
-		GoogleAccountID: pgtype.Text{Valid: false},
-		IsVerified:      account.IsVerified,
+		UserID:            account.ID,
+		Email:             account.Email,
+		Name:              account.Name,
+		Password:          pgtype.Text{Valid: false},
+		GoogleAccountID:   pgtype.Text{Valid: false},
+		IsVerified:        account.IsVerified,
+		VerificationToken: pgtype.Text{Valid: true, String: account.VerificationToken},
 	}
 	if account.GoogleAccountID != nil {
 		params.GoogleAccountID = pgtype.Text{String: *account.GoogleAccountID, Valid: true}
