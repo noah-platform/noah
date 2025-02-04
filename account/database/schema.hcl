@@ -23,6 +23,10 @@ table "account" {
     type = boolean
     default = false
   }
+  column "verification_token" {
+    type = char(64)
+    null = true
+  }
   column "created_at" {
     type = timestamp
     default = sql("CURRENT_TIMESTAMP")

@@ -1,4 +1,5 @@
-h1:dt7JvRmH0/ZRTsSbKd1oy3RgAXpKdOQp7QQ+8LJJ1MA=
+h1:SZh6TmoPw0zYrtJY9tiEeU2Z8nMvppjLwx6rel1/egM=
 20240808152614_create_account.sql h1:aMqY4UBf5Ea9JP4sogSsetjpWAgPQ9d7FvPoQwRsQrs=
 20240809083053_create_account_unique_indexs.sql h1:3/A8ccnFFl5m2oIFw3AiQJsaj9+XSEFiwKmjz3JNhHQ=
 20240816141229_create_password_reset.sql h1:izpVFEY01vUlHyWixWMFDcWgQoBEj+FO63MaNHeVoXc=
+20250204070552_add_account_verification_token.sql h1:aTAOmJRPBN2A/H4iKFdZa3SvRdRgawAPtPeusbT/pgE=
