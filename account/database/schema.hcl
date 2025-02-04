@@ -46,6 +46,10 @@ table "account" {
     columns = [column.google_account_id]
     unique = true
   }
+  index "idx_verification_token" {
+    columns = [column.verification_token]
+    unique = true
+  }
 }
 
 table "password_reset" {

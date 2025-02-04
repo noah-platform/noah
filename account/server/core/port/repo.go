@@ -11,10 +11,12 @@ type AccountRepository interface {
 	transaction.RepositoryWithTransaction
 	GetAccount(ctx context.Context, id string) (*core.Account, error)
 	GetAccountByEmail(ctx context.Context, email string) (*core.Account, error)
+	GetAccountByVerificationToken(ctx context.Context, token string) (*core.Account, error)
 	GetPasswordResetToken(ctx context.Context, token string) (*core.PasswordResetToken, error)
 	GetAccountByGoogleAccountID(ctx context.Context, googleAccountID string) (*core.Account, error)
 	CreateAccount(ctx context.Context, tx *transaction.Tx, account core.Account) error
 	CreatePasswordResetToken(ctx context.Context, token core.PasswordResetToken) error
+	UpdateAccountVerificationStatus(ctx context.Context, userID string, isVerified bool) error
 	UpdateAccountPassword(ctx context.Context, id, password string) error
 	DeletePasswordResetToken(ctx context.Context, token string) error
 }
