@@ -5,7 +5,7 @@ ARG APP_DIR
 ENV CGO_ENABLED=0
 
 RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
-RUN go install github.com/swaggo/swag/cmd/swag@latest
+RUN go install github.com/swaggo/swag/v2/cmd/swag@v2.0.0-rc4
 
 WORKDIR /app
 
@@ -27,5 +27,6 @@ ARG APP_DIR
 WORKDIR /app
 
 COPY --from=builder /app/$APP_DIR/main .
+COPY --from=builder /app/$APP_DIR/generated/docs ./generated/docs
 
 CMD ["./main"]
