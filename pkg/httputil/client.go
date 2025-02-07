@@ -74,6 +74,10 @@ func PostWithQuery[R, B, Q any](c *Client, path string, body *B, query Q) (*R, i
 	return requestWithBody[R](c, http.MethodPost, path, body, query)
 }
 
+func Delete[R any](c *Client, path string) (*R, int, error) {
+	return request[R](c, path, struct{}{})
+}
+
 func requestWithBody[R, B, Q any](c *Client, method string, path string, body *B, query Q) (*R, int, error) {
 	q, err := qs.Values(query)
 	if err != nil {

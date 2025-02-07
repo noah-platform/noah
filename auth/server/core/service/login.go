@@ -10,9 +10,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *Service) Login(ctx context.Context, email, password string) (string, error) {
+func (s *Service) Login(ctx context.Context, email, password, ipAddress, userAgent string) (string, error) {
 	l := log.Ctx(ctx)
-	*l = l.With().Str("email", email).Logger()
+	*l = l.With().Str("email", email).Str("ipAddress", ipAddress).Str("userAgent", userAgent).Logger()
 
 	account, err := s.accountClient.FetchAccountByEmail(email)
 	if err != nil {
@@ -56,9 +56,14 @@ func (s *Service) Login(ctx context.Context, email, password string) (string, er
 		return "", core.ErrAccountNotVerified
 	}
 
-	// TODO: call auth session-server to create a new session
+	session, err := s.authSessionClient.CreateSession(account.ID, ipAddress, userAgent)
+	if err != nil {
+		l.Error().Err(err).Msg("[Service.Login] failed to create session")
 
-	l.Info().Str("sessionId", "TODO").Msg("[Service.Login] login successfully")
+		return "", errors.Wrap(err, "failed to create session")
+	}
 
-	return "", nil
+	l.Info().Str("sessionId", session.SessionID).Msg("[Service.Login] login successfully")
+
+	return session.SessionID, nil
 }

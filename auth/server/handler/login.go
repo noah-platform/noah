@@ -46,7 +46,7 @@ func (s *Server) Login(c echo.Context) error {
 
 	l = l.With().Str("email", req.Email).Logger()
 
-	sessionID, err := s.service.Login(ctx, req.Email, req.Password)
+	sessionID, err := s.service.Login(ctx, req.Email, req.Password, c.RealIP(), c.Request().UserAgent())
 	if err != nil {
 		switch {
 		case errors.Is(err, core.ErrInvalidCredentials):

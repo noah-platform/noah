@@ -23,6 +23,10 @@ jobs:
               - 'account/server/**'
             auth/server:
               - 'auth/server/**'
+            auth/server-session:
+              - 'auth/server-session/**'
+            notification/consumer-email:
+              - 'notification/consumer-email/**'
 
   build:
     needs: changes

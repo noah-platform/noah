@@ -16,7 +16,11 @@ func (s *Service) Logout(ctx context.Context, sessionID string) error {
 		return nil
 	}
 
-	// call auth session server to delete session
+	if err := s.authSessionClient.DeleteSession(sessionID); err != nil {
+		l.Error().Err(err).Msg("[Service.Logout] failed to delete session")
+
+		return err
+	}
 
 	l.Info().Msg("[Service.Logout] logout successfully")
 

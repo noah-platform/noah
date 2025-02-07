@@ -15,7 +15,8 @@ type Config struct {
 	Port      string `env:"PORT,required"`
 	JWTSecret string `env:"JWT_SECRET,required"`
 
-	AccountServerURL string `env:"ACCOUNT_SERVER_URL,required"`
+	AccountServerURL     string `env:"ACCOUNT_SERVER_URL,required"`
+	AuthSessionServerURL string `env:"AUTH_SESSION_SERVER_URL,required"`
 }
 
 func init() {
@@ -38,6 +39,10 @@ func main() {
 		ServiceConfig: di.ServiceConfig{},
 		AccountClientConfig: di.AccountClientConfig{
 			BaseURL:  cfg.AccountServerURL,
+			RetryMax: 3,
+		},
+		AuthSessionClientConfig: di.AuthSessionClientConfig{
+			BaseURL:  cfg.AuthSessionServerURL,
 			RetryMax: 3,
 		},
 	})
