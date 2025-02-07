@@ -9,7 +9,8 @@ import (
 
 func Init() {
 	if os.Getenv("APP_ENV") == "production" {
-		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+		// TODO: Set to InfoLevel
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	} else {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 
