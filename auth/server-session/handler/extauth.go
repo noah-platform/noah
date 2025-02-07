@@ -37,13 +37,14 @@ func (s *Server) ExtAuth(c echo.Context) error {
 			l.Warn().Msg("[Server.ExtAuth] invalid session")
 
 			// Expire the invalid session cookie
+			// TODO: Enable secure cookie
 			cookie := &http.Cookie{
 				Name:     sessionCookieName,
 				Value:    "",
 				Path:     "/",
 				Expires:  time.Unix(0, 0),
 				HttpOnly: true,
-				Secure:   true,
+				Secure:   false,
 			}
 			c.SetCookie(cookie)
 

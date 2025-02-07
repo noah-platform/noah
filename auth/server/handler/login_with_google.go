@@ -57,12 +57,13 @@ func (s *Server) LoginWithGoogle(c echo.Context) error {
 		}
 	}
 
+	// TODO: Enable secure cookie
 	cookie := &http.Cookie{
 		Name:     sessionCookieName,
 		Value:    sessionID,
 		Path:     "/",
 		HttpOnly: true,
-		Secure:   true,
+		Secure:   false,
 	}
 	c.SetCookie(cookie)
 

@@ -37,13 +37,14 @@ func (s *Server) Logout(c echo.Context) error {
 		l.Error().Err(err).Msg("[Server.Logout] failed to logout, continuing to clear cookie")
 	}
 
+	// TODO: Enable secure cookie
 	cookie := &http.Cookie{
 		Name:     sessionCookieName,
 		Value:    "",
 		Path:     "/",
 		Expires:  time.Unix(0, 0),
 		HttpOnly: true,
-		Secure:   true,
+		Secure:   false,
 	}
 	c.SetCookie(cookie)
 
