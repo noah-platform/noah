@@ -80,7 +80,7 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 	var body bytes.Buffer
 	if err = emailVerificationTemplate.Execute(&body, EmailVerificationTemplateData{
 		Name:            name,
-		VerificationURL: "https://noah.example.com/verify/mock" + token,
+		VerificationURL: "https://noah.example.com/verify/" + token,
 	}); err != nil {
 		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to execute email verification template")
 
