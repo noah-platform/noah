@@ -27,6 +27,8 @@ jobs:
               - 'auth/server-session/**'
             notification/consumer-email:
               - 'notification/consumer-email/**'
+            example/server:
+              - 'example/server/**'
 
   build:
     needs: changes
