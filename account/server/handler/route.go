@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
@@ -16,18 +17,22 @@ func (s *Server) Start() {
 	e := echo.New()
 	e.HideBanner = true
 	e.Validator = s.validator
+	e.IPExtractor = echo.ExtractIPFromXFFHeader()
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
 	e.Use(middleware.Logger())
+	e.Use(echoprometheus.NewMiddleware("account_server"))
 
 	e.GET("/health", s.Health)
+	e.GET("/metrics", echoprometheus.NewHandler())
+
 	e.GET("/docs", s.Docs)
 
-	e.POST("/v1/register", s.RegisterAccount)
-	e.POST("/v1/verify-email", s.VerifyEmail)
-	e.POST("/v1/reset-password", s.RequestPasswordReset)
-	e.POST("/v1/reset-password/:token", s.ConfirmPasswordReset)
+	e.POST("/external/v1/register", s.RegisterAccount)
+	e.POST("/external/v1/verify-email", s.VerifyEmail)
+	e.POST("/external/v1/reset-password", s.RequestPasswordReset)
+	e.POST("/external/v1/reset-password/:token", s.ConfirmPasswordReset)
 
 	e.GET("/internal/v1/accounts/:userID", s.InternalGetAccount)
 	e.GET("/internal/v1/accounts/email/:email", s.InternalGetAccountByEmail)

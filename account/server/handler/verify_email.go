@@ -16,7 +16,7 @@ type VerifyEmailRequest struct {
 //
 //	@Summary	Verify email
 //	@Tags		public
-//	@Router		/v1/verify-email [post]
+//	@Router		/external/v1/verify-email [post]
 //	@Param		request	body	VerifyEmailRequest	true	"Verify Email Request"
 //	@Success	204		"Email verified"
 //	@Failure	400     {object}	response.ErrorResponse

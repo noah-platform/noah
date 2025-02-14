@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
@@ -16,12 +17,16 @@ func (s *Server) Start() {
 	e := echo.New()
 	e.HideBanner = true
 	e.Validator = s.validator
+	e.IPExtractor = echo.ExtractIPFromXFFHeader()
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
 	e.Use(middleware.Logger())
+	e.Use(echoprometheus.NewMiddleware("example_server"))
 
 	e.GET("/health", s.Health)
+	e.GET("/metrics", echoprometheus.NewHandler())
+
 	e.GET("/docs", s.Docs)
 
 	e.GET("/internal/v1/example/:exampleID", s.InternalGetExample)

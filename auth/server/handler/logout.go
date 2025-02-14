@@ -14,7 +14,7 @@ import (
 //
 //	@Summary	Logout
 //	@Tags		public
-//	@Router		/v1/logout [post]
+//	@Router		/external/v1/logout [post]
 //	@Success	204
 //	@Failure	500		{object}	response.ErrorResponse
 func (s *Server) Logout(c echo.Context) error {

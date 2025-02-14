@@ -19,7 +19,7 @@ type LoginWithGoogleRequest struct {
 //
 //	@Summary	Login with Google
 //	@Tags		public
-//	@Router		/v1/login/google [post]
+//	@Router		/external/v1/login/google [post]
 //	@Param		request	body	LoginWithGoogleRequest	true	"Login with Google Account request"
 //	@Success	204
 //	@Failure	400		{object}	response.ErrorResponse

@@ -20,7 +20,7 @@ type LoginRequest struct {
 //
 //	@Summary	Login
 //	@Tags		public
-//	@Router		/v1/login [post]
+//	@Router		/external/v1/login [post]
 //	@Param		request	body	LoginRequest	true	"Login request"
 //	@Success	204
 //	@Failure	400		{object}	response.ErrorResponse

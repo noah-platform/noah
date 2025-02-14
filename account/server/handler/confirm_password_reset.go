@@ -16,7 +16,7 @@ type ConfirmPasswordResetRequest struct {
 //
 //	@Summary	Confirm password reset
 //	@Tags		public
-//	@Router		/v1/reset-password/{token} [post]
+//	@Router		/external/v1/reset-password/{token} [post]
 //	@Param		token	path	string	true	"Token"
 //	@Param		request	body	ConfirmPasswordResetRequest	true	"Confirm Password Reset Request"
 //	@Success	204		"Password reset successfully"

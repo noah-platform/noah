@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
@@ -16,17 +17,21 @@ func (s *Server) Start() {
 	e := echo.New()
 	e.HideBanner = true
 	e.Validator = s.validator
+	e.IPExtractor = echo.ExtractIPFromXFFHeader()
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
 	e.Use(middleware.Logger())
+	e.Use(echoprometheus.NewMiddleware("auth_server"))
 
 	e.GET("/health", s.Health)
+	e.GET("/metrics", echoprometheus.NewHandler())
+
 	e.GET("/docs", s.Docs)
 
-	e.POST("/v1/login", s.Login)
-	e.POST("/v1/login/google", s.LoginWithGoogle)
-	e.POST("/v1/logout", s.Logout)
+	e.POST("/external/v1/login", s.Login)
+	e.POST("/external/v1/login/google", s.LoginWithGoogle)
+	e.POST("/external/v1/logout", s.Logout)
 
 	s.RunWithGracefulShutdown(e)
 }

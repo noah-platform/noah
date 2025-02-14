@@ -14,7 +14,7 @@ type ResetPasswordRequest struct {
 //
 //	@Summary	Request password reset
 //	@Tags		public
-//	@Router		/v1/reset-password [post]
+//	@Router		/external/v1/reset-password [post]
 //	@Param		request	body	ResetPasswordRequest	true	"Reset Password request"
 //	@Success	204		"Password reset request processed"
 //	@Failure	400     {object}	response.ErrorResponse
