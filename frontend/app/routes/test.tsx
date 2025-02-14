@@ -20,7 +20,7 @@ export async function loader({}: Route.LoaderArgs) {
 export default function Product({ loaderData }: Route.ComponentProps) {
   const { id, title, completed } = loaderData;
   return (
-    <div>
+    <div className="py-5 px-4 text-lg bg-black">
       <p>ID: {id}</p>
       <h1>{title}</h1>
       <p>Completed: {completed ? 'Yes' : 'No'}</p>
