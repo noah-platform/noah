@@ -3,6 +3,6 @@ kind: Mapping
 metadata:
   name: quote
 spec:
-  hostname: "localhost"
+  hostname: 'localhost'
   prefix: /quote/
   service: quote

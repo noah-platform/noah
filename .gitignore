@@ -1,4 +1,12 @@
+.DS_Store
+
 tmp/
 generated/
 
 .env.generated
+
+node_modules
+**/*/node_modules/
+
+**/*/.react-router/
+**/*/build/

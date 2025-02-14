@@ -4,7 +4,7 @@ metadata:
   name: localhost
   namespace: emissary
 spec:
-  hostname: "localhost"
+  hostname: 'localhost'
   requestPolicy:
     insecure:
-      action: "Route"
+      action: 'Route'

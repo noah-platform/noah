@@ -1,23 +1,23 @@
-const db = db.getSiblingDB("example");
+const db = db.getSiblingDB('example');
 
 db.runCommand({
-  collMod: "example",
+  collMod: 'example',
   validator: {
     $jsonSchema: {
-      bsonType: "object",
-      required: ["exampleId", "title"],
+      bsonType: 'object',
+      required: ['exampleId', 'title'],
       properties: {
         exampleId: {
-          bsonType: "int",
+          bsonType: 'int',
         },
         title: {
-          bsonType: "string",
+          bsonType: 'string',
         },
       },
     },
   },
-  validationLevel: "strict",
-  validationAction: "error",
+  validationLevel: 'strict',
+  validationAction: 'error',
 });
 
 db.example.createIndex({ exampleId: 1 }, { unique: true, background: true });
