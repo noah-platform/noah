@@ -18,7 +18,7 @@ type RegisterAccountRequest struct {
 // RegisterAccount godoc
 //
 //	@Summary	Register new account
-//	@Tags		public
+//	@Tags		external
 //	@Router		/external/v1/register [post]
 //	@Param		request	body	RegisterAccountRequest	true	"Register account request"
 //	@Success	204		"Account registered, awaiting email verification"

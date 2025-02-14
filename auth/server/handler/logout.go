@@ -13,7 +13,7 @@ import (
 // Logout godoc
 //
 //	@Summary	Logout
-//	@Tags		public
+//	@Tags		external
 //	@Router		/external/v1/logout [post]
 //	@Success	204
 //	@Failure	500		{object}	response.ErrorResponse

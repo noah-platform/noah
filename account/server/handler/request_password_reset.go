@@ -13,7 +13,7 @@ type ResetPasswordRequest struct {
 // ResetPassword godoc
 //
 //	@Summary	Request password reset
-//	@Tags		public
+//	@Tags		external
 //	@Router		/external/v1/reset-password [post]
 //	@Param		request	body	ResetPasswordRequest	true	"Reset Password request"
 //	@Success	204		"Password reset request processed"

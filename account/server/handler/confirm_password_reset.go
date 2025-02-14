@@ -15,7 +15,7 @@ type ConfirmPasswordResetRequest struct {
 // ConfirmPasswordReset godoc
 //
 //	@Summary	Confirm password reset
-//	@Tags		public
+//	@Tags		external
 //	@Router		/external/v1/reset-password/{token} [post]
 //	@Param		token	path	string	true	"Token"
 //	@Param		request	body	ConfirmPasswordResetRequest	true	"Confirm Password Reset Request"

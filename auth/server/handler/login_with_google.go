@@ -18,7 +18,7 @@ type LoginWithGoogleRequest struct {
 // LoginWithGoogle godoc
 //
 //	@Summary	Login with Google
-//	@Tags		public
+//	@Tags		external
 //	@Router		/external/v1/login/google [post]
 //	@Param		request	body	LoginWithGoogleRequest	true	"Login with Google Account request"
 //	@Success	204

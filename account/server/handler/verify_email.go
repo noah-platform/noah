@@ -15,7 +15,7 @@ type VerifyEmailRequest struct {
 // VerifyEmail godoc
 //
 //	@Summary	Verify email
-//	@Tags		public
+//	@Tags		external
 //	@Router		/external/v1/verify-email [post]
 //	@Param		request	body	VerifyEmailRequest	true	"Verify Email Request"
 //	@Success	204		"Email verified"

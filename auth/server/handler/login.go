@@ -19,7 +19,7 @@ type LoginRequest struct {
 // Login godoc
 //
 //	@Summary	Login
-//	@Tags		public
+//	@Tags		external
 //	@Router		/external/v1/login [post]
 //	@Param		request	body	LoginRequest	true	"Login request"
 //	@Success	204
