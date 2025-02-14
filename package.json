@@ -17,5 +17,8 @@
     "lint-staged": "^15.4.3",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.24.0"
+  },
+  "volta": {
+    "node": "20.18.3"
   }
 }
