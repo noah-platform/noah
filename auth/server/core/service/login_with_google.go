@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (s *Service) LoginWithGoogle(ctx context.Context, idToken string) (string, error) {
+func (s *Service) LoginWithGoogle(ctx context.Context, idToken, ipAddress, userAgent string) (string, error) {
 	l := log.Ctx(ctx)
 
 	payload, err := s.googleIDTokenValidator.Validate(ctx, idToken, s.config.GoogleClientID)
@@ -43,9 +43,14 @@ func (s *Service) LoginWithGoogle(ctx context.Context, idToken string) (string, 
 
 	*l = l.With().Str("userId", account.ID).Logger()
 
-	// TODO: call auth session server to create a new session
+	session, err := s.authSessionClient.CreateSession(account.ID, ipAddress, userAgent)
+	if err != nil {
+		l.Error().Err(err).Msg("[Service.Login] failed to create session")
 
-	l.Info().Str("sessionId", "TODO").Msg("[Service.LoginWithGoogle] login successfully")
+		return "", errors.Wrap(err, "failed to create session")
+	}
 
-	return "", nil
+	l.Info().Str("sessionId", session.SessionID).Msg("[Service.LoginWithGoogle] login successfully")
+
+	return session.SessionID, nil
 }

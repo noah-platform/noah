@@ -43,7 +43,7 @@ func (s *Server) LoginWithGoogle(c echo.Context) error {
 		return response.BadRequest(c, "invalid request body")
 	}
 
-	sessionID, err := s.service.LoginWithGoogle(ctx, req.IDToken)
+	sessionID, err := s.service.LoginWithGoogle(ctx, req.IDToken, c.RealIP(), c.Request().UserAgent())
 	if err != nil {
 		switch {
 		case errors.Is(err, core.ErrInvalidCredentials):
