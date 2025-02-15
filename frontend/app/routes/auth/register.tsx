@@ -1,14 +1,69 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
-import google from '~/assets/google.svg';
 import { ChevronLeft } from 'lucide-react';
+import { redirectIfLoggedIn } from '~/common/auth';
+import type { Route } from './+types/register';
+import * as zod from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { client } from '~/clients/client';
+import toast from 'react-hot-toast';
+import type { ErrorResponse } from '~/clients/types';
+
+export async function loader({ request }: Route.LoaderArgs) {
+  await redirectIfLoggedIn(request, '/home');
+}
+
+const RegisterSchema = zod
+  .object({
+    fullname: zod.string().nonempty({ message: 'Please enter your name' }),
+    email: zod
+      .string()
+      .nonempty({ message: 'Please enter your email' })
+      .email({ message: 'Please enter a valid email' }),
+    password: zod.string().nonempty({ message: 'Please enter your password' }),
+    confirmPassword: zod.string().nonempty({ message: 'Please enter your password again' }),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({ code: 'custom', message: 'Passwords do not match', path: ['confirmPassword'] });
+    }
+  });
+type RegisterSchema = zod.infer<typeof RegisterSchema>;
 
 export default function Register() {
+  const navigate = useNavigate();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setError,
+  } = useForm({
+    resolver: zodResolver(RegisterSchema),
+  });
+  const { mutateAsync, isPending } = client.useMutation('post', '/account/v1/register');
+
+  const handleRegister = async ({ fullname, email, password }: RegisterSchema) => {
+    try {
+      await mutateAsync({ body: { name: fullname, email, password } });
+      toast.dismiss();
+      toast.success('Account created successfully');
+      navigate('/pending-verification');
+    } catch (error) {
+      const isEmailAlreadyExists = (error as ErrorResponse)?.error === 'account already exists';
+      if (isEmailAlreadyExists) {
+        setError('email', { message: 'This email is already registered' });
+      } else {
+        toast.error('Something went wrong');
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col gap-12 p-8">
-      <Link to="/" className="flex items-center gap-1.5 text-secondary">
+      <Link to="/register" className="flex items-center gap-1.5 text-secondary">
         <ChevronLeft /> Back
       </Link>
       <div className="flex flex-col gap-14 w-2/3 mx-auto">
@@ -17,36 +72,51 @@ export default function Register() {
           <h2 className="text-lg text-secondary">Welcome back to Noah English!</h2>
         </div>
         <div className="flex flex-col gap-10">
-          <form className="flex flex-col gap-5">
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit(handleRegister)}>
             <div className="flex flex-col gap-2.5">
               <Label htmlFor="fullname" className="text-secondary">
                 Full Name
               </Label>
-              <Input id="fullname" placeholder="Enter your name" className="h-14" />
+              <Input id="fullname" placeholder="Enter your name" className="h-14" {...register('fullname')} />
+              {errors.fullname && <p className="text-destructive">{errors.fullname.message}</p>}
             </div>
             <div className="flex flex-col gap-2.5">
               <Label htmlFor="email" className="text-secondary">
                 Email
               </Label>
-              <Input id="email" placeholder="Enter your email" className="h-14" />
+              <Input id="email" placeholder="Enter your email" className="h-14" {...register('email')} />
+              {errors.email && <p className="text-destructive">{errors.email.message}</p>}
             </div>
             <div className="flex flex-col gap-2.5">
               <Label htmlFor="password" className="text-secondary">
                 Password
               </Label>
-              <Input id="password" placeholder="Enter your password" className="h-14" />
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                className="h-14"
+                {...register('password')}
+              />
+              {errors.password && <p className="text-destructive">{errors.password.message}</p>}
             </div>
             <div className="flex flex-col gap-2.5">
               <Label htmlFor="confirm-password" className="text-secondary">
                 Confirm Password
               </Label>
-              <Input id="confirm-password" placeholder="Enter your password again" className="h-14" />
+              <Input
+                id="confirm-password"
+                type="password"
+                placeholder="Enter your password again"
+                className="h-14"
+                {...register('confirmPassword')}
+              />
+              {errors.confirmPassword && <p className="text-destructive">{errors.confirmPassword.message}</p>}
             </div>
-            <Button className="h-14 text-md">Create Account</Button>
+            <Button className="h-14 text-md" disabled={isPending}>
+              Create Account
+            </Button>
           </form>
-          <Button className="h-14 text-md" variant="outline">
-            Continue with Google <img src={google} />
-          </Button>
         </div>
       </div>
     </div>

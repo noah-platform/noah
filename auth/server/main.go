@@ -16,6 +16,7 @@ type Config struct {
 	JWTSecret    string `env:"JWT_SECRET,required"`
 	CookieDomain string `env:"COOKIE_DOMAIN,required"`
 
+	GoogleClientID       string `env:"GOOGLE_CLIENT_ID,required"`
 	AccountServerURL     string `env:"ACCOUNT_SERVER_URL,required"`
 	AuthSessionServerURL string `env:"AUTH_SESSION_SERVER_URL,required"`
 }
@@ -38,7 +39,9 @@ func main() {
 			JWTSecret:    cfg.JWTSecret,
 			CookieDomain: cfg.CookieDomain,
 		},
-		ServiceConfig: di.ServiceConfig{},
+		ServiceConfig: di.ServiceConfig{
+			GoogleClientID: cfg.GoogleClientID,
+		},
 		AccountClientConfig: di.AccountClientConfig{
 			BaseURL:  cfg.AccountServerURL,
 			RetryMax: 3,

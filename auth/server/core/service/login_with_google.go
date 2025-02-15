@@ -12,8 +12,7 @@ import (
 func (s *Service) LoginWithGoogle(ctx context.Context, idToken string) (string, error) {
 	l := log.Ctx(ctx)
 
-	// TODO: replace with client id from config
-	payload, err := s.googleIDTokenValidator.Validate(ctx, idToken, "1082322066020-0a2irp5i8b0shiq0njm8ksd5h4qvt4a8.apps.googleusercontent.com")
+	payload, err := s.googleIDTokenValidator.Validate(ctx, idToken, s.config.GoogleClientID)
 	if err != nil {
 		l.Info().Err(err).Msg("[Service.LoginWithGoogle] failed to validate Google ID token")
 

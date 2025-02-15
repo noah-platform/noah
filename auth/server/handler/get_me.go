@@ -18,7 +18,7 @@ type GetMeResponse struct {
 //
 //	@Summary	Get me
 //	@Tags		external
-//	@Router		/external/v1/me [post]
+//	@Router		/external/v1/me [get]
 //	@Success	200		{object}	response.DataResponse[GetMeResponse]
 //	@Failure	401		{object}	response.ErrorResponse
 //	@Failure	500		{object}	response.ErrorResponse
