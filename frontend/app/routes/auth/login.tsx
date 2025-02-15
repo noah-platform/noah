@@ -2,7 +2,6 @@ import { Link, useNavigate } from 'react-router';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
-import google from '~/assets/google.svg';
 import { ChevronLeft } from 'lucide-react';
 import { client } from '~/clients/client';
 import { useForm } from 'react-hook-form';
