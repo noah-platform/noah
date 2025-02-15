@@ -23,7 +23,11 @@ const RegisterSchema = zod
       .string()
       .nonempty({ message: 'Please enter your email' })
       .email({ message: 'Please enter a valid email' }),
-    password: zod.string().nonempty({ message: 'Please enter your password' }),
+    password: zod
+      .string()
+      .nonempty({ message: 'Please enter your password' })
+      .min(8, { message: 'Password is too short' })
+      .max(64, { message: 'Password is too long' }),
     confirmPassword: zod.string().nonempty({ message: 'Please enter your password again' }),
   })
   .superRefine((data, ctx) => {

@@ -111,7 +111,7 @@ export default function Login() {
                   Password
                 </Label>
                 <Link to="/forget-password" className="text-sm text-blue-500 hover:underline">
-                  Forget Password
+                  Forget password
                 </Link>
               </div>
               <Input
