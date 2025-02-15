@@ -63,7 +63,7 @@ export default function Register() {
 
   return (
     <div className="flex flex-col gap-12 p-8">
-      <Link to="/register" className="flex items-center gap-1.5 text-secondary">
+      <Link to="/login" className="flex items-center gap-1.5 text-secondary">
         <ChevronLeft /> Back
       </Link>
       <div className="flex flex-col gap-14 w-2/3 mx-auto">

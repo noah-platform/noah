@@ -19,7 +19,7 @@ export default function PendingVerification() {
           <h2 className="text-lg text-secondary">Just one last step!</h2>
         </div>
         <div className="flex flex-col gap-10">
-          <p>We have sent a verification email to your inbox.</p>
+          <p>We have sent an email to your inbox.</p>
         </div>
       </div>
     </div>

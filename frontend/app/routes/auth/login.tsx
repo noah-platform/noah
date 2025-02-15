@@ -77,7 +77,6 @@ export default function Login() {
       client_id: GOOGLE_CLIENT_ID,
       callback: handleLoginWithGoogle,
     });
-    window.google.accounts.id.prompt();
     if (googleSignInButtonRef.current) {
       window.google.accounts.id.renderButton(googleSignInButtonRef.current, {
         type: 'standard',
@@ -107,9 +106,14 @@ export default function Login() {
               <p className="text-destructive">{errors.email?.message}</p>
             </div>
             <div className="flex flex-col gap-2.5">
-              <Label htmlFor="password" className="text-secondary">
-                Password
-              </Label>
+              <div className="flex justify-between items-center">
+                <Label htmlFor="password" className="text-secondary">
+                  Password
+                </Label>
+                <Link to="/forget-password" className="text-sm text-blue-500 hover:underline">
+                  Forget Password
+                </Link>
+              </div>
               <Input
                 id="password"
                 type="password"
@@ -123,6 +127,17 @@ export default function Login() {
               Sign in
             </Button>
           </form>
+          <div className="text-center text-secondary">
+            Don&apos;t have an account?{' '}
+            <Link to="/register" className="text-blue-500 hover:underline">
+              Create an account
+            </Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="border-t border-secondary w-1/2"></div>
+            <div className="text-gray-500">or</div>
+            <div className="border-t border-secondary w-1/2"></div>
+          </div>
           <div ref={googleSignInButtonRef} />
           {/* <Button className="h-14 text-md" variant="outline" disabled={isPending}>
             Sign in with Google <img src={google} />
