@@ -33,6 +33,8 @@ func (s *Server) Start() {
 	e.POST("/external/v1/login/google", s.LoginWithGoogle)
 	e.POST("/external/v1/logout", s.Logout)
 
+	e.GET("/external/v1/me", s.GetMe, s.auth.Middleware)
+
 	s.RunWithGracefulShutdown(e)
 }
 
