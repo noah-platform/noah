@@ -10,8 +10,9 @@ type Server struct {
 	service   port.Service
 	validator echo.Validator
 
-	port      string
-	jwtSecret string
+	port         string
+	jwtSecret    string
+	cookieDomain string
 }
 
 type Dependencies struct {
@@ -20,8 +21,9 @@ type Dependencies struct {
 }
 
 type Config struct {
-	Port      string
-	JWTSecret string
+	Port         string
+	JWTSecret    string
+	CookieDomain string
 }
 
 func New(deps Dependencies, cfg Config) *Server {
@@ -29,7 +31,8 @@ func New(deps Dependencies, cfg Config) *Server {
 		service:   deps.Service,
 		validator: deps.Validator,
 
-		port:      cfg.Port,
-		jwtSecret: cfg.JWTSecret,
+		port:         cfg.Port,
+		jwtSecret:    cfg.JWTSecret,
+		cookieDomain: cfg.CookieDomain,
 	}
 }

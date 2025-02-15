@@ -12,8 +12,9 @@ import (
 type Config struct {
 	Environment string `env:"APP_ENV,required"`
 
-	Port      string `env:"PORT,required"`
-	JWTSecret string `env:"JWT_SECRET,required"`
+	Port         string `env:"PORT,required"`
+	JWTSecret    string `env:"JWT_SECRET,required"`
+	CookieDomain string `env:"COOKIE_DOMAIN,required"`
 
 	AccountServerURL     string `env:"ACCOUNT_SERVER_URL,required"`
 	AuthSessionServerURL string `env:"AUTH_SESSION_SERVER_URL,required"`
@@ -33,8 +34,9 @@ func main() {
 
 	server := di.New(di.Config{
 		ServerConfig: di.ServerConfig{
-			Port:      cfg.Port,
-			JWTSecret: cfg.JWTSecret,
+			Port:         cfg.Port,
+			JWTSecret:    cfg.JWTSecret,
+			CookieDomain: cfg.CookieDomain,
 		},
 		ServiceConfig: di.ServiceConfig{},
 		AccountClientConfig: di.AccountClientConfig{

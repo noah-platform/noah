@@ -13,8 +13,9 @@ type Server struct {
 	validator echo.Validator
 	auth      AuthMiddleware
 
-	port      string
-	jwtSecret string
+	port         string
+	jwtSecret    string
+	cookieDomain string
 }
 
 type Dependencies struct {
@@ -24,8 +25,9 @@ type Dependencies struct {
 }
 
 type Config struct {
-	Port      string
-	JWTSecret string
+	Port         string
+	JWTSecret    string
+	CookieDomain string
 }
 
 func New(deps Dependencies, cfg Config) *Server {
@@ -34,7 +36,8 @@ func New(deps Dependencies, cfg Config) *Server {
 		validator: deps.Validator,
 		auth:      deps.AuthMiddleware,
 
-		port:      cfg.Port,
-		jwtSecret: cfg.JWTSecret,
+		port:         cfg.Port,
+		jwtSecret:    cfg.JWTSecret,
+		cookieDomain: cfg.CookieDomain,
 	}
 }

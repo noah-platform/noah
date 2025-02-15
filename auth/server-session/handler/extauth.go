@@ -41,6 +41,7 @@ func (s *Server) ExtAuth(c echo.Context) error {
 			cookie := &http.Cookie{
 				Name:     sessionCookieName,
 				Value:    "",
+				Domain:   s.cookieDomain,
 				Path:     "/",
 				Expires:  time.Unix(0, 0),
 				HttpOnly: true,
