@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"context"
+	"net/url"
 	"time"
 
 	"github.com/noah-platform/noah/account/server/core"
@@ -48,10 +49,17 @@ func (s *Service) RequestPasswordReset(ctx context.Context, traceID, email strin
 		return errors.Wrap(err, "failed to create password reset token")
 	}
 
+	passwordResetURL, err := url.JoinPath(s.config.FrontendBaseUrl, "forget-password", token)
+	if err != nil {
+		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to join password reset URL")
+
+		return errors.Wrap(err, "failed to join password reset URL")
+	}
+
 	var body bytes.Buffer
 	if err = emailPasswordResetTemplate.Execute(&body, EmailPasswordResetTemplateData{
 		Name:             account.Name,
-		PasswordResetURL: "https://noah.example.com/reset-password/" + token,
+		PasswordResetURL: passwordResetURL,
 	}); err != nil {
 		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to execute email password reset template")
 
