@@ -4,7 +4,7 @@ import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 import { ChevronLeft } from 'lucide-react';
 import { redirectIfLoggedIn } from '~/common/auth';
-import type { Route } from './+types/register';
+import type { Route } from './+types/reset-password';
 import * as zod from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,52 +16,48 @@ export async function loader({ request }: Route.LoaderArgs) {
   await redirectIfLoggedIn(request, '/home');
 }
 
-const RegisterSchema = zod
+const ResetPasswordSchema = zod
   .object({
-    fullname: zod.string().nonempty({ message: 'Please enter your name' }),
-    email: zod
-      .string()
-      .nonempty({ message: 'Please enter your email' })
-      .email({ message: 'Please enter a valid email' }),
     password: zod
       .string()
-      .nonempty({ message: 'Please enter your password' })
+      .nonempty({ message: 'Please enter a password' })
       .min(8, { message: 'Password is too short' })
       .max(64, { message: 'Password is too long' }),
-    confirmPassword: zod.string().nonempty({ message: 'Please enter your password again' }),
+    confirmPassword: zod.string().nonempty({ message: 'Please enter the password again' }),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {
       ctx.addIssue({ code: 'custom', message: 'Passwords do not match', path: ['confirmPassword'] });
     }
   });
-type RegisterSchema = zod.infer<typeof RegisterSchema>;
+type ResetPasswordSchema = zod.infer<typeof ResetPasswordSchema>;
 
-export default function Register() {
+export default function ResetPassword({ params }: Route.ComponentProps) {
+  const { token } = params;
   const navigate = useNavigate();
   const {
     register,
     formState: { errors },
     handleSubmit,
-    setError,
   } = useForm({
-    resolver: zodResolver(RegisterSchema),
+    resolver: zodResolver(ResetPasswordSchema),
   });
-  const { mutateAsync, isPending } = client.useMutation('post', '/account/v1/register');
+  const { mutateAsync, isPending } = client.useMutation('post', '/account/v1/reset-password/{token}');
 
-  const handleRegister = async ({ fullname, email, password }: RegisterSchema) => {
+  const handleResetPassword = async ({ password }: ResetPasswordSchema) => {
     try {
-      await mutateAsync({ body: { name: fullname, email, password } });
+      await mutateAsync({ params: { path: { token } }, body: { password } });
       toast.dismiss();
-      toast.success('Welcome to Noah English!');
-      navigate('/pending-verification');
+      toast.success('Password reset successfully');
+      navigate('/login');
     } catch (error) {
-      const isEmailAlreadyExists = (error as ErrorResponse)?.error === 'account already exists';
-      if (isEmailAlreadyExists) {
-        setError('email', { message: 'This email is already registered' });
-      } else {
-        toast.error('Something went wrong');
+      const isTokenInvalid = (error as ErrorResponse)?.error === 'invalid password reset token';
+      if (isTokenInvalid) {
+        toast.error('Invalid password reset token');
+        navigate('/forget-password');
+        return;
       }
+      toast.error('Something went wrong');
     }
   };
 
@@ -72,25 +68,11 @@ export default function Register() {
       </Link>
       <div className="flex flex-col gap-14 w-7/8 md:w-5/6 lg:w-2/3 mx-auto">
         <div className="flex flex-col gap-6">
-          <h1 className="text-4xl font-bold">Sign up</h1>
-          <h2 className="text-lg text-secondary">Welcome to Noah English!</h2>
+          <h1 className="text-4xl font-bold">Reset password</h1>
+          <h2 className="text-lg text-secondary">Please enter a new password.</h2>
         </div>
         <div className="flex flex-col gap-10">
-          <form className="flex flex-col gap-5" onSubmit={handleSubmit(handleRegister)}>
-            <div className="flex flex-col gap-2.5">
-              <Label htmlFor="fullname" className="text-secondary">
-                Full Name
-              </Label>
-              <Input id="fullname" placeholder="Enter your name" className="h-14" {...register('fullname')} />
-              {errors.fullname && <p className="text-destructive">{errors.fullname.message}</p>}
-            </div>
-            <div className="flex flex-col gap-2.5">
-              <Label htmlFor="email" className="text-secondary">
-                Email
-              </Label>
-              <Input id="email" placeholder="Enter your email" className="h-14" {...register('email')} />
-              {errors.email && <p className="text-destructive">{errors.email.message}</p>}
-            </div>
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit(handleResetPassword)}>
             <div className="flex flex-col gap-2.5">
               <Label htmlFor="password" className="text-secondary">
                 Password
@@ -98,7 +80,7 @@ export default function Register() {
               <Input
                 id="password"
                 type="password"
-                placeholder="Enter your password"
+                placeholder="Enter a password"
                 className="h-14"
                 {...register('password')}
               />
@@ -111,14 +93,14 @@ export default function Register() {
               <Input
                 id="confirm-password"
                 type="password"
-                placeholder="Enter your password again"
+                placeholder="Enter the password again"
                 className="h-14"
                 {...register('confirmPassword')}
               />
               {errors.confirmPassword && <p className="text-destructive">{errors.confirmPassword.message}</p>}
             </div>
             <Button className="h-14 text-md" disabled={isPending}>
-              Create Account
+              Reset password
             </Button>
           </form>
         </div>

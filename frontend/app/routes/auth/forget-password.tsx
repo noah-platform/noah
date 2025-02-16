@@ -47,7 +47,7 @@ export default function ForgetPassword() {
       <Link to="/login" className="flex items-center gap-1.5 text-secondary">
         <ChevronLeft /> Back
       </Link>
-      <div className="flex flex-col gap-14 w-2/3 mx-auto">
+      <div className="flex flex-col gap-14 w-7/8 md:w-5/6 lg:w-2/3 mx-auto">
         <div className="flex flex-col gap-6">
           <h1 className="text-4xl font-bold">Forget password</h1>
           <h2 className="text-lg text-secondary">Don&apos;t worry! Just a few steps away.</h2>

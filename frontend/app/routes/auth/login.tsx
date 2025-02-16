@@ -49,6 +49,7 @@ export default function Login() {
     } catch (error) {
       const isPendingVerification = (error as ErrorResponse)?.error === 'account not verified';
       if (isPendingVerification) {
+        toast('Verify your email', { icon: '⚠️' });
         navigate('/pending-verification');
         return;
       }
@@ -91,7 +92,7 @@ export default function Login() {
       <Link to="/" className="flex items-center gap-1.5 text-secondary">
         <ChevronLeft /> Back
       </Link>
-      <div className="flex flex-col gap-14 w-2/3 mx-auto">
+      <div className="flex flex-col gap-14 w-7/8 md:w-5/6 lg:w-2/3 mx-auto">
         <div className="flex flex-col gap-6">
           <h1 className="text-4xl font-bold">Login</h1>
           <h2 className="text-lg text-secondary">Welcome back to Noah English!</h2>
