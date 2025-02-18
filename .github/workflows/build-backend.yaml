@@ -29,6 +29,8 @@ jobs:
               - 'notification/consumer-email/**'
             example/server:
               - 'example/server/**'
+            question-bank/server:
+              - 'question-bank/server/**'
 
   build:
     needs: changes
