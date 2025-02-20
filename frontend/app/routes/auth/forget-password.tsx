@@ -12,7 +12,7 @@ import { client } from '~/clients/client';
 import toast from 'react-hot-toast';
 
 export async function loader({ request }: Route.LoaderArgs) {
-  await redirectIfLoggedIn(request, '/home');
+  await redirectIfLoggedIn(request, '/section');
 }
 
 const ForgetPasswordSchema = zod.object({

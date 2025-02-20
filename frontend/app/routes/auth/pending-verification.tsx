@@ -4,7 +4,7 @@ import { redirectIfLoggedIn } from '~/common/auth';
 import type { Route } from './+types/register';
 
 export async function loader({ request }: Route.LoaderArgs) {
-  await redirectIfLoggedIn(request, '/home');
+  await redirectIfLoggedIn(request, '/section');
 }
 
 export default function PendingVerification() {

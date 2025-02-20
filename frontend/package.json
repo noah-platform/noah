@@ -7,11 +7,12 @@
     "dev": "NODE_OPTIONS='--import ./instrument.server.mjs' react-router dev",
     "start": "NODE_OPTIONS='--import ./instrument.server.mjs' react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "generate": "react-router typegen && openapi-merge-cli --config openapi-merge.json && openapi-typescript ./app/clients/openapi.yaml -o ./app/clients/openapi.ts",
+    "generate": "react-router typegen && openapi-merge-cli --config openapi-merge.json && openapi-typescript ./app/clients/openapi.yaml -o ./app/clients/openapi.ts --properties-required-by-default",
     "postinstall": "pnpm run generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.0",
+    "@radix-ui/react-dropdown-menu": "^2.1.6",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@react-router/node": "^7.1.5",
@@ -26,6 +27,7 @@
     "cookie": "^1.0.2",
     "isbot": "^5.1.17",
     "lucide-react": "^0.475.0",
+    "nuqs": "^2.4.0",
     "openapi-fetch": "^0.13.4",
     "openapi-react-query": "^0.3.0",
     "react": "^19.0.0",

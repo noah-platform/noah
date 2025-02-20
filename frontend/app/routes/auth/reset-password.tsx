@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import type { ErrorResponse } from '~/clients/types';
 
 export async function loader({ request }: Route.LoaderArgs) {
-  await redirectIfLoggedIn(request, '/home');
+  await redirectIfLoggedIn(request, '/section');
 }
 
 const ResetPasswordSchema = zod

@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import * as Sentry from '@sentry/react';
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v7';
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -31,7 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <script src="https://accounts.google.com/gsi/client"></script>
       </head>
       <body>
-        {children}
+        <NuqsAdapter>{children}</NuqsAdapter>
         <ScrollRestoration />
         <Scripts />
       </body>

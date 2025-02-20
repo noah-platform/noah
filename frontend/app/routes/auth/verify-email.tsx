@@ -8,7 +8,7 @@ import { client } from '~/clients/client';
 import type { Route } from './+types/verify-email';
 
 export async function loader({ request }: Route.LoaderArgs) {
-  await redirectIfLoggedIn(request, '/home');
+  await redirectIfLoggedIn(request, '/section');
 }
 
 export default function VerifyEmail({ params }: Route.ComponentProps) {

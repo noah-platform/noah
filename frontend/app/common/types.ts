@@ -1,0 +1,6 @@
+export enum Module {
+  LISTENING = 'LISTENING',
+  READING = 'READING',
+  WRITING = 'WRITING',
+  SPEAKING = 'SPEAKING',
+}

@@ -21,7 +21,7 @@ const LoginSchema = zod.object({
 type LoginSchema = zod.infer<typeof LoginSchema>;
 
 export async function loader({ request }: Route.LoaderArgs) {
-  await redirectIfLoggedIn(request, '/home');
+  await redirectIfLoggedIn(request, '/section');
 }
 
 export default function Login() {
@@ -45,7 +45,7 @@ export default function Login() {
       await login({ body: { email, password } });
       toast.dismiss();
       toast.success('Logged in successfully');
-      navigate('/home');
+      navigate('/section');
     } catch (error) {
       const isPendingVerification = (error as ErrorResponse)?.error === 'account not verified';
       if (isPendingVerification) {
@@ -67,7 +67,7 @@ export default function Login() {
       await loginWithGoogle({ body: { idToken: credential } });
       toast.dismiss();
       toast.success('Logged in successfully');
-      navigate('/home');
+      navigate('/section');
     } catch {
       toast.error('Something went wrong');
     }

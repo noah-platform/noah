@@ -19,6 +19,16 @@
       "operationSelection": {
         "includeTags": ["external"]
       }
+    },
+    {
+      "inputFile": "../question-bank/server/generated/docs/swagger.yaml",
+      "pathModification": {
+        "prepend": "/question-bank",
+        "stripStart": "/external"
+      },
+      "operationSelection": {
+        "includeTags": ["external"]
+      }
     }
   ],
   "output": "./app/clients/openapi.yaml"
