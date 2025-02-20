@@ -14,8 +14,8 @@ type GetTestsByModuleResponse = []core.TestInfo
 // GetTestsByModule godoc
 //
 //	@Summary	Get tests info by module
-//	@Tags		public
-//	@Router		/v1/tests [get]
+//	@Tags		external
+//	@Router		/external/v1/tests [get]
 //	@Param		module	query		string	true	"Module"
 //	@Success	200		{object}	response.DataResponse[GetTestsByModuleResponse]
 //	@Failure	404		{object}	response.ErrorResponse

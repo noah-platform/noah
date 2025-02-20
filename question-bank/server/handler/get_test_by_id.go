@@ -14,8 +14,8 @@ type GetTestByIdResponse = core.TestEntry
 // GetTestById godoc
 //
 //	@Summary	Get test by ID
-//	@Tags		public
-//	@Router		/v1/tests/{testID} [get]
+//	@Tags		external
+//	@Router		/external/v1/tests/{testID} [get]
 //	@Param		testID	path		string	true	"Test ID"
 //	@Success	200		{object}	response.DataResponse[GetTestByIdResponse]
 //	@Failure	404		{object}	response.ErrorResponse

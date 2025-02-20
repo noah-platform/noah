@@ -24,8 +24,8 @@ func (s *Server) Start() {
 	e.GET("/health", s.Health)
 	e.GET("/docs", s.Docs)
 
-	e.GET("/v1/tests/:testID", s.GetTestById)
-	e.GET("/v1/tests", s.GetTestsByModule)
+	e.GET("/external/v1/tests/:testID", s.GetTestById)
+	e.GET("/external/v1/tests", s.GetTestsByModule)
 
 	s.RunWithGracefulShutdown(e)
 }
