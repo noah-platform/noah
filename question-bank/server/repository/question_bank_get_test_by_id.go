@@ -40,9 +40,10 @@ func (r *QuestionBankRepository) GetTestById(ctx context.Context, id string) (*c
 
 	return &core.TestEntry{
 		ID:          testDocument.ID.Hex(),
-		AudioScript: testDocument.AudioScript,
-		QuestionSet: testDocument.QuestionSet,
-		Audio:       testDocument.Audio,
+		Title:       testDocument.Title,
+		Duration:    testDocument.Duration,
+		Instruction: testDocument.Instruction,
 		Module:      testDocument.Module,
+		Sections:    mapSections(testDocument.Sections),
 	}, nil
 }

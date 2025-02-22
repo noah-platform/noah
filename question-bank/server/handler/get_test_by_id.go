@@ -46,9 +46,10 @@ func (s *Server) GetTestById(c echo.Context) error {
 
 	return response.Ok(c, GetTestByIdResponse{
 		ID:          test.ID,
+		Title:       test.Title,
+		Duration:    test.Duration,
+		Instruction: test.Instruction,
 		Module:      test.Module,
-		QuestionSet: test.QuestionSet,
-		Audio:       test.Audio,
-		AudioScript: test.AudioScript,
+		Sections:    test.Sections,
 	})
 }
