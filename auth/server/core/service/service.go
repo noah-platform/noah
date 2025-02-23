@@ -14,6 +14,7 @@ type Service struct {
 }
 
 type Config struct {
+	GoogleClientID string
 }
 
 type Dependencies struct {

@@ -32,6 +32,10 @@ func Success(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
+func Status(c echo.Context, status int) error {
+	return c.NoContent(status)
+}
+
 func Error(c echo.Context, status int, msg string) error {
 	res := ErrorResponse{
 		Error: msg,

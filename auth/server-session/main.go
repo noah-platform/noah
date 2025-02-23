@@ -13,8 +13,10 @@ const sessionIDLength = 64
 type Config struct {
 	Environment string `env:"APP_ENV,required"`
 
-	Port        string `env:"PORT,required"`
-	JWTSecret   string `env:"JWT_SECRET,required"`
+	Port         string `env:"PORT,required"`
+	JWTSecret    string `env:"JWT_SECRET,required"`
+	CookieDomain string `env:"COOKIE_DOMAIN,required"`
+
 	PostgresUrl string `env:"POSTGRES_URL,required"`
 	RedisUrl    string `env:"REDIS_URL,required"`
 }
@@ -33,8 +35,9 @@ func main() {
 
 	server := di.New(di.Config{
 		ServerConfig: di.ServerConfig{
-			Port:      cfg.Port,
-			JWTSecret: cfg.JWTSecret,
+			Port:         cfg.Port,
+			JWTSecret:    cfg.JWTSecret,
+			CookieDomain: cfg.CookieDomain,
 		},
 		ServiceConfig: di.ServiceConfig{
 			SessionIDLength: sessionIDLength,

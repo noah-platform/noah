@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/rand"
+	"net/url"
 
 	"github.com/lucsky/cuid"
 	"github.com/pkg/errors"
@@ -77,10 +78,17 @@ func (s *Service) RegisterAccount(ctx context.Context, traceID, email, name, pas
 		}
 	}
 
+	verificationURL, err := url.JoinPath(s.config.FrontendBaseUrl, "verify-email", token)
+	if err != nil {
+		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to join verification URL")
+
+		return errors.Wrap(err, "failed to join verification URL")
+	}
+
 	var body bytes.Buffer
 	if err = emailVerificationTemplate.Execute(&body, EmailVerificationTemplateData{
 		Name:            name,
-		VerificationURL: "https://noah.example.com/verify/" + token,
+		VerificationURL: verificationURL,
 	}); err != nil {
 		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to execute email verification template")
 

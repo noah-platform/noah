@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"context"
+	"net/url"
 	"time"
 
 	"github.com/noah-platform/noah/account/server/core"
@@ -20,11 +21,11 @@ func (s *Service) RequestPasswordReset(ctx context.Context, traceID, email strin
 	if err != nil {
 		switch {
 		case errors.Is(err, core.ErrAccountNotFound):
-			l.Info().Err(err).Msg("[Service.ResetPassword] account not found")
+			l.Info().Err(err).Msg("[Service.RequestPasswordReset] account not found")
 
 			return nil
 		default:
-			l.Error().Err(err).Msgf("[Service.ResetPassword] failed to get account")
+			l.Error().Err(err).Msgf("[Service.RequestPasswordReset] failed to get account")
 
 			return errors.Wrap(err, "failed to get account")
 		}
@@ -32,7 +33,7 @@ func (s *Service) RequestPasswordReset(ctx context.Context, traceID, email strin
 
 	token, err := random.GenerateRandomString(64)
 	if err != nil {
-		l.Error().Err(err).Msg("[Service.ResetPassword] failed to generate token")
+		l.Error().Err(err).Msg("[Service.RequestPasswordReset] failed to generate token")
 
 		return errors.Wrap(err, "failed to generate token")
 	}
@@ -43,17 +44,24 @@ func (s *Service) RequestPasswordReset(ctx context.Context, traceID, email strin
 		ExpiresAt: time.Now().Add(time.Hour),
 	})
 	if err != nil {
-		l.Error().Err(err).Msg("[Service.ResetPassword] failed to create password reset token")
+		l.Error().Err(err).Msg("[Service.RequestPasswordReset] failed to create password reset token")
 
 		return errors.Wrap(err, "failed to create password reset token")
+	}
+
+	passwordResetURL, err := url.JoinPath(s.config.FrontendBaseUrl, "forget-password", token)
+	if err != nil {
+		l.Error().Err(err).Msg("[Service.RequestPasswordReset] failed to join password reset URL")
+
+		return errors.Wrap(err, "failed to join password reset URL")
 	}
 
 	var body bytes.Buffer
 	if err = emailPasswordResetTemplate.Execute(&body, EmailPasswordResetTemplateData{
 		Name:             account.Name,
-		PasswordResetURL: "https://noah.example.com/reset-password/" + token,
+		PasswordResetURL: passwordResetURL,
 	}); err != nil {
-		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to execute email password reset template")
+		l.Error().Err(err).Msg("[Service.RequestPasswordReset] failed to execute email password reset template")
 
 		return errors.Wrap(err, "failed to execute email password reset template")
 	}
@@ -67,12 +75,12 @@ func (s *Service) RequestPasswordReset(ctx context.Context, traceID, email strin
 		Body:          body.String(),
 	}
 	if err := s.emailRepo.ProduceOutgoingEmail(ctx, traceID, message); err != nil {
-		l.Error().Err(err).Msg("[Service.RegisterAccount] failed to produce email password reset request")
+		l.Error().Err(err).Msg("[Service.RequestPasswordReset] failed to produce email password reset request")
 
 		return errors.Wrap(err, "failed to produce email password reset request")
 	}
 
-	l.Info().Msg("[Service.ResetPassword] password reset token created")
+	l.Info().Msg("[Service.RequestPasswordReset] password reset token created")
 
 	return nil
 }

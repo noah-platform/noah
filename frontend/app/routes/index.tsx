@@ -1,9 +1,4 @@
 import type { Route } from './+types/home';
-
-export function meta({}: Route.MetaArgs) {
-  return [{ title: 'New React Router App' }, { name: 'description', content: 'Welcome to React Router!' }];
-}
-
 import logo from './logo.svg';
 import slide_1 from './slide_1.svg';
 import slide_2 from './slide_2.svg';
@@ -24,6 +19,10 @@ import dashboard from './dashboard.svg';
 import { FaUser } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+
+export function meta({}: Route.MetaArgs) {
+  return [{ title: 'New React Router App' }, { name: 'description', content: 'Welcome to React Router!' }];
+}
 
 export default function Home() {
   return (

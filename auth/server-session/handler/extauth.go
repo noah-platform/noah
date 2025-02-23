@@ -27,7 +27,7 @@ func (s *Server) ExtAuth(c echo.Context) error {
 	if err != nil {
 		l.Info().Err(err).Msg("[Server.ExtAuth] session cookie not found")
 
-		return response.Unauthorized(c, "no session")
+		return response.Status(c, http.StatusUnauthorized)
 	}
 
 	userID, err := s.service.VerifySession(ctx, sessionID.Value)
@@ -41,6 +41,7 @@ func (s *Server) ExtAuth(c echo.Context) error {
 			cookie := &http.Cookie{
 				Name:     sessionCookieName,
 				Value:    "",
+				Domain:   s.cookieDomain,
 				Path:     "/",
 				Expires:  time.Unix(0, 0),
 				HttpOnly: true,
@@ -48,11 +49,11 @@ func (s *Server) ExtAuth(c echo.Context) error {
 			}
 			c.SetCookie(cookie)
 
-			return response.Unauthorized(c, "invalid session")
+			return response.Status(c, http.StatusUnauthorized)
 		default:
 			l.Error().Err(err).Msg("[Server.ExtAuth] failed to verify session")
 
-			return response.InternalServerError(c, "failed to verify session")
+			return response.Status(c, http.StatusInternalServerError)
 		}
 	}
 
@@ -61,5 +62,5 @@ func (s *Server) ExtAuth(c echo.Context) error {
 
 	l.Info().Str("userId", userID).Msg("[Server.ExtAuth] session verified")
 
-	return response.Ok(c, "ok")
+	return response.Status(c, http.StatusOK)
 }

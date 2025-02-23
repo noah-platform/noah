@@ -68,6 +68,7 @@ func (s *Server) Login(c echo.Context) error {
 	cookie := &http.Cookie{
 		Name:     sessionCookieName,
 		Value:    sessionID,
+		Domain:   s.cookieDomain,
 		Path:     "/",
 		HttpOnly: true,
 		Secure:   false,
