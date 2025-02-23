@@ -37,7 +37,7 @@ export default function Login() {
   const { mutateAsync: login, isPending: isLoginPending } = client.useMutation('post', '/auth/v1/login');
   const { mutateAsync: loginWithGoogle, isPending: isLoginWithGooglePending } = client.useMutation(
     'post',
-    '/auth/v1/login/google'
+    '/auth/v1/login/google',
   );
 
   const handleLoginWithEmail = async ({ email, password }: LoginSchema) => {

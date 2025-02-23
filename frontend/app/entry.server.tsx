@@ -18,7 +18,7 @@ export default function handleRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   routerContext: EntryContext,
-  loadContext: AppLoadContext
+  loadContext: AppLoadContext,
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
@@ -41,7 +41,7 @@ export default function handleRequest(
           new Response(stream, {
             headers: responseHeaders,
             status: responseStatusCode,
-          })
+          }),
         );
 
         pipe(body);

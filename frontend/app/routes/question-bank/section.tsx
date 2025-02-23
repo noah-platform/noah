@@ -18,7 +18,7 @@ function ModuleButton({ module, currentModule, setModule, icon, children }: Modu
     <button
       className={cn(
         'flex items-center gap-3 text-lg font-semibold text-[#D9D9D9] shadow-md hover:text-primary border-2 border-transparent hover:border-gray-300 hover:bg-gray-100 px-5 py-2.5 rounded-full cursor-pointer',
-        module === currentModule ? 'bg-primary hover:bg-primary hover:text-white text-white' : ''
+        module === currentModule ? 'bg-primary hover:bg-primary hover:text-white text-white' : '',
       )}
       onClick={() => setModule(module)}
     >

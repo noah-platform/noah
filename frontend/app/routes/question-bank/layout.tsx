@@ -21,7 +21,7 @@ export function NavbarLink({ to, children }: LinkProps) {
       className={({ isActive }) =>
         cn(
           'text-md font-semibold text-white hover:text-black hover:bg-white px-4 py-2 rounded-full',
-          isActive ? 'text-black bg-white' : ''
+          isActive ? 'text-black bg-white' : '',
         )
       }
     >
