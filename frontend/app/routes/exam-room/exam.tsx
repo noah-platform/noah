@@ -1,0 +1,112 @@
+import { COOKIE_NAME, requireAuth } from '~/common/auth';
+import type { Route } from './+types/exam';
+import ExamContextProvider, { useExam } from './context';
+import cookie from 'cookie';
+import { fetchClient } from '~/clients/client';
+import { Layout } from './layout';
+import { ResponseType, type Question, type QuestionSet } from '../../common/types';
+import { match } from 'ts-pattern';
+import { RichTextPreview } from '~/components/richtext-preview';
+import { Controller, useFormContext } from 'react-hook-form';
+import { AudioPlayer } from './components/audio-player';
+
+export async function loader({ request, params: { testId } }: Route.LoaderArgs) {
+  const { sessionId } = await requireAuth(request);
+
+  const response = await fetchClient.GET('/question-bank/v1/tests/{testID}', {
+    params: { path: { testID: testId } },
+    headers: { Cookie: cookie.serialize(COOKIE_NAME, sessionId) },
+  });
+  if (response.error) {
+    throw new Error('Something went wrong');
+  }
+  return { exam: response.data.data };
+}
+
+export default function ExamRoom({ params, loaderData }: Route.ComponentProps) {
+  const { testId } = params;
+  const { exam } = loaderData;
+
+  return (
+    <ExamContextProvider testId={testId} exam={exam}>
+      <Layout>
+        <Exam />
+      </Layout>
+    </ExamContextProvider>
+  );
+}
+
+function Exam() {
+  const { exam, hasAudio, currentSection } = useExam();
+
+  console.log(exam);
+
+  const section = exam.sections[currentSection];
+  return (
+    <div className="flex flex-col gap-4 my-8">
+      <div className="flex flex-col gap-2 bg-gray-100 p-6 rounded-xl">
+        <p className="font-bold text-lg">{section.title}</p>
+        <p>{section.instruction}</p>
+      </div>
+      <div className="bg-gray-100 p-6 rounded-xl">
+        {hasAudio && <AudioPlayer />}
+        {section.questionSet.map((questionSet) => (
+          <QuestionSet key={JSON.stringify(questionSet)} questionSet={questionSet} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface QuesitonSetProps {
+  questionSet: QuestionSet;
+}
+function QuestionSet({ questionSet }: QuesitonSetProps) {
+  return (
+    <div className="flex flex-col gap-4">
+      {match(questionSet.responseType)
+        .with(ResponseType.FREE_TEXT, () => <FreeTextQuestion questions={questionSet.questions} />)
+        .otherwise(() => (
+          <p>Unsupported Response Type</p>
+        ))}
+    </div>
+  );
+}
+interface FreeTextQuestionProps {
+  questions: Question[];
+}
+function FreeTextQuestion({ questions }: FreeTextQuestionProps) {
+  return (
+    <div>
+      {questions.map((question) => (
+        <div className="grid grid-cols-2 gap-4" key={JSON.stringify(question)}>
+          <div className="flex flex-col gap-2 relative top-[-8px]">
+            <RichTextPreview value={question.body} />
+            {question.imageUrls.map((url, index) => (
+              <img key={index} src={url} />
+            ))}
+          </div>
+          {/* TODO: Add questionId */}
+          <TextArea questionId={question.body} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+interface TextAreaProps {
+  questionId: string;
+}
+function TextArea({ questionId }: TextAreaProps) {
+  const { control } = useFormContext();
+
+  return (
+    <Controller
+      control={control}
+      name={questionId}
+      render={({ field: { value, ...rest } }) => (
+        <textarea className="min-h-[600px] p-2 bg-white border rounded-sm" value={value} {...rest} />
+      )}
+    />
+  );
+}

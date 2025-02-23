@@ -1,5 +1,5 @@
 import user from '~/assets/user.svg';
-import { Link, NavLink, Outlet } from 'react-router';
+import { Link, Outlet } from 'react-router';
 import logo from '~/assets/logo.png';
 import {
   DropdownMenu,
@@ -7,28 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
-import { cn } from '~/lib/utils';
-import type { ReactNode } from 'react';
-
-interface LinkProps {
-  to: string;
-  children: ReactNode;
-}
-export function NavbarLink({ to, children }: LinkProps) {
-  return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        cn(
-          'text-md font-semibold text-white hover:text-black hover:bg-white px-4 py-2 rounded-full',
-          isActive ? 'text-black bg-white' : '',
-        )
-      }
-    >
-      {children}
-    </NavLink>
-  );
-}
+import { NavbarLink } from './components/navbar-link';
 
 export default function Layout() {
   return (

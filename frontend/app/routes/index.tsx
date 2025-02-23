@@ -1,4 +1,4 @@
-import type { Route } from './+types/home';
+import type { Route } from './+types/index';
 import logo from './logo.svg';
 import slide_1 from './slide_1.svg';
 import slide_2 from './slide_2.svg';
@@ -21,7 +21,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: 'New React Router App' }, { name: 'description', content: 'Welcome to React Router!' }];
+  return [{ title: 'Noah English' }];
 }
 
 export default function Home() {
@@ -177,7 +177,9 @@ function SlideBar() {
               <button
                 key={index}
                 onClick={() => handleSlideChange(index)}
-                className={`px-10 py-1.5 rounded-full cursor-pointer ${currentSlide === index ? 'bg-[#EF1B31]' : 'bg-[#D9D9D9]'}`}
+                className={`px-10 py-1.5 rounded-full cursor-pointer ${
+                  currentSlide === index ? 'bg-[#EF1B31]' : 'bg-[#D9D9D9]'
+                }`}
               />
             ))}
           </div>
@@ -321,7 +323,9 @@ const Personalization = () => {
               (item, index) => (
                 <motion.div
                   key={index}
-                  className={`w-64 py-6 text-center rounded-full text-lg font-medium cursor-pointer transition-all relative ${item === 'Diagram Label' ? 'bg-white text-black' : 'bg-white text-black'} ${index % 2 === 0 ? 'self-start' : 'self-end'}`}
+                  className={`w-64 py-6 text-center rounded-full text-lg font-medium cursor-pointer transition-all relative ${
+                    item === 'Diagram Label' ? 'bg-white text-black' : 'bg-white text-black'
+                  } ${index % 2 === 0 ? 'self-start' : 'self-end'}`}
                   whileHover={{ scale: 1.05 }}
                   onClick={() => console.log(`${item} clicked`)}
                   style={{ filter: item !== 'Diagram Label' ? 'blur(1.5px)' : 'none' }}
@@ -333,7 +337,7 @@ const Personalization = () => {
                     </div>
                   )}
                 </motion.div>
-              ),
+              )
             )}
           </div>
 
@@ -433,7 +437,9 @@ const PricingPage = () => {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`bg-white p-6 rounded-lg shadow-lg ${plan.isPopular ? 'border-2 border-red-500 relative' : ''}`}
+              className={`bg-white p-6 rounded-lg shadow-lg ${
+                plan.isPopular ? 'border-2 border-red-500 relative' : ''
+              }`}
             >
               {plan.isPopular && (
                 <div className="absolute -top-4 right-4">

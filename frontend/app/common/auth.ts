@@ -3,8 +3,8 @@ import axios from 'axios';
 import { AUTH_SESSION_SERVER_BASE_URL } from '~/constants/env.server';
 import cookie from 'cookie';
 
-const COOKIE_NAME = 'noahses';
-const USER_ID_HEADER_NAME = 'x-noah-user-id';
+export const COOKIE_NAME = 'noahses';
+export const USER_ID_HEADER_NAME = 'x-noah-user-id';
 
 export async function redirectIfLoggedIn(request: Request, path: string) {
   const cookies = request.headers.get('cookie') ?? '';
@@ -14,7 +14,7 @@ export async function redirectIfLoggedIn(request: Request, path: string) {
   }
 }
 
-export async function requireAuth(request: Request): Promise<{ userId: string }> {
+export async function requireAuth(request: Request): Promise<{ userId: string; sessionId: string }> {
   const cookies = request.headers.get('cookie') ?? '';
   const sessionId = cookie.parse(cookies)[COOKIE_NAME];
   if (!sessionId) {
@@ -33,5 +33,5 @@ export async function requireAuth(request: Request): Promise<{ userId: string }>
     throw redirect('/login');
   }
 
-  return { userId };
+  return { userId, sessionId };
 }
