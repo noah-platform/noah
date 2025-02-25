@@ -54,7 +54,7 @@ export default function ExamContextProvider({ testId, exam, children }: ExamCont
 
   const questionCount = useMemo(() => exam.sections.reduce((acc, section) => acc + section.questionCount, 0), [exam]);
   const questionSectionMap = useMemo(
-    () => exam.sections.flatMap((sections, index) => Array({ length: sections.questionCount }).map(() => index)),
+    () => exam.sections.flatMap((section, index) => Array.from({ length: section.questionCount }).map(() => index)),
     [exam]
   );
 

@@ -9,6 +9,9 @@ import { match } from 'ts-pattern';
 import { RichTextPreview } from '~/components/richtext-preview';
 import { Controller, useFormContext } from 'react-hook-form';
 import { AudioPlayer } from './components/audio-player';
+import reactStringReplace from 'react-string-replace';
+import parse from 'html-react-parser';
+import { Input } from '~/components/ui/input';
 
 export async function loader({ request, params: { testId } }: Route.LoaderArgs) {
   const { sessionId } = await requireAuth(request);
@@ -39,14 +42,15 @@ export default function ExamRoom({ params, loaderData }: Route.ComponentProps) {
 function Exam() {
   const { exam, hasAudio, currentSection } = useExam();
 
-  console.log(exam);
-
   const section = exam.sections[currentSection];
   return (
-    <div className="flex flex-col gap-4 my-8">
+    <div className="flex flex-col gap-4 my-8 mb-22">
       <div className="flex flex-col gap-2 bg-gray-100 p-6 rounded-xl">
         <p className="font-bold text-lg">{section.title}</p>
         <p>{section.instruction}</p>
+        {section.questionSet.map((questionSet) => (
+          <p key={JSON.stringify(questionSet)}>{questionSet.instruction}</p>
+        ))}
       </div>
       <div className="bg-gray-100 p-6 rounded-xl">
         {hasAudio && <AudioPlayer />}
@@ -66,6 +70,7 @@ function QuestionSet({ questionSet }: QuesitonSetProps) {
     <div className="flex flex-col gap-4">
       {match(questionSet.responseType)
         .with(ResponseType.FREE_TEXT, () => <FreeTextQuestion questions={questionSet.questions} />)
+        .with(ResponseType.NOTE_COMPLETION, () => <NoteCompletionQuestion questions={questionSet.questions} />)
         .otherwise(() => (
           <p>Unsupported Response Type</p>
         ))}
@@ -108,5 +113,32 @@ function TextArea({ questionId }: TextAreaProps) {
         <textarea className="min-h-[600px] p-2 bg-white border rounded-sm" value={value} {...rest} />
       )}
     />
+  );
+}
+
+interface NoteCompletionQuestionProps {
+  questions: Question[];
+}
+function NoteCompletionQuestion({ questions }: NoteCompletionQuestionProps) {
+  return (
+    <div className="w-full">
+      {questions.map((question) => (
+        <div className="prose w-full !max-w-none" key={JSON.stringify(question)}>
+          {parse(question.body, {
+            replace: (domNode) => {
+              if (domNode.type === 'text') {
+                return (
+                  <>
+                    {reactStringReplace(domNode.data, /{{(\d+)}}/g, (match) => (
+                      <Input className="inline-block w-[200px] mx-1 bg-white" key={match} />
+                    ))}
+                  </>
+                );
+              }
+            },
+          })}
+        </div>
+      ))}
+    </div>
   );
 }

@@ -12,6 +12,7 @@ export type QuestionSet = components['schemas']['core.QuestionSetEntry'];
 export type Question = components['schemas']['core.QuestionEntry'];
 export enum ResponseType {
   FREE_TEXT = 'FREE_TEXT',
+  NOTE_COMPLETION = 'NOTE_COMPLETION',
 }
 
 export enum LocalStorageKey {
