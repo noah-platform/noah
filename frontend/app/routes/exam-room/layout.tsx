@@ -29,14 +29,14 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="flex flex-col">
       <div className="flex flex-1 justify-center bg-primary min-h-[90px]">
-        <div className="flex w-5/6 justify-between items-center">
-          <div className="flex items-center gap-4">
+        <div className="grid grid-cols-3 w-5/6 items-center">
+          <div className="flex justify-start items-center gap-4">
             <Link to="/section">
               <button className="text-md font-semibold text-black bg-white px-4 py-2 rounded-full">Exit</button>
             </Link>
           </div>
           <TimeRemaining startedAt={startedAt} exam={exam} />
-          <div className="flex items-center gap-4">
+          <div className="flex justify-end items-center gap-4">
             <button className="text-md font-semibold text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full">
               Help
             </button>
