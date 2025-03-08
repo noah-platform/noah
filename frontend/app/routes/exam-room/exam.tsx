@@ -16,7 +16,7 @@ import { Input } from '~/components/ui/input';
 export async function loader({ request, params: { testId } }: Route.LoaderArgs) {
   const { sessionId } = await requireAuth(request);
 
-  const response = await fetchClient.GET('/question-bank/v1/tests/{testID}', {
+  const response = await fetchClient.POST('/question-bank/v1/tests/{testID}', {
     params: { path: { testID: testId } },
     headers: { Cookie: cookie.serialize(COOKIE_NAME, sessionId) },
   });
@@ -31,7 +31,7 @@ export default function ExamRoom({ params, loaderData }: Route.ComponentProps) {
   const { exam } = loaderData;
 
   return (
-    <ExamContextProvider testId={testId} exam={exam}>
+    <ExamContextProvider testId={testId} exam={exam.test} savedAnswers={exam.answers ?? {}}>
       <Layout>
         <Exam />
       </Layout>
@@ -120,6 +120,8 @@ interface NoteCompletionQuestionProps {
   questions: Question[];
 }
 function NoteCompletionQuestion({ questions }: NoteCompletionQuestionProps) {
+  const { register } = useFormContext();
+
   return (
     <div className="w-full">
       {questions.map((question) => (
@@ -130,7 +132,7 @@ function NoteCompletionQuestion({ questions }: NoteCompletionQuestionProps) {
                 return (
                   <>
                     {reactStringReplace(domNode.data, /{{(\d+)}}/g, (match) => (
-                      <Input className="inline-block w-[200px] mx-1 bg-white" key={match} />
+                      <Input className="inline-block w-[200px] mx-1 bg-white" key={match} {...register(match)} />
                     ))}
                   </>
                 );

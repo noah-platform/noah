@@ -1,6 +1,7 @@
-import React, { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { LocalStorageKey, type Exam } from '../../common/types';
 import { FormProvider, useForm } from 'react-hook-form';
+import { AutoSave } from './components/auto-save';
 
 interface ExamContext {
   testId: string;
@@ -38,9 +39,10 @@ export const useExam = () => {
 interface ExamContextProviderProps {
   testId: string;
   exam: Exam;
+  savedAnswers: Record<string, string>;
   children: ReactNode;
 }
-export default function ExamContextProvider({ testId, exam, children }: ExamContextProviderProps) {
+export default function ExamContextProvider({ testId, exam, savedAnswers, children }: ExamContextProviderProps) {
   const startedAt = useMemo(() => new Date(), []);
 
   const hasAudio = useMemo(() => exam.sections.some((section) => !!section.audioUrl), [exam]);
@@ -81,7 +83,9 @@ export default function ExamContextProvider({ testId, exam, children }: ExamCont
     setCurrentQuestion(index);
   }, []);
 
-  const form = useForm();
+  const form = useForm({
+    defaultValues: savedAnswers,
+  });
 
   return (
     <ExamRoomContext.Provider
@@ -108,7 +112,10 @@ export default function ExamContextProvider({ testId, exam, children }: ExamCont
         jumpToQuestion,
       }}
     >
-      <FormProvider {...form}>{children}</FormProvider>
+      <FormProvider {...form}>
+        {children}
+        <AutoSave testId={testId} />
+      </FormProvider>
     </ExamRoomContext.Provider>
   );
 }
