@@ -9,4 +9,6 @@ import (
 type Service interface {
 	GetTestsByModule(ctx context.Context, module string) ([]core.TestInfo, error)
 	GetTestById(ctx context.Context, id string) (*core.TestEntry, error)
+	BeginTestSession(ctx context.Context, userID, testID string) (*core.UserTestSession, error)
+	SaveTestSession(ctx context.Context, userID, testID string, answers map[string]string) error
 }

@@ -38,7 +38,7 @@ func (r *QuestionBankRepository) GetTestsByModule(ctx context.Context, module st
 
 	l.Debug().Msg("[QuestionBankRepository.GetTestsByModule] tests loaded")
 
-	var testInfoList []core.TestInfo
+	testInfoList := make([]core.TestInfo, 0, len(testDocuments))
 	for _, doc := range testDocuments {
 		testInfoList = append(testInfoList, core.TestInfo{
 			ID:     doc.ID.Hex(),
