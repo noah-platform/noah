@@ -19,6 +19,7 @@ export function Layout({ children }: LayoutProps) {
     startedAt,
     elapsedTime,
     currentSection,
+    currentQuestion,
     questionSectionMap,
     reviews,
     toggleReview,
@@ -71,8 +72,10 @@ export function Layout({ children }: LayoutProps) {
                 key={index}
                 className={cn(
                   'w-8 h-8 bg-white font-bold text-black border-2 border-primary',
+                  questionSectionMap[index] === currentSection && 'border-yellow-500',
+                  index === currentQuestion && 'bg-yellow-500',
                   reviews.includes(index) && 'text-white bg-red-600',
-                  questionSectionMap[index] === currentSection && 'border-yellow-500'
+                  reviews.includes(index) && index === currentQuestion && 'text-yellow-500'
                 )}
                 onClick={() => jumpToQuestion(index)}
                 onDoubleClick={() => toggleReview(index)}

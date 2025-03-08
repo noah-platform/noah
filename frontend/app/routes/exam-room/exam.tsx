@@ -87,7 +87,7 @@ function FreeTextQuestion({ questions }: FreeTextQuestionProps) {
         <div className="grid grid-cols-2 gap-4" key={JSON.stringify(question)}>
           <div className="flex flex-col gap-2 relative top-[-8px]">
             <RichTextPreview value={question.body} />
-            {question.imageUrls.map((url, index) => (
+            {(question.imageUrls ?? []).map((url, index) => (
               <img key={index} src={url} />
             ))}
           </div>

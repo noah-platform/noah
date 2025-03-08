@@ -87,6 +87,8 @@ export default function ExamContextProvider({ testId, session, children }: ExamC
     defaultValues: session.answers,
   });
 
+  console.log(session);
+
   return (
     <ExamRoomContext.Provider
       value={{
