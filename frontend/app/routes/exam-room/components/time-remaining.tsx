@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import { calculateRemainingTime } from '../utils';
-import type { Exam } from '../../../common/types';
 
 interface TimeRemainingProps {
   startedAt: Date;
-  exam: Exam;
+  elapsedTime: number;
+  duration: number;
 }
-export function TimeRemaining({ startedAt, exam }: TimeRemainingProps) {
+export function TimeRemaining({ startedAt, elapsedTime, duration }: TimeRemainingProps) {
   const [timeRemaining, setTimeRemaining] = useState<{ minutes: number; seconds: number; duration: number }>(() =>
-    calculateRemainingTime(startedAt, exam.duration - 1)
+    calculateRemainingTime(startedAt, duration - elapsedTime)
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeRemaining(calculateRemainingTime(startedAt, exam.duration));
+      setTimeRemaining(calculateRemainingTime(startedAt, duration - elapsedTime));
     }, 1000);
     return () => clearInterval(interval);
   }, [startedAt]);

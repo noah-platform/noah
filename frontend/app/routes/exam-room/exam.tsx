@@ -23,15 +23,15 @@ export async function loader({ request, params: { testId } }: Route.LoaderArgs) 
   if (response.error) {
     throw new Error('Something went wrong');
   }
-  return { exam: response.data.data };
+  return { session: response.data.data };
 }
 
 export default function ExamRoom({ params, loaderData }: Route.ComponentProps) {
   const { testId } = params;
-  const { exam } = loaderData;
+  const { session } = loaderData;
 
   return (
-    <ExamContextProvider testId={testId} exam={exam.test} savedAnswers={exam.answers ?? {}}>
+    <ExamContextProvider testId={testId} session={session}>
       <Layout>
         <Exam />
       </Layout>

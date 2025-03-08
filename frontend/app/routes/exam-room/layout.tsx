@@ -17,6 +17,7 @@ export function Layout({ children }: LayoutProps) {
     setVolume,
     questionCount,
     startedAt,
+    elapsedTime,
     currentSection,
     questionSectionMap,
     reviews,
@@ -35,7 +36,7 @@ export function Layout({ children }: LayoutProps) {
               <button className="text-md font-semibold text-black bg-white px-4 py-2 rounded-full">Exit</button>
             </Link>
           </div>
-          <TimeRemaining startedAt={startedAt} exam={exam} />
+          <TimeRemaining startedAt={startedAt} elapsedTime={elapsedTime} duration={exam.duration} />
           <div className="flex justify-end items-center gap-4">
             <button className="text-md font-semibold text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full">
               Help

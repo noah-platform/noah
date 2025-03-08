@@ -7,6 +7,7 @@ export enum Module {
   SPEAKING = 'SPEAKING',
 }
 
+export type Session = components['schemas']['handler.BeginTestSessionResponse'];
 export type Exam = components['schemas']['handler.GetTestByIdResponse'];
 export type QuestionSet = components['schemas']['core.QuestionSetEntry'];
 export type Question = components['schemas']['core.QuestionEntry'];

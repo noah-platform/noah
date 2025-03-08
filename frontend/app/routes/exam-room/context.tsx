@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
-import { LocalStorageKey, type Exam } from '../../common/types';
+import { LocalStorageKey, type Exam, type Session } from '../../common/types';
 import { FormProvider, useForm } from 'react-hook-form';
 import { AutoSave } from './components/auto-save';
 
@@ -8,6 +8,7 @@ interface ExamContext {
   exam: Exam;
 
   startedAt: Date;
+  elapsedTime: number;
 
   hasAudio: boolean;
   volume: number;
@@ -38,13 +39,12 @@ export const useExam = () => {
 
 interface ExamContextProviderProps {
   testId: string;
-  exam: Exam;
-  savedAnswers: Record<string, string>;
+  session: Session;
   children: ReactNode;
 }
-export default function ExamContextProvider({ testId, exam, savedAnswers, children }: ExamContextProviderProps) {
+export default function ExamContextProvider({ testId, session, children }: ExamContextProviderProps) {
   const startedAt = useMemo(() => new Date(), []);
-
+  const exam = session.test;
   const hasAudio = useMemo(() => exam.sections.some((section) => !!section.audioUrl), [exam]);
   const [volume, _setVolume] = useState(() =>
     Number(typeof window !== 'undefined' ? localStorage.getItem(LocalStorageKey.VOLUME) ?? 100 : 100)
@@ -84,7 +84,7 @@ export default function ExamContextProvider({ testId, exam, savedAnswers, childr
   }, []);
 
   const form = useForm({
-    defaultValues: savedAnswers,
+    defaultValues: session.answers,
   });
 
   return (
@@ -93,6 +93,7 @@ export default function ExamContextProvider({ testId, exam, savedAnswers, childr
         testId,
         exam,
         startedAt,
+        elapsedTime: session.elapsedTime,
 
         hasAudio,
         volume,
