@@ -17,8 +17,11 @@ func (r *UserTestSessionRepository) SaveSession(ctx context.Context, userID, tes
 	filter := bson.M{"userId": userID, "test.id": testID}
 	update := bson.M{
 		"$set": bson.M{
-			"test":    session.Test,
-			"answers": session.Answers,
+			"test":         session.Test,
+			"answers":      session.Answers,
+			"startedAt":    session.StartedAt,
+			"lastActiveAt": session.LastActiveAt,
+			"elapsedTime":  session.ElapsedTime,
 		},
 	}
 	opts := options.Update().SetUpsert(true)

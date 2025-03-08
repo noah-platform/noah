@@ -46,7 +46,10 @@ func (s *Server) BeginTestSession(c echo.Context) error {
 	l.Info().Msg("[Server.BeginTestSession] begin test session successfully")
 
 	return response.Ok(c, &BeginTestSessionResponse{
-		Test:    session.Test,
-		Answers: session.Answers,
+		Test:         session.Test,
+		Answers:      session.Answers,
+		StartedAt:    session.StartedAt,
+		LastActiveAt: session.LastActiveAt,
+		ElapsedTime:  session.ElapsedTime,
 	})
 }

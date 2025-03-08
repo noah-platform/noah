@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -38,12 +39,16 @@ func (s *Service) BeginTestSession(ctx context.Context, userID, testID string) (
 		}
 	}
 
+	now := time.Now()
 	if errors.Is(err, core.ErrUserTestSessionNotFound) {
 		l.Info().Msg("[Service.BeginTestSession] user test session not found, creating new session")
 
 		session = &core.UserTestSession{
-			Test:    test,
-			Answers: make(map[string]string),
+			Test:         test,
+			Answers:      make(map[string]string),
+			StartedAt:    now,
+			LastActiveAt: now,
+			ElapsedTime:  0,
 		}
 		err = s.userTestSessionRepo.SaveSession(ctx, userID, testID, session)
 		if err != nil {
@@ -53,6 +58,14 @@ func (s *Service) BeginTestSession(ctx context.Context, userID, testID string) (
 		}
 	} else {
 		l.Info().Msg("[Service.BeginTestSession] existing user test session found, continuing previous session")
+
+		session.LastActiveAt = now
+		err = s.userTestSessionRepo.SaveSession(ctx, userID, testID, session)
+		if err != nil {
+			l.Error().Err(err).Msg("[Service.BeginTestSession] failed to save user test session")
+
+			return nil, errors.Wrap(err, "failed to save user test session")
+		}
 	}
 
 	l.Info().Msg("[Service.BeginTestSession] begin test session successfully")

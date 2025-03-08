@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -26,7 +27,10 @@ func (s *Service) SaveTestSession(ctx context.Context, userID, testID string, an
 		}
 	}
 
+	now := time.Now()
 	session.Answers = answers
+	session.ElapsedTime = session.ElapsedTime + int(now.Sub(session.LastActiveAt).Seconds())
+	session.LastActiveAt = now
 	err = s.userTestSessionRepo.SaveSession(ctx, userID, testID, session)
 	if err != nil {
 		l.Error().Err(err).Msg("[Service.SaveTestSession] failed to save test session")
