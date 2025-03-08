@@ -92,7 +92,7 @@ function FreeTextQuestion({ questions }: FreeTextQuestionProps) {
             ))}
           </div>
           {/* TODO: Add questionId */}
-          <TextArea questionId={question.body} />
+          <TextArea questionId={question.body.slice(0, 15)} />
         </div>
       ))}
     </div>
