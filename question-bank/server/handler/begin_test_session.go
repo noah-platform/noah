@@ -12,12 +12,12 @@ import (
 )
 
 type BeginTestSessionResponse struct {
-	Test         *core.TestEntry   `bson:"test"`
-	Answers      map[string]string `bson:"answers"`
-	StartedAt    time.Time         `bson:"startedAt"`
-	LastActiveAt time.Time         `bson:"lastActiveAt"`
-	ElapsedTime  int               `bson:"elapsedTime"`
-	CompletedAt  *time.Time        `bson:"completedAt"`
+	Test         *core.TestEntry   `json:"test"`
+	Answers      map[string]string `json:"answers"`
+	StartedAt    time.Time         `json:"startedAt"`
+	LastActiveAt time.Time         `json:"lastActiveAt"`
+	ElapsedTime  int               `json:"elapsedTime"`
+	CompletedAt  *time.Time        `json:"completedAt"`
 }
 
 // BeginTestSession godoc
