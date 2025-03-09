@@ -15,7 +15,7 @@ export function RichTextPreview(props: RichTextPreviewProps) {
   return (
     <div
       className={cn(
-        'prose w-full overflow-x-auto pb-1 [&>*]:h5 [&>*]:leading-normal [&>*:first-child]:mt-0 [&>*:last-child]:mb-0',
+        'prose w-full overflow-x-auto pb-1 [&>*]:h5 [&>*]:leading-normal [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 !max-w-none',
         className
       )}
       dangerouslySetInnerHTML={{

@@ -64,7 +64,7 @@ export function Layout({ children }: LayoutProps) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-5/6 mx-auto my-4">
+      <div className="flex flex-col w-10/11 lg:w-5/6 mx-auto my-4">
         {!isCompleted ? children : <Submitting exam={exam} isSubmitting={isSubmitting} />}
       </div>
       <div className="bg-primary fixed w-full bottom-0 left-0">

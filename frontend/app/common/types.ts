@@ -14,6 +14,8 @@ export type Question = components['schemas']['core.QuestionEntry'];
 export enum ResponseType {
   FREE_TEXT = 'FREE_TEXT',
   NOTE_COMPLETION = 'NOTE_COMPLETION',
+  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
+  MULTIPLE_SELECT = 'MULTIPLE_SELECT',
 }
 export enum TestSessionStatus {
   NOT_STARTED = 'NOT_STARTED',
@@ -23,4 +25,5 @@ export enum TestSessionStatus {
 
 export enum LocalStorageKey {
   VOLUME = 'volume',
+  LAST_SELECTED_MODULE = 'last_selected_module',
 }
