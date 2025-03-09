@@ -15,6 +15,7 @@ type SectionDocument struct {
 	ID            primitive.ObjectID    `bson:"_id"`
 	Title         string                `bson:"title"`
 	Instruction   string                `bson:"instruction"`
+	Passage       string                `bson:"passage"`
 	AudioUrl      string                `bson:"audioUrl"`
 	QuestionCount int32                 `bson:"questionCount"`
 	QuestionSet   []QuestionSetDocument `bson:"questionset"`

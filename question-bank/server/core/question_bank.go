@@ -13,6 +13,7 @@ type SectionEntry struct {
 	ID            string             `json:"sectionId"`
 	Title         string             `json:"title"`
 	Instruction   string             `json:"instruction"`
+	Passage       string             `json:"passage"`
 	AudioUrl      string             `json:"audioUrl"`
 	QuestionCount int32              `json:"questionCount"`
 	QuestionSet   []QuestionSetEntry `json:"questionSet"`

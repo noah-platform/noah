@@ -9,6 +9,7 @@ func mapSections(docs []SectionDocument) []core.SectionEntry {
 			ID:            doc.ID.Hex(),
 			Title:         doc.Title,
 			Instruction:   doc.Instruction,
+			Passage:       doc.Passage,
 			AudioUrl:      doc.AudioUrl,
 			QuestionCount: doc.QuestionCount,
 			QuestionSet:   mapQuestionSets(doc.QuestionSet),
