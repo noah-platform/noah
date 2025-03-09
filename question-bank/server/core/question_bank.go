@@ -25,8 +25,20 @@ type QuestionSetEntry struct {
 }
 
 type QuestionEntry struct {
-	Body      string   `json:"body"`
-	ImageUrls []string `json:"imageUrls"`
+	Body                  string        `json:"body,omitempty"`
+	ImageUrls             []string      `json:"imageUrls,omitempty"`
+	Title                 string        `json:"title,omitempty"`
+	SelectCount           int32         `json:"selectCount,omitempty"`
+	Choices               []ChoiceEntry `json:"choices,omitempty"`
+	AudioUrl              string        `json:"audioUrl,omitempty"`
+	MaximumQuestionRepeat int32         `json:"maximumQuestionRepeat,omitempty"`
+	PreparationDuration   int32         `json:"preparationDuration,omitempty"`
+	MaximumAnswerDuration int32         `json:"maximumAnswerDuration,omitempty"`
+	TaskCard              string        `json:"taskCard,omitempty"`
+}
+
+type ChoiceEntry struct {
+	Text string `json:"text"`
 }
 type TestInfo struct {
 	ID     string `json:"testId"`

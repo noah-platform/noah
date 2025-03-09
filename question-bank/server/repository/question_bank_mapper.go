@@ -33,9 +33,27 @@ func mapQuestions(docs []QuestionDocument) []core.QuestionEntry {
 	questions := make([]core.QuestionEntry, len(docs))
 	for i, doc := range docs {
 		questions[i] = core.QuestionEntry{
-			Body:      doc.Body,
-			ImageUrls: doc.ImageUrls,
+			Body:                  doc.Body,
+			ImageUrls:             doc.ImageUrls,
+			Title:                 doc.Title,
+			SelectCount:           doc.SelectCount,
+			Choices:               mapChoices(doc.Choices),
+			AudioUrl:              doc.AudioUrl,
+			MaximumQuestionRepeat: doc.MaximumQuestionRepeat,
+			PreparationDuration:   doc.PreparationDuration,
+			MaximumAnswerDuration: doc.MaximumAnswerDuration,
+			TaskCard:              doc.TaskCard,
 		}
 	}
 	return questions
+}
+
+func mapChoices(docs []ChoiceDocument) []core.ChoiceEntry {
+	choices := make([]core.ChoiceEntry, len(docs))
+	for i, doc := range docs {
+		choices[i] = core.ChoiceEntry{
+			Text: doc.Text,
+		}
+	}
+	return choices
 }

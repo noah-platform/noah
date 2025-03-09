@@ -27,6 +27,18 @@ type QuestionSetDocument struct {
 }
 
 type QuestionDocument struct {
-	Body      string   `bson:"body"`
-	ImageUrls []string `bson:"imageUrls"`
+	Body                  string           `bson:"body,omitempty"`
+	ImageUrls             []string         `bson:"imageUrls,omitempty"`
+	Title                 string           `bson:"title,omitempty"`
+	SelectCount           int32            `bson:"selectCount,omitempty"`
+	Choices               []ChoiceDocument `bson:"choices,omitempty"`
+	AudioUrl              string           `bson:"audioUrl,omitempty"`
+	MaximumQuestionRepeat int32            `bson:"maximumQuestionRepeat,omitempty"`
+	PreparationDuration   int32            `bson:"preparationDuration,omitempty"`
+	MaximumAnswerDuration int32            `bson:"maximumAnswerDuration,omitempty"`
+	TaskCard              string           `bson:"taskCard,omitempty"`
+}
+
+type ChoiceDocument struct {
+	Text string `bson:"text"`
 }
