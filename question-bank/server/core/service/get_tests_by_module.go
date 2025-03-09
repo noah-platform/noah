@@ -33,15 +33,18 @@ func (s *Service) GetTestsByModule(ctx context.Context, userID, module string) (
 
 		return nil, errors.Wrap(err, "failed to get user test sessions")
 	}
-	sessionsMap := lo.Map(sessions, func(session core.UserTestSession, _ int) string {
+	sessionsMap := lo.KeyBy(sessions, func(session core.UserTestSession) string {
 		return session.Test.ID
 	})
 	userTestInfoList := lo.Map(testInfoList, func(test core.TestInfo, _ int) core.UserTestInfo {
+		status := core.TestSessionStatusNotStarted
+		if session, ok := sessionsMap[test.ID]; ok {
+			status = lo.Ternary(session.CompletedAt != nil, core.TestSessionStatusCompleted, core.TestSessionStatusInProgress)
+		}
 		return core.UserTestInfo{
 			ID:     test.ID,
 			Module: test.Module,
-			// TODO: Handle completed tests
-			Status: lo.Ternary(lo.Contains(sessionsMap, test.ID), core.TestSessionStatusInProgress, core.TestSessionStatusNotStarted),
+			Status: status,
 		}
 	})
 

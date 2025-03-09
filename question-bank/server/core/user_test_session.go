@@ -22,4 +22,5 @@ type UserTestSession struct {
 	StartedAt    time.Time         `json:"startedAt" bson:"startedAt"`
 	LastActiveAt time.Time         `json:"lastActiveAt" bson:"lastActiveAt"`
 	ElapsedTime  int               `json:"elapsedTime" bson:"elapsedTime"`
+	CompletedAt  *time.Time        `json:"completedAt" bson:"completedAt"`
 }

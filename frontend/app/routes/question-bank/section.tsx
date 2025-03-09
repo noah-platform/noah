@@ -1,4 +1,4 @@
-import { Module } from '~/common/types';
+import { Module, TestSessionStatus } from '~/common/types';
 import { useQueryState } from 'nuqs';
 import { Suspense } from 'react';
 import { BookDashed } from 'lucide-react';
@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import { requireAuth } from '~/common/auth';
 import type { Route } from '../+types';
 import { ModuleSelector } from './components/module-selector';
+import { match } from 'ts-pattern';
 
 export async function loader({ request }: Route.LoaderArgs) {
   await requireAuth(request);
@@ -55,9 +56,14 @@ function TestList({ module }: TestListProps) {
         >
           <div className="flex justify-between items-center gap-2">
             <p className="text-xl font-medium">Test {index + 1}</p>
-            {test.status === 'IN_PROGRESS' && (
-              <p className="px-4 py-1 border-2 border-primary bg-gray-200 text-sm rounded-full">In Progress</p>
-            )}
+            {match(test.status as TestSessionStatus)
+              .with(TestSessionStatus.IN_PROGRESS, () => (
+                <p className="px-4 py-1 border border-primary bg-gray-200 text-sm rounded-full">In Progress</p>
+              ))
+              .with(TestSessionStatus.COMPLETED, () => (
+                <p className="px-4 py-1 border border-primary bg-primary text-white text-sm rounded-full">Completed</p>
+              ))
+              .otherwise(() => null)}
           </div>
           <div className="border border-b border-gray-200" />
           <p className="text-sm">{test.testId}</p>

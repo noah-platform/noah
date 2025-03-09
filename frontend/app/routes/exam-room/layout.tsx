@@ -5,6 +5,7 @@ import { cn } from '~/lib/utils';
 import { useExam } from './context';
 import { TimeRemaining } from './components/time-remaining';
 import { Slider } from '~/components/ui/slider';
+import { Submitting } from './components/submitting';
 
 interface LayoutProps {
   children: ReactNode;
@@ -26,25 +27,28 @@ export function Layout({ children }: LayoutProps) {
     nextQuestion,
     previousQuestion,
     jumpToQuestion,
+    isCompleted,
+    isSubmitting,
+    handleSubmit,
   } = useExam();
 
   return (
     <div className="flex flex-col">
       <div className="flex flex-1 justify-center bg-primary min-h-[90px]">
-        <div className="grid grid-cols-3 w-5/6 items-center">
+        <div className={cn('grid grid-cols-3 w-5/6 items-center', isCompleted && 'grid-cols-2')}>
           <div className="flex justify-start items-center gap-4">
             <Link to="/section">
               <button className="text-md font-semibold text-black bg-white px-4 py-2 rounded-full">Exit</button>
             </Link>
           </div>
-          <TimeRemaining startedAt={startedAt} elapsedTime={elapsedTime} duration={exam.duration} />
+          {!isCompleted && <TimeRemaining startedAt={startedAt} elapsedTime={elapsedTime} duration={exam.duration} />}
           <div className="flex justify-end items-center gap-4">
             <button className="text-md font-semibold text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full">
               Help
             </button>
-            <Link to="/review">
-              <button className="text-md font-semibold text-black bg-white px-4 py-2 rounded-full">Submit</button>
-            </Link>
+            <button className="text-md font-semibold text-black bg-white px-4 py-2 rounded-full" onClick={handleSubmit}>
+              Submit
+            </button>
             {hasAudio && (
               <div className="flex items-center gap-2 ml-4">
                 <Volume2 className="text-white h-8 w-8" strokeWidth={2} />
@@ -60,7 +64,9 @@ export function Layout({ children }: LayoutProps) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-5/6 mx-auto my-4">{children}</div>
+      <div className="flex flex-col w-5/6 mx-auto my-4">
+        {!isCompleted ? children : <Submitting exam={exam} isSubmitting={isSubmitting} />}
+      </div>
       <div className="bg-primary fixed w-full bottom-0 left-0">
         <div className="flex justify-between items-center gap-2 w-5/6 min-h-[60px] mx-auto">
           <div className="flex items-center gap-2">

@@ -15,18 +15,9 @@ func (r *UserTestSessionRepository) SaveSession(ctx context.Context, userID, tes
 	l := log.Ctx(ctx)
 
 	filter := bson.M{"userId": userID, "test.id": testID}
-	update := bson.M{
-		"$set": bson.M{
-			"test":         session.Test,
-			"answers":      session.Answers,
-			"startedAt":    session.StartedAt,
-			"lastActiveAt": session.LastActiveAt,
-			"elapsedTime":  session.ElapsedTime,
-		},
-	}
-	opts := options.Update().SetUpsert(true)
+	opts := options.Replace().SetUpsert(true)
 
-	if _, err := r.userTestSession.UpdateOne(ctx, filter, update, opts); err != nil {
+	if _, err := r.userTestSession.ReplaceOne(ctx, filter, session, opts); err != nil {
 		l.Error().Err(err).Msg("[UserTestSessionRepository.SaveSession] failed to save user test session")
 
 		return errors.Wrap(err, "failed to save user test session")

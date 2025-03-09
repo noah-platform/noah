@@ -11,4 +11,5 @@ type Service interface {
 	GetTestById(ctx context.Context, id string) (*core.TestEntry, error)
 	BeginTestSession(ctx context.Context, userID, testID string) (*core.UserTestSession, error)
 	SaveTestSession(ctx context.Context, userID, testID string, answers map[string]string) error
+	EndTestSession(ctx context.Context, userID, testID string, answers map[string]string) error
 }
