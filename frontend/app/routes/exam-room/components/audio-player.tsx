@@ -2,13 +2,13 @@ import { useRef, useMemo, useEffect, useCallback } from 'react';
 import { useExam } from '../context';
 
 export function AudioPlayer() {
-  const { exam, volume } = useExam();
+  const { exam, volume, isReviewing } = useExam();
   const player = useRef<HTMLAudioElement>(null);
 
   const audioUrls = useMemo(() => exam.sections.map((section) => section.audioUrl), [exam]);
 
   useEffect(() => {
-    if (!player.current) return;
+    if (!player.current || isReviewing) return;
 
     player.current.src = audioUrls[0];
     player.current.play();

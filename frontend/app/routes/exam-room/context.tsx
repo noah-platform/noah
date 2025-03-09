@@ -28,6 +28,9 @@ interface ExamContext {
   previousQuestion: () => void;
   jumpToQuestion: (index: number) => void;
 
+  isReviewing: boolean;
+  answers: Record<string, string[]>;
+
   isCompleted: boolean;
   isSubmitting: boolean;
   handleSubmit: () => Promise<void>;
@@ -88,6 +91,9 @@ export default function ExamContextProvider({ testId, session, children }: ExamC
     setCurrentQuestion(index);
   }, []);
 
+  const isReviewing = !!session.completedAt;
+  const answers = session.test.answers;
+
   const form = useForm({
     defaultValues: session.answers,
   });
@@ -125,6 +131,9 @@ export default function ExamContextProvider({ testId, session, children }: ExamC
         nextQuestion,
         previousQuestion,
         jumpToQuestion,
+
+        isReviewing,
+        answers,
 
         isCompleted,
         isSubmitting,

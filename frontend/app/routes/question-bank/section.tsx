@@ -50,7 +50,7 @@ function TestList({ module }: TestListProps) {
     <div className="grid grid-cols-3 gap-4">
       {lists.map((test, index) => (
         <Link
-          to={`/test/${test.testId}`}
+          to={test.status !== TestSessionStatus.COMPLETED ? `/test/${test.testId}` : `/test/${test.testId}/start`}
           key={test.testId}
           className="flex flex-col gap-2 w-full h-[220px] bg-gray-100 border-2 border-gray-300 hover:border-2 hover:border-gray-400 rounded-xl p-4 shadow-sm"
         >

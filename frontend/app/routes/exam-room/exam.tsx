@@ -56,7 +56,7 @@ function Exam() {
           {hasAudio && <AudioPlayer />}
           {section.questionSet.map((questionSet) => (
             <QuestionSet
-              key={JSON.stringify(questionSet)}
+              key={questionSet.questionSetId}
               questionSet={questionSet}
               showInstruction={section.questionSet.length > 1}
             />

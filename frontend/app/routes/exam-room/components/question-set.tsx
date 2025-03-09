@@ -3,7 +3,7 @@ import { FreeTextQuestion } from './components/free-text-question';
 import { NoteCompletionQuestion } from './components/note-completion-question';
 import { match } from 'ts-pattern';
 import { MultipleChoiceQuestion } from './components/multiple-choice-question';
-import { MultipleSelectQuestion } from './components/multiple-select-questio';
+import { MultipleSelectQuestion } from './components/multiple-select-question';
 
 interface QuesitonSetProps {
   questionSet: QuestionSet;
