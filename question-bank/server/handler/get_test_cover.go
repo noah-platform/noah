@@ -9,18 +9,18 @@ import (
 	"github.com/noah-platform/noah/question-bank/server/core"
 )
 
-type GetTestByIdResponse = core.TestEntry
+type GetTestCoverResponse = core.TestCover
 
-// GetTestById godoc
+// GetTestCover godoc
 //
-//	@Summary	Get test by ID
+//	@Summary	Get test cover
 //	@Tags		external
 //	@Router		/external/v1/tests/{testID} [get]
 //	@Param		testID	path		string	true	"Test ID"
-//	@Success	200		{object}	response.DataResponse[GetTestByIdResponse]
+//	@Success	200		{object}	response.DataResponse[GetTestCoverResponse]
 //	@Failure	404		{object}	response.ErrorResponse
 //	@Failure	500		{object}	response.ErrorResponse
-func (s *Server) GetTestById(c echo.Context) error {
+func (s *Server) GetTestCover(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	testID := c.Param("testID")
@@ -28,28 +28,28 @@ func (s *Server) GetTestById(c echo.Context) error {
 	l := log.With().Str("requestId", c.Response().Header().Get(echo.HeaderXRequestID)).Str("testID", testID).Logger()
 	ctx = l.WithContext(ctx)
 
-	test, err := s.service.GetTestById(ctx, testID)
+	test, err := s.service.GetTestCover(ctx, testID)
 	if err != nil {
 		switch {
 		case errors.Is(err, core.ErrTestNotFound):
-			l.Info().Msg("[Server.GetTestById] test not found")
+			l.Info().Msg("[Server.GetTestCover] test not found")
 
 			return response.NotFound(c, "test not found")
 		default:
-			l.Error().Err(err).Msg("[Server.GetTestById] failed to get test")
+			l.Error().Err(err).Msg("[Server.GetTestCover] failed to get test cover")
 
-			return response.InternalServerError(c, "failed to get test")
+			return response.InternalServerError(c, "failed to get test cover")
 		}
 	}
 
-	l.Info().Msg("[Server.GetTestById] get test successfully")
+	l.Info().Msg("[Server.GetTestCover] get test successfully")
 
-	return response.Ok(c, GetTestByIdResponse{
+	return response.Ok(c, GetTestCoverResponse{
 		ID:          test.ID,
 		Title:       test.Title,
 		Duration:    test.Duration,
 		Instruction: test.Instruction,
 		Module:      test.Module,
-		Sections:    test.Sections,
+		Tags:        test.Tags,
 	})
 }

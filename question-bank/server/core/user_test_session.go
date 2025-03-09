@@ -13,6 +13,7 @@ const (
 type UserTestInfo struct {
 	ID     string            `json:"testId"`
 	Module string            `json:"module"`
+	Tags   []string          `json:"tags"`
 	Status TestSessionStatus `json:"status"`
 }
 

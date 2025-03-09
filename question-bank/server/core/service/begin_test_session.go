@@ -69,6 +69,11 @@ func (s *Service) BeginTestSession(ctx context.Context, userID, testID string) (
 		}
 	}
 
+	// Hide answers until the test is completed
+	if session.CompletedAt == nil {
+		session.Test.Answers = nil
+	}
+
 	l.Info().Msg("[Service.BeginTestSession] begin test session successfully")
 
 	return session, nil

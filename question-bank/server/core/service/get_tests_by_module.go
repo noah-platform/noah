@@ -11,7 +11,7 @@ import (
 	"github.com/noah-platform/noah/question-bank/server/core"
 )
 
-func (s *Service) GetTestsByModule(ctx context.Context, userID, module string) ([]core.UserTestInfo, error) {
+func (s *Service) GetTestsByModule(ctx context.Context, userID string, module core.Module) ([]core.UserTestInfo, error) {
 	l := log.Ctx(ctx)
 
 	testInfoList, err := s.questionBankRepo.GetTestsByModule(ctx, module)
@@ -46,6 +46,7 @@ func (s *Service) GetTestsByModule(ctx context.Context, userID, module string) (
 		return core.UserTestInfo{
 			ID:     test.ID,
 			Module: test.Module,
+			Tags:   test.Tags,
 			Status: status,
 		}
 	})

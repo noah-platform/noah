@@ -11,7 +11,7 @@ import (
 	"github.com/noah-platform/noah/question-bank/server/core"
 )
 
-func (r *QuestionBankRepository) GetTestsByModule(ctx context.Context, module string) ([]core.TestInfo, error) {
+func (r *QuestionBankRepository) GetTestsByModule(ctx context.Context, module core.Module) ([]core.TestInfo, error) {
 	l := log.Ctx(ctx)
 
 	var testDocuments []TestDocument
@@ -43,6 +43,7 @@ func (r *QuestionBankRepository) GetTestsByModule(ctx context.Context, module st
 		testInfoList = append(testInfoList, core.TestInfo{
 			ID:     doc.ID.Hex(),
 			Module: doc.Module,
+			Tags:   doc.Tags,
 		})
 	}
 

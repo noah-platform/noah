@@ -7,8 +7,8 @@ import (
 )
 
 type QuestionBankRepository interface {
-	GetTestsByModule(ctx context.Context, module string) ([]core.TestInfo, error)
-	GetTestById(ctx context.Context, module string) (*core.TestEntry, error)
+	GetTestsByModule(ctx context.Context, module core.Module) ([]core.TestInfo, error)
+	GetTestById(ctx context.Context, id string) (*core.TestEntry, error)
 }
 
 type UserTestSessionRepository interface {

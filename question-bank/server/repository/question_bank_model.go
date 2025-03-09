@@ -3,12 +3,14 @@ package repository
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type TestDocument struct {
-	ID          primitive.ObjectID `bson:"_id"`
-	Title       string             `bson:"title"`
-	Duration    int32              `bson:"duration"`
-	Instruction string             `bson:"instruction"`
-	Module      string             `bson:"module"`
-	Sections    []SectionDocument  `bson:"sections"`
+	ID          primitive.ObjectID  `bson:"_id"`
+	Title       string              `bson:"title"`
+	Duration    int32               `bson:"duration"`
+	Instruction string              `bson:"instruction"`
+	Module      string              `bson:"module"`
+	Tags        []string            `bson:"tags"`
+	Sections    []SectionDocument   `bson:"sections"`
+	Answers     map[string][]string `bson:"answers"`
 }
 
 type SectionDocument struct {
@@ -22,22 +24,24 @@ type SectionDocument struct {
 }
 
 type QuestionSetDocument struct {
+	ID           primitive.ObjectID `bson:"_id"`
 	Instruction  string             `bson:"instruction"`
 	ResponseType string             `bson:"responseType"`
 	Questions    []QuestionDocument `bson:"questions"`
 }
 
 type QuestionDocument struct {
-	Body                  string           `bson:"body,omitempty"`
-	ImageUrls             []string         `bson:"imageUrls,omitempty"`
-	Title                 string           `bson:"title,omitempty"`
-	SelectCount           int32            `bson:"selectCount,omitempty"`
-	Choices               []ChoiceDocument `bson:"choices,omitempty"`
-	AudioUrl              string           `bson:"audioUrl,omitempty"`
-	MaximumQuestionRepeat int32            `bson:"maximumQuestionRepeat,omitempty"`
-	PreparationDuration   int32            `bson:"preparationDuration,omitempty"`
-	MaximumAnswerDuration int32            `bson:"maximumAnswerDuration,omitempty"`
-	TaskCard              string           `bson:"taskCard,omitempty"`
+	ID                    primitive.ObjectID `bson:"_id"`
+	Body                  string             `bson:"body,omitempty"`
+	ImageUrls             []string           `bson:"imageUrls,omitempty"`
+	Title                 string             `bson:"title,omitempty"`
+	SelectCount           int32              `bson:"selectCount,omitempty"`
+	Choices               []ChoiceDocument   `bson:"choices,omitempty"`
+	AudioUrl              string             `bson:"audioUrl,omitempty"`
+	MaximumQuestionRepeat int32              `bson:"maximumQuestionRepeat,omitempty"`
+	PreparationDuration   int32              `bson:"preparationDuration,omitempty"`
+	MaximumAnswerDuration int32              `bson:"maximumAnswerDuration,omitempty"`
+	TaskCard              string             `bson:"taskCard,omitempty"`
 }
 
 type ChoiceDocument struct {

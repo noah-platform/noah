@@ -13,7 +13,7 @@ type GetTestsByModuleResponse = []core.UserTestInfo
 
 // GetTestsByModule godoc
 //
-//	@Summary	Get tests info by module
+//	@Summary	List tests by module
 //	@Tags		external
 //	@Router		/external/v1/tests [get]
 //	@Param		module	query		string	true	"Module"
@@ -26,10 +26,21 @@ func (s *Server) GetTestsByModule(c echo.Context) error {
 	module := c.QueryParam("module")
 	userID := s.auth.GetUserID(c)
 
-	l := log.With().Str("requestId", c.Response().Header().Get(echo.HeaderXRequestID)).Str("module", module).Logger()
+	l := log.With().Str("requestId", c.Response().Header().Get(echo.HeaderXRequestID)).Str("userID", userID).Str("module", module).Logger()
 	ctx = l.WithContext(ctx)
 
-	userTestInfoList, err := s.service.GetTestsByModule(ctx, userID, module)
+	if module == "" {
+		l.Debug().Msg("[Server.GetTestsByModule] missing module filter")
+
+		return response.BadRequest(c, "module is required")
+	}
+	if !core.Module(module).IsValid() {
+		l.Debug().Msg("[Server.GetTestsByModule] invalid module")
+
+		return response.BadRequest(c, "invalid module")
+	}
+
+	userTestInfoList, err := s.service.GetTestsByModule(ctx, userID, core.Module(module))
 	if err != nil {
 		switch {
 		case errors.Is(err, core.ErrTestNotFound):

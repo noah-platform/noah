@@ -1,12 +1,29 @@
 package core
 
+type TestInfo struct {
+	ID     string   `json:"testId"`
+	Module string   `json:"module"`
+	Tags   []string `json:"tags"`
+}
+
+type TestCover struct {
+	ID          string   `json:"testId"`
+	Title       string   `json:"title"`
+	Duration    int32    `json:"duration"`
+	Instruction string   `json:"instruction"`
+	Module      string   `json:"module"`
+	Tags        []string `json:"tags"`
+}
+
 type TestEntry struct {
-	ID          string         `json:"testId"`
-	Title       string         `json:"title"`
-	Duration    int32          `json:"duration"`
-	Instruction string         `json:"instruction"`
-	Module      string         `json:"module"`
-	Sections    []SectionEntry `json:"sections"`
+	ID          string              `json:"testId"`
+	Title       string              `json:"title"`
+	Duration    int32               `json:"duration"`
+	Instruction string              `json:"instruction"`
+	Module      string              `json:"module"`
+	Tags        []string            `json:"tags"`
+	Sections    []SectionEntry      `json:"sections"`
+	Answers     map[string][]string `json:"answers,omitempty"`
 }
 
 type SectionEntry struct {
@@ -20,12 +37,14 @@ type SectionEntry struct {
 }
 
 type QuestionSetEntry struct {
+	ID           string          `json:"questionSetId"`
 	Instruction  string          `json:"instruction"`
 	ResponseType string          `json:"responseType"`
 	Questions    []QuestionEntry `json:"questions"`
 }
 
 type QuestionEntry struct {
+	ID                    string        `json:"questionId"`
 	Body                  string        `json:"body,omitempty"`
 	ImageUrls             []string      `json:"imageUrls,omitempty"`
 	Title                 string        `json:"title,omitempty"`
@@ -40,8 +59,4 @@ type QuestionEntry struct {
 
 type ChoiceEntry struct {
 	Text string `json:"text"`
-}
-type TestInfo struct {
-	ID     string `json:"testId"`
-	Module string `json:"module"`
 }

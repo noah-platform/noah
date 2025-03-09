@@ -22,6 +22,7 @@ func mapQuestionSets(docs []QuestionSetDocument) []core.QuestionSetEntry {
 	sets := make([]core.QuestionSetEntry, len(docs))
 	for i, doc := range docs {
 		sets[i] = core.QuestionSetEntry{
+			ID:           doc.ID.Hex(),
 			Instruction:  doc.Instruction,
 			ResponseType: doc.ResponseType,
 			Questions:    mapQuestions(doc.Questions),
@@ -34,6 +35,7 @@ func mapQuestions(docs []QuestionDocument) []core.QuestionEntry {
 	questions := make([]core.QuestionEntry, len(docs))
 	for i, doc := range docs {
 		questions[i] = core.QuestionEntry{
+			ID:                    doc.ID.Hex(),
 			Body:                  doc.Body,
 			ImageUrls:             doc.ImageUrls,
 			Title:                 doc.Title,

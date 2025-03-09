@@ -44,6 +44,8 @@ func (r *QuestionBankRepository) GetTestById(ctx context.Context, id string) (*c
 		Duration:    testDocument.Duration,
 		Instruction: testDocument.Instruction,
 		Module:      testDocument.Module,
+		Tags:        testDocument.Tags,
 		Sections:    mapSections(testDocument.Sections),
+		Answers:     testDocument.Answers,
 	}, nil
 }
