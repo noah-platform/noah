@@ -29,10 +29,9 @@ func (s *Server) Start() {
 
 	e.GET("/docs", s.Docs)
 
-	e.GET("/external/v1/tests/:testID", s.GetTestById)
-	e.GET("/external/v1/tests", s.GetTestsByModule)
-
 	u := e.Group("", s.auth.Middleware)
+	u.GET("/external/v1/tests", s.GetTestsByModule)
+	u.GET("/external/v1/tests/:testID", s.GetTestById)
 	u.POST("/external/v1/tests/:testID", s.BeginTestSession)
 	u.PUT("/external/v1/tests/:testID", s.SaveTestSession)
 

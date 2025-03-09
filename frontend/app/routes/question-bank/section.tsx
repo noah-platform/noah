@@ -53,7 +53,12 @@ function TestList({ module }: TestListProps) {
           key={test.testId}
           className="flex flex-col gap-2 w-full h-[220px] bg-gray-100 border-2 border-gray-300 hover:border-2 hover:border-gray-400 rounded-xl p-4 shadow-sm"
         >
-          <p className="text-xl font-medium">Test {index + 1}</p>
+          <div className="flex justify-between items-center gap-2">
+            <p className="text-xl font-medium">Test {index + 1}</p>
+            {test.status === 'IN_PROGRESS' && (
+              <p className="px-4 py-1 border-2 border-primary bg-gray-200 text-sm rounded-full">In Progress</p>
+            )}
+          </div>
           <div className="border border-b border-gray-200" />
           <p className="text-sm">{test.testId}</p>
         </Link>

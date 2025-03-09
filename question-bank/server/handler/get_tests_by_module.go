@@ -9,7 +9,7 @@ import (
 	"github.com/noah-platform/noah/question-bank/server/core"
 )
 
-type GetTestsByModuleResponse = []core.TestInfo
+type GetTestsByModuleResponse = []core.UserTestInfo
 
 // GetTestsByModule godoc
 //
@@ -24,11 +24,12 @@ func (s *Server) GetTestsByModule(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	module := c.QueryParam("module")
+	userID := s.auth.GetUserID(c)
 
 	l := log.With().Str("requestId", c.Response().Header().Get(echo.HeaderXRequestID)).Str("module", module).Logger()
 	ctx = l.WithContext(ctx)
 
-	testInfoList, err := s.service.GetTestsByModule(ctx, module)
+	userTestInfoList, err := s.service.GetTestsByModule(ctx, userID, module)
 	if err != nil {
 		switch {
 		case errors.Is(err, core.ErrTestNotFound):
@@ -44,5 +45,5 @@ func (s *Server) GetTestsByModule(c echo.Context) error {
 
 	l.Info().Msg("[Server.GetTestsByModule] get tests successfully")
 
-	return response.Ok(c, GetTestsByModuleResponse(testInfoList))
+	return response.Ok(c, GetTestsByModuleResponse(userTestInfoList))
 }
