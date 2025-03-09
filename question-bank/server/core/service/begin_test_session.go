@@ -44,13 +44,14 @@ func (s *Service) BeginTestSession(ctx context.Context, userID, testID string) (
 		l.Info().Msg("[Service.BeginTestSession] user test session not found, creating new session")
 
 		session = &core.UserTestSession{
+			UserID:       userID,
 			Test:         test,
 			Answers:      make(map[string]string),
 			StartedAt:    now,
 			LastActiveAt: now,
 			ElapsedTime:  0,
 		}
-		err = s.userTestSessionRepo.SaveSession(ctx, userID, testID, session)
+		err = s.userTestSessionRepo.SaveSession(ctx, session)
 		if err != nil {
 			l.Error().Err(err).Msg("[Service.BeginTestSession] failed to save user test session")
 
@@ -60,7 +61,7 @@ func (s *Service) BeginTestSession(ctx context.Context, userID, testID string) (
 		l.Info().Msg("[Service.BeginTestSession] existing user test session found, continuing previous session")
 
 		session.LastActiveAt = now
-		err = s.userTestSessionRepo.SaveSession(ctx, userID, testID, session)
+		err = s.userTestSessionRepo.SaveSession(ctx, session)
 		if err != nil {
 			l.Error().Err(err).Msg("[Service.BeginTestSession] failed to save user test session")
 

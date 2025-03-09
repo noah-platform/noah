@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"time"
+
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -9,7 +11,14 @@ import (
 	"github.com/noah-platform/noah/question-bank/server/core"
 )
 
-type BeginTestSessionResponse = core.UserTestSession
+type BeginTestSessionResponse struct {
+	Test         *core.TestEntry   `bson:"test"`
+	Answers      map[string]string `bson:"answers"`
+	StartedAt    time.Time         `bson:"startedAt"`
+	LastActiveAt time.Time         `bson:"lastActiveAt"`
+	ElapsedTime  int               `bson:"elapsedTime"`
+	CompletedAt  *time.Time        `bson:"completedAt"`
+}
 
 // BeginTestSession godoc
 //
@@ -51,5 +60,6 @@ func (s *Server) BeginTestSession(c echo.Context) error {
 		StartedAt:    session.StartedAt,
 		LastActiveAt: session.LastActiveAt,
 		ElapsedTime:  session.ElapsedTime,
+		CompletedAt:  session.CompletedAt,
 	})
 }

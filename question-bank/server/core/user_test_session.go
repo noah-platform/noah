@@ -17,10 +17,11 @@ type UserTestInfo struct {
 }
 
 type UserTestSession struct {
-	Test         *TestEntry        `json:"test" bson:"test"`
-	Answers      map[string]string `json:"answers" bson:"answers"`
-	StartedAt    time.Time         `json:"startedAt" bson:"startedAt"`
-	LastActiveAt time.Time         `json:"lastActiveAt" bson:"lastActiveAt"`
-	ElapsedTime  int               `json:"elapsedTime" bson:"elapsedTime"`
-	CompletedAt  *time.Time        `json:"completedAt" bson:"completedAt"`
+	UserID       string            `bson:"userId"`
+	Test         *TestEntry        `bson:"test"`
+	Answers      map[string]string `bson:"answers"`
+	StartedAt    time.Time         `bson:"startedAt"`
+	LastActiveAt time.Time         `bson:"lastActiveAt"`
+	ElapsedTime  int               `bson:"elapsedTime"`
+	CompletedAt  *time.Time        `bson:"completedAt"`
 }

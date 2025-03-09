@@ -11,10 +11,10 @@ import (
 	"github.com/noah-platform/noah/question-bank/server/core"
 )
 
-func (r *UserTestSessionRepository) SaveSession(ctx context.Context, userID, testID string, session *core.UserTestSession) error {
+func (r *UserTestSessionRepository) SaveSession(ctx context.Context, session *core.UserTestSession) error {
 	l := log.Ctx(ctx)
 
-	filter := bson.M{"userId": userID, "test.id": testID}
+	filter := bson.M{"userId": session.UserID, "test.id": session.Test.ID}
 	opts := options.Replace().SetUpsert(true)
 
 	if _, err := r.userTestSession.ReplaceOne(ctx, filter, session, opts); err != nil {

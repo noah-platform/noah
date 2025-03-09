@@ -14,5 +14,5 @@ type QuestionBankRepository interface {
 type UserTestSessionRepository interface {
 	GetSession(ctx context.Context, userID, testID string) (*core.UserTestSession, error)
 	GetManySessionsByUserID(ctx context.Context, userID string) ([]core.UserTestSession, error)
-	SaveSession(ctx context.Context, userID, testID string, session *core.UserTestSession) error
+	SaveSession(ctx context.Context, session *core.UserTestSession) error
 }

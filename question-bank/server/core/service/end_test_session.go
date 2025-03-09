@@ -32,7 +32,7 @@ func (s *Service) EndTestSession(ctx context.Context, userID, testID string, ans
 	session.ElapsedTime = session.ElapsedTime + int(now.Sub(session.LastActiveAt).Seconds())
 	session.LastActiveAt = now
 	session.CompletedAt = &now
-	err = s.userTestSessionRepo.SaveSession(ctx, userID, testID, session)
+	err = s.userTestSessionRepo.SaveSession(ctx, session)
 	if err != nil {
 		l.Error().Err(err).Msg("[Service.EndTestSession] failed to save test session")
 

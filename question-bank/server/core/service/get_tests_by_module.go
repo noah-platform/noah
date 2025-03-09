@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -37,6 +38,7 @@ func (s *Service) GetTestsByModule(ctx context.Context, userID, module string) (
 		return session.Test.ID
 	})
 	userTestInfoList := lo.Map(testInfoList, func(test core.TestInfo, _ int) core.UserTestInfo {
+		fmt.Println(test.ID, sessions)
 		status := core.TestSessionStatusNotStarted
 		if session, ok := sessionsMap[test.ID]; ok {
 			status = lo.Ternary(session.CompletedAt != nil, core.TestSessionStatusCompleted, core.TestSessionStatusInProgress)
