@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
-import { NavbarLink } from './components/navbar-link';
+import { NavbarLink } from '../../components/navbar-link';
 
 export default function Layout() {
   return (
@@ -16,10 +16,11 @@ export default function Layout() {
         <div className="flex w-5/6 justify-between">
           <Link to="/" className="flex items-center gap-2">
             <img className="h-[90px]" src={logo} />
-            <h1 className="text-white text-2xl font-bold">Noah English</h1>
+            <h1 className="text-white text-2xl font-bold">NOAH ENGLISH</h1>
           </Link>
           <div className="flex items-center gap-3">
-            <NavbarLink to="/">Full Test</NavbarLink>
+            {/* <NavbarLink to="/">Full Test</NavbarLink> */}
+            <NavbarLink to="/">Home</NavbarLink>
             <NavbarLink to="/section">Section Test</NavbarLink>
             <NavbarLink to="/review">Review</NavbarLink>
             <DropdownMenu>

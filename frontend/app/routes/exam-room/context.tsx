@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 import { LocalStorageKey, type Exam, type Session } from '../../common/types';
 import { FormProvider, useForm } from 'react-hook-form';
 import { AutoSave } from './components/auto-save';
+import { client } from '~/clients/client';
 
 interface ExamContext {
   testId: string;
@@ -26,6 +27,10 @@ interface ExamContext {
   nextQuestion: () => void;
   previousQuestion: () => void;
   jumpToQuestion: (index: number) => void;
+
+  isCompleted: boolean;
+  isSubmitting: boolean;
+  handleSubmit: () => Promise<void>;
 }
 export const ExamRoomContext = createContext<ExamContext>({} as ExamContext);
 
@@ -87,6 +92,13 @@ export default function ExamContextProvider({ testId, session, children }: ExamC
     defaultValues: session.answers,
   });
 
+  const [isCompleted, setIsCompleted] = useState(false);
+  const { isPending: isSubmitting, mutateAsync } = client.useMutation('post', '/question-bank/v1/tests/{testID}/end');
+  const handleSubmit = useCallback(async () => {
+    setIsCompleted(true);
+    await mutateAsync({ params: { path: { testID: testId } }, body: { answers: form.getValues() } });
+  }, [testId, mutateAsync]);
+
   console.log(session);
 
   return (
@@ -113,6 +125,10 @@ export default function ExamContextProvider({ testId, session, children }: ExamC
         nextQuestion,
         previousQuestion,
         jumpToQuestion,
+
+        isCompleted,
+        isSubmitting,
+        handleSubmit,
       }}
     >
       <FormProvider {...form}>

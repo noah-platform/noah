@@ -15,7 +15,7 @@ export default function Logout() {
         await mutateAsync({});
         toast.dismiss();
         toast.success('Logged out successfully');
-        navigate('/login');
+        navigate('/');
       } catch {
         toast.error('Something went wrong');
         return;

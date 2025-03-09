@@ -15,6 +15,11 @@ export enum ResponseType {
   FREE_TEXT = 'FREE_TEXT',
   NOTE_COMPLETION = 'NOTE_COMPLETION',
 }
+export enum TestSessionStatus {
+  NOT_STARTED = 'NOT_STARTED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+}
 
 export enum LocalStorageKey {
   VOLUME = 'volume',

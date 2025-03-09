@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
@@ -53,7 +53,7 @@ export default function Register() {
     try {
       await mutateAsync({ body: { name: fullname, email, password } });
       toast.dismiss();
-      toast.success('Welcome to Noah English!');
+      toast.success('Welcome to NOAH ENGLISH!');
       navigate('/pending-verification');
     } catch (error) {
       const isEmailAlreadyExists = (error as ErrorResponse)?.error === 'account already exists';
@@ -67,13 +67,13 @@ export default function Register() {
 
   return (
     <div className="flex flex-col gap-12 p-8">
-      <Link to="/login" className="flex items-center gap-1.5 text-secondary">
+      <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-secondary">
         <ChevronLeft /> Back
-      </Link>
+      </button>
       <div className="flex flex-col gap-14 w-7/8 md:w-5/6 lg:w-2/3 mx-auto">
         <div className="flex flex-col gap-6">
           <h1 className="text-4xl font-bold">Sign up</h1>
-          <h2 className="text-lg text-secondary">Welcome to Noah English!</h2>
+          <h2 className="text-lg text-secondary">Welcome to NOAH ENGLISH!</h2>
         </div>
         <div className="flex flex-col gap-10">
           <form className="flex flex-col gap-5" onSubmit={handleSubmit(handleRegister)}>

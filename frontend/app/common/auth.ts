@@ -14,6 +14,15 @@ export async function redirectIfLoggedIn(request: Request, path: string) {
   }
 }
 
+export function getSession(request: Request): boolean {
+  const cookies = request.headers.get('cookie') ?? '';
+  const sessionId = cookie.parse(cookies)[COOKIE_NAME];
+  if (!sessionId) {
+    return false;
+  }
+  return true;
+}
+
 export async function requireAuth(request: Request): Promise<{ userId: string; sessionId: string }> {
   const cookies = request.headers.get('cookie') ?? '';
   const sessionId = cookie.parse(cookies)[COOKIE_NAME];

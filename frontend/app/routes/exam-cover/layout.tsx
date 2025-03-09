@@ -18,7 +18,7 @@ export function Layout({ hasAudio, volume, setVolume, children }: LayoutProps) {
         <div className="flex w-5/6 justify-between">
           <Link to="/" className="flex items-center gap-2">
             <img className="h-[90px]" src={logo} />
-            <h1 className="text-white text-2xl font-bold">Noah English</h1>
+            <h1 className="text-white text-2xl font-bold">NOAH ENGLISH</h1>
           </Link>
           <div className="flex items-center gap-6">
             <Link to="/section">
