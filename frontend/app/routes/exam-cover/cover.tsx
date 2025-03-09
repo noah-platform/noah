@@ -8,7 +8,7 @@ import { ExamInstruction } from './components/instruction';
 import { AudioText } from './components/audio-test';
 import cookie from 'cookie';
 import { Layout } from './layout';
-import { LocalStorageKey } from '~/common/types';
+import { LocalStorageKey, Module } from '~/common/types';
 
 export async function loader({ request, params: { testId } }: Route.LoaderArgs) {
   const { sessionId } = await requireAuth(request);
@@ -20,12 +20,12 @@ export async function loader({ request, params: { testId } }: Route.LoaderArgs) 
   if (response.error) {
     throw new Error('Something went wrong');
   }
-  return { exam: response.data.data };
+  return { cover: response.data.data };
 }
 
 export default function Cover({ loaderData }: Route.ComponentProps) {
-  const { exam } = loaderData;
-  const hasAudio = exam.sections.some((section) => !!section.audioUrl);
+  const { cover } = loaderData;
+  const hasAudio = cover.module === Module.LISTENING;
 
   const [state, setState] = useState<CoverState>(() => (hasAudio ? CoverState.AUDIO_TEST : CoverState.INSTRUCTION));
 
@@ -41,7 +41,7 @@ export default function Cover({ loaderData }: Route.ComponentProps) {
     <Layout hasAudio={hasAudio} volume={volume} setVolume={handleSetVolume}>
       {match(state)
         .with(CoverState.AUDIO_TEST, () => <AudioText volume={volume} next={() => setState(CoverState.INSTRUCTION)} />)
-        .with(CoverState.INSTRUCTION, () => <ExamInstruction exam={exam} />)
+        .with(CoverState.INSTRUCTION, () => <ExamInstruction cover={cover} />)
         .exhaustive()}
     </Layout>
   );
