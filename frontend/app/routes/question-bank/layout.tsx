@@ -40,7 +40,7 @@ export default function Layout() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-5/6 mx-auto my-4">
+      <div className="flex flex-col w-5/6 mx-auto my-4 mb-8">
         <Outlet />
       </div>
     </div>

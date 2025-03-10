@@ -11,6 +11,7 @@ export type Session = components['schemas']['handler.BeginTestSessionResponse'];
 export type Exam = components['schemas']['handler.BeginTestSessionResponse']['test'];
 export type ExamCover = components['schemas']['handler.GetTestCoverResponse'];
 export type QuestionSet = components['schemas']['core.QuestionSetEntry'];
+export type TestInfo = components['schemas']['core.UserTestInfo'];
 export type Question = components['schemas']['core.QuestionEntry'];
 export enum ResponseType {
   FREE_TEXT = 'FREE_TEXT',

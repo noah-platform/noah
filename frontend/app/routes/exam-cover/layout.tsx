@@ -42,7 +42,7 @@ export function Layout({ hasAudio, volume, setVolume, children }: LayoutProps) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-5/6 mx-auto my-4">{children}</div>
+      <div className="flex flex-col w-5/6 mx-auto my-4 mb-8">{children}</div>
     </div>
   );
 }
