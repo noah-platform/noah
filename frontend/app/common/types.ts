@@ -4,3 +4,8 @@ export enum Module {
   WRITING = 'WRITING',
   SPEAKING = 'SPEAKING',
 }
+
+export enum Section {
+  FULLTEST = 'FULLTEST',
+  SECTIONTEST = 'SECTIONTEST',
+}

@@ -1,4 +1,3 @@
-import type { Route } from './+types/home';
 import logo from './logo.svg';
 import slide_1 from './slide_1.svg';
 import slide_2 from './slide_2.svg';
@@ -19,10 +18,6 @@ import dashboard from './dashboard.svg';
 import { FaUser } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-
-export function meta({}: Route.MetaArgs) {
-  return [{ title: 'New React Router App' }, { name: 'description', content: 'Welcome to React Router!' }];
-}
 
 export default function Home() {
   return (
@@ -56,9 +51,8 @@ function NavBar() {
 
       {/* Authentication Buttons */}
       <div className="flex items-center space-x-4">
-        <button className="bg-[#EF1B31] font-semibold text-white px-4 py-2 rounded-full cursor-pointer">
-          Sign up | Log in
-        </button>
+        <button className="bg-[#EF1B31] font-semibold text-white px-4 py-2 rounded-full cursor-pointer">Sign up</button>
+        <button className="bg-[#EF1B31] font-semibold text-white px-4 py-2 rounded-full cursor-pointer">Log in</button>
         <FaUser className="text-white text-4xl cursor-pointer bg-[#D9D9D9] rounded-full p-2" />
       </div>
     </nav>
@@ -141,6 +135,7 @@ function SlideBar() {
       component: slide4,
     },
   ];
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -160,7 +155,20 @@ function SlideBar() {
       <div className="bg-[#070559] px-6 py-16 flex">
         {/* Left Side */}
         <div className="flex-1 flex justify-center items-center">
-          <img src={slides[currentSlide].img} className="lg:w-[500px] h-[350px] object-cover rounded-lg" />
+          {currentSlide === 2 ? (
+            <a
+              href="https://www.britishcouncil.or.th/en/exam/ielts/dates-fees-locations?utm_source=google&utm_medium=cpc&utm_campaign=exams-all-ielts-ea-th-generic&utm_term=ad2&utm_content=generic-ielts-kw&gad_source=1&gclid=Cj0KCQjwm7q-BhDRARIsACD6-fUUECDaduie7HEUXOJTtH4-3i4KAsKlN348iN_fVGqBOe_Rs3sH44kaAk-mEALw_wcB"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={slides[currentSlide].img}
+                className="lg:w-[500px] h-[350px] object-cover rounded-lg cursor-pointer"
+              />
+            </a>
+          ) : (
+            <img src={slides[currentSlide].img} className="lg:w-[500px] h-[350px] object-cover rounded-lg" />
+          )}
         </div>
 
         {/* Right Side */}
@@ -171,13 +179,13 @@ function SlideBar() {
           </div>
           {/* Buttons */}
           <div className="flex justify-center space-x-10 mt-5">
-            {' '}
-            {/* Adjust the margin here */}
             {slides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => handleSlideChange(index)}
-                className={`px-10 py-1.5 rounded-full cursor-pointer ${currentSlide === index ? 'bg-[#EF1B31]' : 'bg-[#D9D9D9]'}`}
+                className={`px-10 py-1.5 rounded-full cursor-pointer ${
+                  currentSlide === index ? 'bg-[#EF1B31]' : 'bg-[#D9D9D9]'
+                }`}
               />
             ))}
           </div>
@@ -321,7 +329,9 @@ const Personalization = () => {
               (item, index) => (
                 <motion.div
                   key={index}
-                  className={`w-64 py-6 text-center rounded-full text-lg font-medium cursor-pointer transition-all relative ${item === 'Diagram Label' ? 'bg-white text-black' : 'bg-white text-black'} ${index % 2 === 0 ? 'self-start' : 'self-end'}`}
+                  className={`w-64 py-6 text-center rounded-full text-lg font-medium cursor-pointer transition-all relative ${
+                    item === 'Diagram Label' ? 'bg-white text-black' : 'bg-white text-black'
+                  } ${index % 2 === 0 ? 'self-start' : 'self-end'}`}
                   whileHover={{ scale: 1.05 }}
                   onClick={() => console.log(`${item} clicked`)}
                   style={{ filter: item !== 'Diagram Label' ? 'blur(1.5px)' : 'none' }}
@@ -333,7 +343,7 @@ const Personalization = () => {
                     </div>
                   )}
                 </motion.div>
-              ),
+              )
             )}
           </div>
 
@@ -388,32 +398,43 @@ const PricingPage = () => {
   const plans = [
     {
       title: 'Free Explorer',
+      price: '0',
+      yearlyPrice: '0',
+      discount: '',
       features: [
         { text: '4 skills practicing question', available: true },
         { text: '3 practice test', available: true },
         { text: 'Personalization', available: false },
-        { text: 'Unlimit Question generated', available: false },
-        { text: 'Insigth Analytics', available: false },
+        { text: 'Unlimited Question generated', available: false },
+        { text: 'Insight Analytics', available: false },
       ],
     },
     {
       title: 'Pro Learner',
+      price: '49',
+      beforeprice: '588',
+      yearlyPrice: '399',
+      discount: '30',
       features: [
         { text: '4 Skills practicing question', available: true },
         { text: '99 practice test/ month', available: true },
         { text: 'Personalization', available: true },
-        { text: 'Unlimit Question generated', available: false },
-        { text: 'Insigth Analytics', available: false },
+        { text: 'Unlimited Question generated', available: false },
+        { text: 'Insight Analytics', available: false },
       ],
     },
     {
       title: 'Premium Mastery',
+      price: '79',
+      beforeprice: '948',
+      yearlyPrice: '599',
+      discount: '35',
       features: [
         { text: '4 Skills practicing question', available: true },
-        { text: 'Unlimit practice test/ month', available: true },
+        { text: 'Unlimited practice test/ month', available: true },
         { text: 'Personalization', available: true },
-        { text: 'Unlimit Question generated', available: true },
-        { text: 'Insigth Analytics', available: true },
+        { text: 'Unlimited Question generated', available: true },
+        { text: 'Insight Analytics', available: true },
       ],
       isPopular: true,
     },
@@ -421,8 +442,6 @@ const PricingPage = () => {
 
   return (
     <div className="min-h-screen bg-[#000A52] py-12 px-4">
-      {' '}
-      {/* Changed bg-navy-950 to bg-blue-900 */}
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white mb-4">Plans that fit your need</h1>
@@ -433,20 +452,26 @@ const PricingPage = () => {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`bg-white p-6 rounded-lg shadow-lg ${plan.isPopular ? 'border-2 border-red-500 relative' : ''}`}
+              className={`bg-white p-6 rounded-lg shadow-lg ${
+                plan.isPopular ? 'border-2 border-red-500 relative' : ''
+              }`}
             >
               {plan.isPopular && (
-                <div className="absolute -top-4 right-4">
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm">Most popular</span>
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <span className="bg-red-500 text-white px-5 py-2 rounded-full text-sm">Most popular</span>
                 </div>
               )}
-
               <h2 className="text-2xl font-bold text-navy-900 mb-15 underline decoration-4 underline-offset-10 decoration-red-500">
                 {plan.title}
               </h2>
-              <div className="mb-15">
-                <p className="text-xl">0 Bath/month</p>
-                <p className="text-xl">0 Bath/year</p>
+              <div className="mb-15 flex flex-col items-center">
+                <p className="text-xl">
+                  <span className="text-2xl">{plan.price}</span> Bath/month
+                </p>
+                <p className="text-xl">
+                  <del>{plan.beforeprice}</del> <span className="text-4xl font-bold">{plan.yearlyPrice}</span> Bath/year
+                </p>
+                {plan.discount && <p className="text-2xl font-bold text-red-500">Save {plan.discount} % </p>}
               </div>
 
               <div className="space-y-3">
@@ -473,13 +498,14 @@ const PricingPage = () => {
                   </div>
                 ))}
               </div>
-
-              <button
-                className="mt-6 w-full bg-navy-900 text-black text-center py-2 px-4 rounded hover:bg-navy-800 transition-colors"
-                onClick={() => console.log(`Selected ${plan.title}`)}
-              >
-                Get Started
-              </button>
+              <div className="flex justify-center">
+                <button
+                  className="mt-6 w-1/2 bg-white text-[#000A52] text-center py-2 px-4 rounded border border-[#000A52] hover:bg-[#000A52] hover:text-white transition-colors"
+                  onClick={() => console.log(`Selected ${plan.title}`)}
+                >
+                  Get Started
+                </button>
+              </div>
             </div>
           ))}
         </div>
