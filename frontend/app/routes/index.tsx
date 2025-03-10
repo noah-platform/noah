@@ -1,28 +1,30 @@
-import logo from './logo.svg';
-import slide_1 from './slide_1.svg';
-import slide_2 from './slide_2.svg';
-import slide_3 from './slide_3.svg';
-import slide_4 from './slide_4.svg';
-import std_1 from './std_1.svg';
-import std_2 from './std_2.svg';
-import std_3 from './std_3.svg';
-import teacher_1 from './teacher_1.svg';
-import teacher_2 from './teacher_2.svg';
-import teacher_3 from './teacher_3.svg';
-import listening from './listening.svg';
-import writing from './writing.svg';
-import reading from './reading.svg';
-import speaking from './speaking.svg';
-import click from './click.svg';
-import dashboard from './dashboard.svg';
-import { FaUser } from 'react-icons/fa';
+import type { Route } from './+types/index';
+import slide_1 from '~/assets/home/slide_1.svg';
+import slide_2 from '~/assets/home/slide_2.svg';
+import slide_3 from '~/assets/home/slide_3.svg';
+import slide_4 from '~/assets/home/slide_4.svg';
+import std_1 from '~/assets/home/std_1.svg';
+import std_2 from '~/assets/home/std_2.svg';
+import std_3 from '~/assets/home/std_3.svg';
+import teacher_1 from '~/assets/home/teacher_1.svg';
+import teacher_2 from '~/assets/home/teacher_2.svg';
+import teacher_3 from '~/assets/home/teacher_3.svg';
+import listening from '~/assets/home/listening.svg';
+import writing from '~/assets/home/writing.svg';
+import reading from '~/assets/home/reading.svg';
+import speaking from '~/assets/home/speaking.svg';
+import click from '~/assets/home/click.svg';
+import dashboard from '~/assets/home/dashboard.svg';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+
+export function meta({}: Route.MetaArgs) {
+  return [{ title: 'NOAH ENGLISH' }];
+}
 
 export default function Home() {
   return (
     <>
-      <NavBar />
       <SlideBar />
       <SampleQuestion />
       <ReviewPage />
@@ -30,32 +32,6 @@ export default function Home() {
       <InsightAnalytic />
       <PricingPage />
     </>
-  );
-}
-function NavBar() {
-  return (
-    <nav className="bg-[#070559] text-white px-6 py-4 flex justify-between items-center">
-      {/* Logo */}
-      <div className="flex items-center">
-        <img src={logo} alt="NOAH ENGLISH" className="w-18 h-12 mr-4" />
-        <span className="text-xl font-bold">NOAH ENGLISH</span>
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className="hidden md:flex space-x-6">
-        <button className="px-4 py-2 rounded-full font-semibold cursor-pointer">Full Test</button>
-        <button className="px-4 py-2 rounded-full font-semibold cursor-pointer">Section Test</button>
-        <button className="px-4 py-2 rounded-full font-semibold cursor-pointer">Review</button>
-        <button className="px-4 py-2 rounded-full font-semibold bg-white text-black">Home</button>
-      </div>
-
-      {/* Authentication Buttons */}
-      <div className="flex items-center space-x-4">
-        <button className="bg-[#EF1B31] font-semibold text-white px-4 py-2 rounded-full cursor-pointer">Sign up</button>
-        <button className="bg-[#EF1B31] font-semibold text-white px-4 py-2 rounded-full cursor-pointer">Log in</button>
-        <FaUser className="text-white text-4xl cursor-pointer bg-[#D9D9D9] rounded-full p-2" />
-      </div>
-    </nav>
   );
 }
 
@@ -237,24 +213,24 @@ function ReviewPage() {
       {
         img: std_1,
         title: 'grade 11th Student',
-        desc: "Noah English makes studying so easy! The personalized practice tests feel like they're tailored just for me. The AI gives detailed feedback that actually helps me improve. Highly recommend it to anyone aiming for a high score!",
+        desc: "NOAH ENGLISH makes studying so easy! The personalized practice tests feel like they're tailored just for me. The AI gives detailed feedback that actually helps me improve. Highly recommend it to anyone aiming for a high score!",
       },
       {
         img: std_2,
         title: 'grade 10th Student',
-        desc: 'I love how Noah English keeps things interesting! The questions are challenging but not overwhelming, and the mock tests are super realistic. The app feels like a mix of studying and gaming—it makes learning fun instead of stressful.',
+        desc: 'I love how NOAH ENGLISH keeps things interesting! The questions are challenging but not overwhelming, and the mock tests are super realistic. The app feels like a mix of studying and gaming—it makes learning fun instead of stressful.',
       },
       {
         img: std_3,
         title: 'grade 12th Student',
-        desc: 'Balancing school and IELTS prep is tough, but Noah English fits into my schedule perfectly. The AI-generated exercises save so much time, and I love how I can choose practice areas based on my weaknesses. It’s like having a personal tutor 24/7!',
+        desc: 'Balancing school and IELTS prep is tough, but NOAH ENGLISH fits into my schedule perfectly. The AI-generated exercises save so much time, and I love how I can choose practice areas based on my weaknesses. It’s like having a personal tutor 24/7!',
       },
     ],
     [
       {
         img: teacher_1,
         title: 'IELTS Senior Grader Review',
-        desc: 'NOAH English aligns well with the official IELTS format, offering diverse topics and challenges. While the Writing and Speaking modules are solid, more detailed feedback on essay structure and fluency, along with model answers, would enhance its value for teaching.',
+        desc: 'NOAH ENGLISH aligns well with the official IELTS format, offering diverse topics and challenges. While the Writing and Speaking modules are solid, more detailed feedback on essay structure and fluency, along with model answers, would enhance its value for teaching.',
       },
       {
         img: teacher_2,
@@ -264,7 +240,7 @@ function ReviewPage() {
       {
         img: teacher_3,
         title: 'IELTS Teacher Review',
-        desc: "NOAH English does well in simulating test conditions, especially in Reading and Listening. However, Speaking and Writing feedback needs refinement to better match real-world grading. It's a strong tool with room for targeted enhancements.",
+        desc: "NOAH ENGLISH does well in simulating test conditions, especially in Reading and Listening. However, Speaking and Writing feedback needs refinement to better match real-world grading. It's a strong tool with room for targeted enhancements.",
       },
     ],
   ];

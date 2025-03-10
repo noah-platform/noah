@@ -27,6 +27,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set env
+        run: rm frontend/.env && cp frontend/.env.production frontend/.env
+
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:

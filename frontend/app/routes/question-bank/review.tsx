@@ -9,6 +9,12 @@ import reading from '../readingicon.svg';
 import speaking from '../speakingicon.svg';
 import globe from '../globe.svg';
 import { useState } from 'react';
+import { requireAuth } from '~/common/auth';
+import type { Route } from './+types/review';
+
+export async function loader({ request }: Route.LoaderArgs) {
+  await requireAuth(request);
+}
 
 interface ModuleButtonProps {
   section: Section;

@@ -37,7 +37,7 @@ export default function Login() {
   const { mutateAsync: login, isPending: isLoginPending } = client.useMutation('post', '/auth/v1/login');
   const { mutateAsync: loginWithGoogle, isPending: isLoginWithGooglePending } = client.useMutation(
     'post',
-    '/auth/v1/login/google',
+    '/auth/v1/login/google'
   );
 
   const handleLoginWithEmail = async ({ email, password }: LoginSchema) => {
@@ -95,7 +95,7 @@ export default function Login() {
       <div className="flex flex-col gap-14 w-7/8 md:w-5/6 lg:w-2/3 mx-auto">
         <div className="flex flex-col gap-6">
           <h1 className="text-4xl font-bold">Login</h1>
-          <h2 className="text-lg text-secondary">Welcome back to Noah English!</h2>
+          <h2 className="text-lg text-secondary">Welcome back to NOAH ENGLISH!</h2>
         </div>
         <div className="flex flex-col gap-10">
           <form className="flex flex-col gap-5" onSubmit={handleSubmit(handleLoginWithEmail)}>

@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
@@ -16,16 +17,24 @@ func (s *Server) Start() {
 	e := echo.New()
 	e.HideBanner = true
 	e.Validator = s.validator
+	e.IPExtractor = echo.ExtractIPFromXFFHeader()
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
 	e.Use(middleware.Logger())
+	e.Use(echoprometheus.NewMiddleware("question_bank_server"))
 
 	e.GET("/health", s.Health)
+	e.GET("/metrics", echoprometheus.NewHandler())
+
 	e.GET("/docs", s.Docs)
 
-	e.GET("/external/v1/tests/:testID", s.GetTestById)
-	e.GET("/external/v1/tests", s.GetTestsByModule)
+	u := e.Group("", s.auth.Middleware)
+	u.GET("/external/v1/tests", s.GetTestsByModule)
+	u.GET("/external/v1/tests/:testID", s.GetTestCover)
+	u.POST("/external/v1/tests/:testID", s.BeginTestSession)
+	u.PUT("/external/v1/tests/:testID", s.SaveTestSession)
+	u.POST("/external/v1/tests/:testID/end", s.EndTestSession)
 
 	s.RunWithGracefulShutdown(e)
 }

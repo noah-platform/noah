@@ -4,7 +4,7 @@ import { hydrateRoot } from 'react-dom/client';
 import { HydratedRouter } from 'react-router/dom';
 
 Sentry.init({
-  enabled: true,
+  enabled: false,
 
   dsn: 'https://cd257a261d3aa8b073ce3c2f7fb35462@o1418462.ingest.us.sentry.io/4508830487543808',
   integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
@@ -25,6 +25,6 @@ startTransition(() => {
     document,
     <StrictMode>
       <HydratedRouter />
-    </StrictMode>,
+    </StrictMode>
   );
 });

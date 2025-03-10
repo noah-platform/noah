@@ -2,14 +2,16 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 
 	"github.com/noah-platform/noah/question-bank/server/core"
 )
 
-func (s *Service) GetTestsByModule(ctx context.Context, module string) ([]core.TestInfo, error) {
+func (s *Service) GetTestsByModule(ctx context.Context, userID string, module core.Module) ([]core.UserTestInfo, error) {
 	l := log.Ctx(ctx)
 
 	testInfoList, err := s.questionBankRepo.GetTestsByModule(ctx, module)
@@ -26,7 +28,30 @@ func (s *Service) GetTestsByModule(ctx context.Context, module string) ([]core.T
 		}
 	}
 
+	sessions, err := s.userTestSessionRepo.GetManySessionsByUserID(ctx, userID)
+	if err != nil {
+		l.Error().Err(err).Msg("[Service.GetTestsByModule] failed to get user test sessions")
+
+		return nil, errors.Wrap(err, "failed to get user test sessions")
+	}
+	sessionsMap := lo.KeyBy(sessions, func(session core.UserTestSession) string {
+		return session.Test.ID
+	})
+	userTestInfoList := lo.Map(testInfoList, func(test core.TestInfo, _ int) core.UserTestInfo {
+		fmt.Println(test.ID, sessions)
+		status := core.TestSessionStatusNotStarted
+		if session, ok := sessionsMap[test.ID]; ok {
+			status = lo.Ternary(session.CompletedAt != nil, core.TestSessionStatusCompleted, core.TestSessionStatusInProgress)
+		}
+		return core.UserTestInfo{
+			ID:     test.ID,
+			Module: test.Module,
+			Tags:   test.Tags,
+			Status: status,
+		}
+	})
+
 	l.Debug().Interface("tests", testInfoList).Msg("[Service.GetTestsByModule] got tests by module")
 
-	return testInfoList, nil
+	return userTestInfoList, nil
 }

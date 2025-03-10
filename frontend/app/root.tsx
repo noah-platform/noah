@@ -7,6 +7,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import * as Sentry from '@sentry/react';
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v7';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { getSession } from './common/auth';
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -20,6 +27,11 @@ export const links: Route.LinksFunction = () => [
     href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
   },
 ];
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const isLoggedIn = getSession(request);
+  return { isLoggedIn };
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

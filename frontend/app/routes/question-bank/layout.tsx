@@ -1,5 +1,5 @@
 import user from '~/assets/user.svg';
-import { Link, NavLink, Outlet } from 'react-router';
+import { Link, Outlet } from 'react-router';
 import logo from '~/assets/logo.png';
 import {
   DropdownMenu,
@@ -7,28 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
-import { cn } from '~/lib/utils';
-import type { ReactNode } from 'react';
-
-interface LinkProps {
-  to: string;
-  children: ReactNode;
-}
-export function NavbarLink({ to, children }: LinkProps) {
-  return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        cn(
-          'text-md font-semibold text-white hover:text-black hover:bg-white px-4 py-2 rounded-full',
-          isActive ? 'text-black bg-white' : '',
-        )
-      }
-    >
-      {children}
-    </NavLink>
-  );
-}
+import { NavbarLink } from '../../components/navbar-link';
 
 export default function Layout() {
   return (
@@ -37,10 +16,11 @@ export default function Layout() {
         <div className="flex w-5/6 justify-between">
           <Link to="/" className="flex items-center gap-2">
             <img className="h-[90px]" src={logo} />
-            <h1 className="text-white text-2xl font-bold">Noah English</h1>
+            <h1 className="text-white text-2xl font-bold">NOAH ENGLISH</h1>
           </Link>
           <div className="flex items-center gap-3">
-            <NavbarLink to="/">Full Test</NavbarLink>
+            {/* <NavbarLink to="/">Full Test</NavbarLink> */}
+            <NavbarLink to="/">Home</NavbarLink>
             <NavbarLink to="/section">Section Test</NavbarLink>
             <NavbarLink to="/review">Review</NavbarLink>
             <DropdownMenu>
@@ -60,7 +40,7 @@ export default function Layout() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-5/6 mx-auto my-4">
+      <div className="flex flex-col w-5/6 mx-auto my-4 mb-8">
         <Outlet />
       </div>
     </div>

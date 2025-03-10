@@ -1,101 +1,18 @@
-import { Module } from '~/common/types';
+import { Module, TestSessionStatus } from '~/common/types';
 import { useQueryState } from 'nuqs';
-import { cn } from '~/lib/utils';
-import { Suspense, type ReactNode } from 'react';
-import { BookDashed, BookText, Headphones, Mic, Pencil } from 'lucide-react';
+import { Suspense } from 'react';
+import { BookDashed } from 'lucide-react';
 import { client } from '~/clients/client';
 import { Link } from 'react-router';
+import { requireAuth } from '~/common/auth';
+import type { Route } from '../+types';
+import { ModuleSelector } from './components/module-selector';
+import { match } from 'ts-pattern';
+import { TagSelector } from './components/tag-selector';
+import { useTagFilter } from './hooks/useTagFilter';
 
-interface ModuleButtonProps {
-  module: Module;
-  currentModule: Module;
-  setModule: (module: Module) => void;
-  icon: ReactNode;
-  children: ReactNode;
-}
-function ModuleButton({ module, currentModule, setModule, icon, children }: ModuleButtonProps) {
-  return (
-    <button
-      className={cn(
-        'flex items-center gap-3 text-lg font-semibold text-[#D9D9D9] shadow-md hover:text-primary border-2 border-transparent hover:border-gray-300 hover:bg-gray-100 px-5 py-2.5 rounded-full cursor-pointer',
-        module === currentModule ? 'bg-primary hover:bg-primary hover:text-white text-white' : '',
-      )}
-      onClick={() => setModule(module)}
-    >
-      {icon}
-      {children}
-    </button>
-  );
-}
-
-interface ModuleSelectorProps {
-  module: Module;
-  setModule: (module: Module) => void;
-}
-function ModuleSelector({ module, setModule }: ModuleSelectorProps) {
-  return (
-    <div className="flex justify-center items-center gap-4">
-      <ModuleButton module={Module.LISTENING} currentModule={module} setModule={setModule} icon={<Headphones />}>
-        Listening
-      </ModuleButton>
-      <ModuleButton module={Module.READING} currentModule={module} setModule={setModule} icon={<BookText />}>
-        Reading
-      </ModuleButton>
-      <ModuleButton module={Module.WRITING} currentModule={module} setModule={setModule} icon={<Pencil />}>
-        Writing
-      </ModuleButton>
-      <ModuleButton module={Module.SPEAKING} currentModule={module} setModule={setModule} icon={<Mic />}>
-        Speaking
-      </ModuleButton>
-    </div>
-  );
-}
-
-interface TestListProps {
-  module: Module;
-}
-export function TestList({ module }: TestListProps) {
-  const { data } = client.useSuspenseQuery('get', '/question-bank/v1/tests', {
-    params: { query: { module } },
-  });
-  const lists = data?.data ?? [];
-
-  if (lists.length === 0) {
-    return (
-      <div className="flex flex-col gap-4 justify-center items-center text-lg min-h-[400px]">
-        <BookDashed className="w-22 h-22" strokeWidth={1} />
-        No test available
-      </div>
-    );
-  }
-  return (
-    <div className="grid grid-cols-3 gap-4">
-      {lists.map((test, index) => (
-        <Link
-          to={`/test/${test.testId}`}
-          key={test.testId}
-          className="flex flex-col gap-2 w-full h-[220px] bg-gray-100 border border-gray-300 rounded-xl p-4 shadow-md"
-        >
-          <p className="text-xl font-medium">Test {index + 1}</p>
-          <div className="border border-b border-gray-200" />
-          <p className="text-sm">{test.testId}</p>
-        </Link>
-      ))}
-    </div>
-  );
-}
-
-export function TestListFallback() {
-  return (
-    <div className="grid grid-cols-3 gap-4">
-      <div className="w-full h-[220px] bg-gray-200 animate-pulse rounded-2xl"></div>
-      <div className="w-full h-[220px] bg-gray-200 animate-pulse rounded-2xl"></div>
-      <div className="w-full h-[220px] bg-gray-200 animate-pulse rounded-2xl"></div>
-      <div className="w-full h-[220px] bg-gray-200 animate-pulse rounded-2xl"></div>
-      <div className="w-full h-[220px] bg-gray-200 animate-pulse rounded-2xl"></div>
-      <div className="w-full h-[220px] bg-gray-200 animate-pulse rounded-2xl"></div>
-    </div>
-  );
+export async function loader({ request }: Route.LoaderArgs) {
+  await requireAuth(request);
 }
 
 export default function QuestionBank() {
@@ -110,6 +27,89 @@ export default function QuestionBank() {
       <Suspense fallback={<TestListFallback />}>
         <TestList module={module} />
       </Suspense>
+    </div>
+  );
+}
+
+interface TestListProps {
+  module: Module;
+}
+function TestList({ module }: TestListProps) {
+  const { data } = client.useSuspenseQuery('get', '/question-bank/v1/tests', {
+    params: { query: { module } },
+  });
+  const tests = data?.data ?? [];
+  const { availableTags, selectedTags, handleSelectTag, handleRandomize, handleSelectAll, filteredTests } =
+    useTagFilter(module, tests);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <TagSelector
+        availableTags={availableTags}
+        selectedTags={selectedTags}
+        onSelectTag={handleSelectTag}
+        onRandomize={handleRandomize}
+        onSelectAll={handleSelectAll}
+      />
+      {filteredTests.length === 0 && (
+        <div className="flex flex-col gap-4 justify-center items-center text-lg min-h-[400px]">
+          <BookDashed className="w-22 h-22" strokeWidth={1} />
+          No test available
+        </div>
+      )}
+      {filteredTests.length > 0 && (
+        <div className="grid grid-cols-3 gap-4">
+          {filteredTests.map((test, index) => (
+            <Link
+              to={test.status !== TestSessionStatus.COMPLETED ? `/test/${test.testId}` : `/test/${test.testId}/start`}
+              key={test.testId}
+              className="flex flex-col gap-2 w-full h-[220px] bg-gray-100 border-2 border-gray-300 hover:border-2 hover:border-gray-400 rounded-xl p-4 shadow-sm"
+            >
+              <div className="flex justify-between items-center gap-2">
+                <p className="text-xl font-medium">Test {index + 1}</p>
+                {match(test.status as TestSessionStatus)
+                  .with(TestSessionStatus.IN_PROGRESS, () => (
+                    <p className="px-4 py-1 border border-primary bg-gray-200 text-sm rounded-full">In Progress</p>
+                  ))
+                  .with(TestSessionStatus.COMPLETED, () => (
+                    <p className="px-4 py-1 border border-primary bg-primary text-white text-sm rounded-full">
+                      Completed
+                    </p>
+                  ))
+                  .otherwise(() => null)}
+              </div>
+              <div className="border border-b border-gray-200" />
+              {test.tags ?? [] ? (
+                <div className="flex flex-wrap gap-2">
+                  {(test.tags ?? []).map((tag) => (
+                    <p key={tag} className="px-2 py-1 bg-gray-200 text-sm rounded-full">
+                      {tag}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 text-sm">No tags</p>
+              )}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TestListFallback() {
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="w-full h-[160px] bg-gray-100 animate-pulse rounded-2xl"></div>
+      <div className="grid grid-cols-3 gap-4">
+        <div className="w-full h-[220px] bg-gray-100 animate-pulse rounded-2xl"></div>
+        <div className="w-full h-[220px] bg-gray-100 animate-pulse rounded-2xl"></div>
+        <div className="w-full h-[220px] bg-gray-100 animate-pulse rounded-2xl"></div>
+        <div className="w-full h-[220px] bg-gray-100 animate-pulse rounded-2xl"></div>
+        <div className="w-full h-[220px] bg-gray-100 animate-pulse rounded-2xl"></div>
+        <div className="w-full h-[220px] bg-gray-100 animate-pulse rounded-2xl"></div>
+      </div>
     </div>
   );
 }
