@@ -16,3 +16,7 @@ type UserTestSessionRepository interface {
 	GetManySessionsByUserID(ctx context.Context, userID string) ([]core.UserTestSession, error)
 	SaveSession(ctx context.Context, session *core.UserTestSession) error
 }
+
+type WritingAssessmentRepository interface {
+	Invoke(ctx context.Context, input *core.WritingAssessmentInput) (*core.WritingAssessmentOutput, error)
+}

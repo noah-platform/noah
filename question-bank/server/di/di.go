@@ -13,14 +13,17 @@ type ServerConfig = handler.Config
 
 type ServiceConfig = service.Config
 
+type WritingAssessmentRepoConfig = repository.WritingAssessmentRepoConfig
+
 type Config struct {
-	ServerConfig  ServerConfig
-	ServiceConfig ServiceConfig
-	MongoConfig   MongoConfig
+	ServerConfig                ServerConfig
+	ServiceConfig               ServiceConfig
+	MongoConfig                 MongoConfig
+	LambdaConfig                LambdaConfig
+	WritingAssessmentRepoConfig WritingAssessmentRepoConfig
 }
 
 func New(cfg Config) *handler.Server {
-
 	db := newMongoClient(cfg.MongoConfig)
 	questionBankRepo := repository.NewQuestionBankRepository(repository.QuestionBankRepoDependencies{
 		QuestionBank: db.Collection("question-bank"),
@@ -29,9 +32,15 @@ func New(cfg Config) *handler.Server {
 		UserTestSession: db.Collection("user-test-sessions"),
 	})
 
+	lambdaClient := newLambdaClient(cfg.LambdaConfig)
+	writingAssessmentRepo := repository.NewWritingAssessmentRepository(repository.WritingAssessmentRepoDependencies{
+		LambdaClient: lambdaClient,
+	}, cfg.WritingAssessmentRepoConfig)
+
 	service := service.New(service.Dependencies{
-		QuestionBankRepository:    questionBankRepo,
-		UserTestSessionRepository: userTestSessionRepo,
+		QuestionBankRepository:      questionBankRepo,
+		UserTestSessionRepository:   userTestSessionRepo,
+		WritingAssessmentRepository: writingAssessmentRepo,
 	}, cfg.ServiceConfig)
 
 	server := handler.New(handler.Dependencies{

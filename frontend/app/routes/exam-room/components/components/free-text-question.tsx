@@ -2,6 +2,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 import type { Question } from '~/common/types';
 import { RichTextPreview } from '~/components/richtext-preview';
 import { useExam } from '../../context';
+import { cn } from '~/lib/utils';
 
 interface FreeTextQuestionProps {
   questions: Question[];
@@ -38,7 +39,10 @@ function TextArea({ questionId }: TextAreaProps) {
       render={({ field: { value, ...rest } }) => (
         <textarea
           disabled={isReviewing}
-          className="min-h-[600px] p-2 bg-white border rounded-sm disabled:bg-gray-100 hover:cursor-not-allowed"
+          className={cn(
+            'min-h-[600px] p-2 bg-white border rounded-sm disabled:bg-gray-100',
+            isReviewing && 'hover:cursor-not-allowed'
+          )}
           value={value}
           {...rest}
         />
