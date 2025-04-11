@@ -6,6 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/noah-platform/noah/question-bank/server/core"
 )
@@ -13,8 +14,11 @@ import (
 func (r *UserTestSessionRepository) GetManySessionsByUserID(ctx context.Context, userID string) ([]core.UserTestSession, error) {
 	l := log.Ctx(ctx)
 
+	filter := bson.M{"userId": userID, "completedAt": bson.M{"$ne": nil}}
+	opts := options.Find().SetSort(bson.D{{"startedAt", -1}})
+
 	var sessions []core.UserTestSession
-	cursor, err := r.userTestSession.Find(ctx, bson.M{"userId": userID})
+	cursor, err := r.userTestSession.Find(ctx, filter, opts)
 	if err != nil {
 		l.Error().Err(err).Msg("[UserTestSessionRepository.GetManySessionsByUserID] failed to get user test session")
 

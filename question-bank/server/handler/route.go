@@ -35,6 +35,7 @@ func (s *Server) Start() {
 	u.POST("/external/v1/tests/:testID", s.BeginTestSession)
 	u.PUT("/external/v1/tests/:testID", s.SaveTestSession)
 	u.POST("/external/v1/tests/:testID/end", s.EndTestSession)
+	u.GET("/external/v1/sessions", s.ListMyTestSessions)
 
 	s.RunWithGracefulShutdown(e)
 }
