@@ -63,16 +63,18 @@ function TestList({ module }: TestListProps) {
             <Link
               to={test.status !== TestSessionStatus.COMPLETED ? `/test/${test.testId}` : `/test/${test.testId}/start`}
               key={test.testId}
-              className="flex flex-col gap-2 w-full h-[220px] bg-gray-100 border-2 border-gray-300 hover:border-2 hover:border-gray-400 rounded-xl p-4 shadow-sm"
+              className="flex flex-col gap-2 w-full h-[220px] bg-[#1310A5] border-2 border-gray-300 hover:border-2 hover:border-gray-400 rounded-xl p-4 shadow-sm"
             >
               <div className="flex justify-between items-center gap-2">
-                <p className="text-xl font-medium">Test {index + 1}</p>
+                <p className="text-xl font-medium text-white">Test {index + 1}</p>
                 {match(test.status as TestSessionStatus)
                   .with(TestSessionStatus.IN_PROGRESS, () => (
-                    <p className="px-4 py-1 border border-primary bg-gray-200 text-sm rounded-full">In Progress</p>
+                    <p className="px-4 py-1 border border-yellow-800 bg-yellow-600 text-white text-sm rounded-full">
+                      In Progress
+                    </p>
                   ))
                   .with(TestSessionStatus.COMPLETED, () => (
-                    <p className="px-4 py-1 border border-primary bg-primary text-white text-sm rounded-full">
+                    <p className="px-4 py-1 border border-green-800 bg-green-700 text-white text-sm rounded-full">
                       Completed
                     </p>
                   ))
@@ -82,7 +84,7 @@ function TestList({ module }: TestListProps) {
               {test.tags ?? [] ? (
                 <div className="flex flex-wrap gap-2">
                   {(test.tags ?? []).map((tag) => (
-                    <p key={tag} className="px-2 py-1 bg-gray-200 text-sm rounded-full">
+                    <p key={tag} className="px-3 py-1 bg-gray-200 text-sm rounded-full">
                       {tag}
                     </p>
                   ))}

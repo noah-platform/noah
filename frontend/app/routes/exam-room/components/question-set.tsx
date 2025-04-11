@@ -4,6 +4,8 @@ import { NoteCompletionQuestion } from './components/note-completion-question';
 import { match } from 'ts-pattern';
 import { MultipleChoiceQuestion } from './components/multiple-choice-question';
 import { MultipleSelectQuestion } from './components/multiple-select-question';
+import { ShortVoiceQuestion } from './components/short-voice-question';
+import { LongVoiceQuestion } from './components/long-voice-question';
 
 interface QuesitonSetProps {
   questionSet: QuestionSet;
@@ -18,6 +20,8 @@ export function QuestionSet({ questionSet, showInstruction }: QuesitonSetProps) 
         .with(ResponseType.NOTE_COMPLETION, () => <NoteCompletionQuestion questions={questionSet.questions} />)
         .with(ResponseType.MULTIPLE_CHOICE, () => <MultipleChoiceQuestion questions={questionSet.questions} />)
         .with(ResponseType.MULTIPLE_SELECT, () => <MultipleSelectQuestion questions={questionSet.questions} />)
+        .with(ResponseType.SHORT_VOICE, () => <ShortVoiceQuestion questions={questionSet.questions} />)
+        .with(ResponseType.LONG_VOICE, () => <LongVoiceQuestion questions={questionSet.questions} />)
         .otherwise(() => (
           <p>Unsupported Response Type</p>
         ))}

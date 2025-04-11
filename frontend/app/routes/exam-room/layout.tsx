@@ -36,13 +36,15 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="flex flex-col">
       <div className="flex flex-1 justify-center bg-primary min-h-[90px]">
-        <div className={cn('grid grid-cols-3 w-5/6 items-center', isCompleted && 'grid-cols-2')}>
+        <div
+          className={cn('grid grid-cols-3 w-5/6 items-center', (exam.duration === 0 || isCompleted) && 'grid-cols-2')}
+        >
           <div className="flex justify-start items-center gap-4">
             <Link to="/section">
               <button className="text-md font-semibold text-black bg-white px-4 py-2 rounded-full">Exit</button>
             </Link>
           </div>
-          {!isCompleted && !isReviewing && (
+          {exam.duration > 0 && !isCompleted && !isReviewing && (
             <TimeRemaining startedAt={startedAt} elapsedTime={elapsedTime} duration={exam.duration} />
           )}
           {isReviewing && (

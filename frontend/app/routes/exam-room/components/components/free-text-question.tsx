@@ -37,15 +37,18 @@ function TextArea({ questionId }: TextAreaProps) {
       control={control}
       name={questionId}
       render={({ field: { value, ...rest } }) => (
-        <textarea
-          disabled={isReviewing}
-          className={cn(
-            'min-h-[600px] p-2 bg-white border rounded-sm disabled:bg-gray-100',
-            isReviewing && 'hover:cursor-not-allowed'
-          )}
-          value={value}
-          {...rest}
-        />
+        <div className="flex flex-col gap-2">
+          <textarea
+            disabled={isReviewing}
+            className={cn(
+              'min-h-[600px] p-2 bg-white border rounded-sm disabled:bg-gray-100',
+              isReviewing && 'hover:cursor-not-allowed'
+            )}
+            value={value}
+            {...rest}
+          />
+          <p>{value === '' ? '0 word' : `${value.split(' ').length} words`}</p>
+        </div>
       )}
     />
   );
