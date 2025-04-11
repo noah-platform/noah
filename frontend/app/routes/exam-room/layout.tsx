@@ -6,6 +6,7 @@ import { useExam } from './context';
 import { TimeRemaining } from './components/time-remaining';
 import { Slider } from '~/components/ui/slider';
 import { Submitting } from './components/submitting';
+import { Module } from '~/common/types';
 
 interface LayoutProps {
   children: ReactNode;
@@ -37,7 +38,10 @@ export function Layout({ children }: LayoutProps) {
     <div className="flex flex-col">
       <div className="flex flex-1 justify-center bg-primary min-h-[90px]">
         <div
-          className={cn('grid grid-cols-3 w-5/6 items-center', (exam.duration === 0 || isCompleted) && 'grid-cols-2')}
+          className={cn(
+            'grid grid-cols-3 w-5/6 items-center',
+            (isCompleted || (exam.module === Module.SPEAKING && !isReviewing)) && 'grid-cols-2'
+          )}
         >
           <div className="flex justify-start items-center gap-4">
             <Link to="/section">
