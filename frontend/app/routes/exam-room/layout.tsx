@@ -91,47 +91,47 @@ export function Layout({ children }: LayoutProps) {
       <div className="flex flex-col w-10/11 lg:w-5/6 mx-auto my-4">
         {!isCompleted ? children : <Submitting exam={exam} isSubmitting={isSubmitting} />}
       </div>
-      {!isReviewing && (
-        <div className="bg-primary fixed w-full bottom-0 left-0">
-          <div className="flex justify-between items-center gap-2 w-5/6 min-h-[60px] mx-auto">
-            <div className="flex items-center gap-2">
+      <div className="bg-primary fixed w-full bottom-0 left-0">
+        <div className="flex justify-between items-center gap-2 w-5/6 min-h-[60px] mx-auto">
+          <div className="flex items-center gap-2">
+            {!isReviewing && (
               <p className="text-white text-center text-sm mr-4">
                 Double click to <br /> mark for review
               </p>
-              {Array.from({ length: questionCount }).map((_, index) => (
-                <button
-                  key={index}
-                  className={cn(
-                    'w-8 h-8 bg-white font-bold text-black border-2 border-primary',
-                    questionSectionMap[index] === currentSection && 'border-yellow-500',
-                    index === currentQuestion && 'bg-yellow-500',
-                    reviews.includes(index) && 'text-white bg-red-600',
-                    reviews.includes(index) && index === currentQuestion && 'text-yellow-500'
-                  )}
-                  onClick={() => jumpToQuestion(index)}
-                  onDoubleClick={() => toggleReview(index)}
-                >
-                  {index + 1}
-                </button>
-              ))}
-            </div>
-            <div className="flex items-center gap-3">
+            )}
+            {Array.from({ length: questionCount }).map((_, index) => (
               <button
-                className="flex justify-center items-center w-10 h-10 bg-white text-yellow-500 hover:border-2 hover:border-yellow-500 rounded-full hover:shadow-lg"
-                onClick={previousQuestion}
+                key={index}
+                className={cn(
+                  'w-8 h-8 bg-white font-bold text-black border-2 border-primary',
+                  questionSectionMap[index] === currentSection && 'border-yellow-500',
+                  index === currentQuestion && 'bg-yellow-500',
+                  reviews.includes(index) && 'text-white bg-red-600',
+                  reviews.includes(index) && index === currentQuestion && 'text-yellow-500'
+                )}
+                onClick={() => jumpToQuestion(index)}
+                onDoubleClick={!isReviewing ? () => toggleReview(index) : undefined}
               >
-                <ChevronLeft size={32} strokeWidth={3} />
+                {index + 1}
               </button>
-              <button
-                className="flex justify-center items-center w-10 h-10 bg-white text-yellow-500 hover:border-2 hover:border-yellow-500 rounded-full"
-                onClick={nextQuestion}
-              >
-                <ChevronRight size={32} strokeWidth={3} />
-              </button>
-            </div>
+            ))}
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              className="flex justify-center items-center w-10 h-10 bg-white text-yellow-500 hover:border-2 hover:border-yellow-500 rounded-full hover:shadow-lg"
+              onClick={previousQuestion}
+            >
+              <ChevronLeft size={32} strokeWidth={3} />
+            </button>
+            <button
+              className="flex justify-center items-center w-10 h-10 bg-white text-yellow-500 hover:border-2 hover:border-yellow-500 rounded-full"
+              onClick={nextQuestion}
+            >
+              <ChevronRight size={32} strokeWidth={3} />
+            </button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

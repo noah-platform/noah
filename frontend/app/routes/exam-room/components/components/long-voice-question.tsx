@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import type { Question } from '~/common/types';
 import { RichTextPreview } from '~/components/richtext-preview';
 import { Button } from '~/components/ui/button';
+import { useExam } from '../../context';
 
 interface LongVoiceQuestionProps {
   questions: Question[];
@@ -20,6 +21,7 @@ interface VoiceQuestionProps {
   question: Question;
 }
 function VoiceQuestion({ question }: VoiceQuestionProps) {
+  const { isReviewing } = useExam();
   const [isTaskCardRevealed, setIsTaskCardRevealed] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [preparationTimeLeft, setPreparationTimeLeft] = useState(question.preparationDuration);
@@ -54,6 +56,16 @@ function VoiceQuestion({ question }: VoiceQuestionProps) {
     setRecordingTimeLeft(0);
   };
 
+  if (isReviewing) {
+    return (
+      <div className="flex flex-col items-center gap-6">
+        <div className="bg-white rounded-lg px-9 py-3">
+          <RichTextPreview value={question.taskCard} />
+        </div>
+        <p>Recording completed!</p>
+      </div>
+    );
+  }
   if (!isTaskCardRevealed) {
     return (
       <div className="flex justify-center my-4">

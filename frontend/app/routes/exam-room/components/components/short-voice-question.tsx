@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import type { Question } from '~/common/types';
 import { Button } from '~/components/ui/button';
+import { useExam } from '../../context';
 
 interface ShortVoiceQuestionProps {
   questions: Question[];
@@ -20,6 +21,7 @@ interface VoiceQuestionProps {
   question: Question;
 }
 function VoiceQuestion({ index, question }: VoiceQuestionProps) {
+  const { isReviewing } = useExam();
   const [questionRepeatCount, setQuestionRepeatCount] = useState(0);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -56,6 +58,19 @@ function VoiceQuestion({ index, question }: VoiceQuestionProps) {
     setTimeRemaining(0);
   };
 
+  if (isReviewing) {
+    return (
+      <div className="grid grid-cols-[1fr_2fr_1fr] items-center w-full" key={question.questionId}>
+        <h3 className="font-medium">Question {index + 1}:</h3>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" className="w-full" disabled>
+            Recording completed!
+          </Button>
+        </div>
+        <p className="justify-self-end text-sm">Maximum {question.maximumAnswerDuration} seconds</p>
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-[1fr_2fr_1fr] items-center w-full" key={question.questionId}>
       <h3 className="font-medium">Question {index + 1}:</h3>
