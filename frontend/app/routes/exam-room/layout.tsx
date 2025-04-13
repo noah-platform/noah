@@ -36,7 +36,7 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-1 justify-center bg-primary min-h-[90px]">
+      <div className="sticky top-0 flex flex-1 justify-center bg-primary min-h-[90px]">
         <div
           className={cn(
             'grid grid-cols-3 w-5/6 items-center',
