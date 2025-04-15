@@ -25,7 +25,7 @@ export async function loader({ request, params: { testId } }: Route.LoaderArgs) 
 
 export default function Cover({ loaderData }: Route.ComponentProps) {
   const { cover } = loaderData;
-  const hasAudio = cover.module === Module.LISTENING;
+  const hasAudio = cover.module === Module.LISTENING || cover.module === Module.SPEAKING;
 
   const [state, setState] = useState<CoverState>(() => (hasAudio ? CoverState.AUDIO_TEST : CoverState.INSTRUCTION));
 

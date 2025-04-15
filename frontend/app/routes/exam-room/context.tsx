@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
-import { LocalStorageKey, type Exam, type Session } from '../../common/types';
+import { LocalStorageKey, Module, type Exam, type Session } from '../../common/types';
 import { FormProvider, useForm } from 'react-hook-form';
 import { AutoSave } from './components/auto-save';
 import { client } from '~/clients/client';
@@ -53,7 +53,7 @@ interface ExamContextProviderProps {
 export default function ExamContextProvider({ testId, session, children }: ExamContextProviderProps) {
   const startedAt = useMemo(() => new Date(), []);
   const exam = session.test;
-  const hasAudio = useMemo(() => exam.sections.some((section) => !!section.audioUrl), [exam]);
+  const hasAudio = useMemo(() => exam.module === Module.LISTENING || exam.module === Module.SPEAKING, [exam]);
   const [volume, _setVolume] = useState(() =>
     Number(typeof window !== 'undefined' ? localStorage.getItem(LocalStorageKey.VOLUME) ?? 100 : 100)
   );
