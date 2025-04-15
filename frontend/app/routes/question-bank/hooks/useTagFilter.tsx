@@ -1,13 +1,9 @@
-import { useQueryState } from 'nuqs';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { TestSessionStatus, type Module, type TestInfo } from '~/common/types';
 
 export function useTagFilter(module: Module, availableTests: TestInfo[]) {
-  const [selectedTags, setSelectedTags] = useQueryState<string[]>('tags', {
-    parse: (value) => value.split(',').filter((tag) => tag !== ''),
-    defaultValue: [],
-  });
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const availableTags = useMemo(
     () =>

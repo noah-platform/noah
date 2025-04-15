@@ -1,6 +1,5 @@
-import { Module, TestSessionStatus } from '~/common/types';
-import { useQueryState } from 'nuqs';
-import { Suspense } from 'react';
+import { LocalStorageKey, Module, TestSessionStatus, type TestInfo } from '~/common/types';
+import { Suspense, useState } from 'react';
 import { BookDashed } from 'lucide-react';
 import { client } from '~/clients/client';
 import { Link } from 'react-router';
@@ -16,11 +15,16 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function QuestionBank() {
-  const [module, setModule] = useQueryState<Module>('module', {
-    parse: (value) => Module[value as keyof typeof Module],
-    defaultValue: Module.LISTENING,
+  const [module, _setModule] = useState<Module | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return (localStorage.getItem(LocalStorageKey.LAST_SELECTED_MODULE) as Module) ?? Module.LISTENING;
   });
+  const setModule = (value: Module) => {
+    _setModule(value);
+    localStorage.setItem(LocalStorageKey.LAST_SELECTED_MODULE, value);
+  };
 
+  if (!module) return null;
   return (
     <div className="flex flex-col gap-8 my-4">
       <ModuleSelector module={module} setModule={setModule} />
@@ -39,6 +43,39 @@ function TestList({ module }: TestListProps) {
     params: { query: { module } },
   });
   const tests = data?.data ?? [];
+
+  // TODO: Filter at backend
+  if (module === Module.WRITING) {
+    const part1Tests = tests.flatMap((test) => {
+      if (!test.tags?.includes('Part 1')) return [];
+      return { ...test, tags: test.tags.filter((tag) => tag !== 'Part 1') };
+    });
+    const part2Tests = tests.flatMap((test) => {
+      if (!test.tags?.includes('Part 2')) return [];
+      return { ...test, tags: test.tags.filter((tag) => tag !== 'Part 2') };
+    });
+
+    return (
+      <div className="flex flex-col gap-18">
+        <div className="flex flex-col gap-4">
+          <h2 className="text-3xl font-bold">Part 1</h2>
+          <Tests module={module} tests={part1Tests} />
+        </div>
+        <div className="flex flex-col gap-4">
+          <h2 className="text-3xl font-bold">Part 2</h2>
+          <Tests module={module} tests={part2Tests} />
+        </div>
+      </div>
+    );
+  }
+  return <Tests module={module} tests={tests} />;
+}
+
+interface TestsProps {
+  module: Module;
+  tests: TestInfo[];
+}
+function Tests({ module, tests }: TestsProps) {
   const { availableTags, selectedTags, handleSelectTag, handleRandomize, handleSelectAll, filteredTests } =
     useTagFilter(module, tests);
 
@@ -63,7 +100,7 @@ function TestList({ module }: TestListProps) {
             <Link
               to={test.status !== TestSessionStatus.COMPLETED ? `/test/${test.testId}` : `/test/${test.testId}/start`}
               key={test.testId}
-              className="flex flex-col gap-2 w-full h-[220px] bg-[#1310A5] border-2 border-gray-300 hover:border-2 hover:border-gray-400 rounded-xl p-4 shadow-sm"
+              className="flex flex-col gap-2 w-full h-[220px] bg-primary border-2 border-gray-300 hover:border-2 hover:border-gray-400 rounded-xl p-4 shadow-sm"
             >
               <div className="flex justify-between items-center gap-2">
                 <p className="text-xl font-medium text-white">Test {index + 1}</p>
@@ -74,7 +111,7 @@ function TestList({ module }: TestListProps) {
                     </p>
                   ))
                   .with(TestSessionStatus.COMPLETED, () => (
-                    <p className="px-4 py-1 border border-green-800 bg-green-700 text-white text-sm rounded-full">
+                    <p className="px-4 py-1 border border-green-700 bg-green-600 text-white text-sm rounded-full">
                       Completed
                     </p>
                   ))
