@@ -48,11 +48,11 @@ function Exam() {
       </div>
       <div className={cn('', section.passage && 'grid grid-cols-1 lg:grid-cols-2 gap-4')}>
         {section.passage && (
-          <div className="bg-gray-100 p-6 rounded-xl w-full">
+          <div className="bg-gray-100 p-6 rounded-xl w-full h-[calc(100vh-350px)] overflow-y-auto">
             <RichTextPreview value={section.passage} />
           </div>
         )}
-        <div className="flex flex-col gap-4">
+        <div className={cn('flex flex-col gap-4', section.passage && 'h-[calc(100vh-350px)] overflow-y-auto')}>
           {hasAudio && <AudioPlayer />}
           {section.questionSet.map((questionSet) => (
             <QuestionSet
