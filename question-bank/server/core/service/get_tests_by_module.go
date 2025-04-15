@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -28,7 +27,7 @@ func (s *Service) GetTestsByModule(ctx context.Context, userID string, module co
 		}
 	}
 
-	sessions, err := s.userTestSessionRepo.GetManySessionsByUserID(ctx, userID)
+	sessions, err := s.userTestSessionRepo.GetManySessionsByUserID(ctx, userID, false)
 	if err != nil {
 		l.Error().Err(err).Msg("[Service.GetTestsByModule] failed to get user test sessions")
 
@@ -38,7 +37,6 @@ func (s *Service) GetTestsByModule(ctx context.Context, userID string, module co
 		return session.Test.ID
 	})
 	userTestInfoList := lo.Map(testInfoList, func(test core.TestInfo, _ int) core.UserTestInfo {
-		fmt.Println(test.ID, sessions)
 		status := core.TestSessionStatusNotStarted
 		if session, ok := sessionsMap[test.ID]; ok {
 			status = lo.Ternary(session.CompletedAt != nil, core.TestSessionStatusCompleted, core.TestSessionStatusInProgress)

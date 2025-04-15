@@ -12,7 +12,7 @@ import (
 func (s *Service) ListMyTestSessions(ctx context.Context, userID string) ([]core.UserTestSession, error) {
 	l := log.Ctx(ctx)
 
-	sessions, err := s.userTestSessionRepo.GetManySessionsByUserID(ctx, userID)
+	sessions, err := s.userTestSessionRepo.GetManySessionsByUserID(ctx, userID, true)
 	if err != nil {
 		l.Error().Err(err).Msg("[Service.ListMyTestSessions] failed to list my test sessions")
 

@@ -11,11 +11,15 @@ import (
 	"github.com/noah-platform/noah/question-bank/server/core"
 )
 
-func (r *UserTestSessionRepository) GetManySessionsByUserID(ctx context.Context, userID string) ([]core.UserTestSession, error) {
+func (r *UserTestSessionRepository) GetManySessionsByUserID(ctx context.Context, userID string, isCompletedOnly bool) ([]core.UserTestSession, error) {
 	l := log.Ctx(ctx)
 
-	filter := bson.M{"userId": userID, "completedAt": bson.M{"$ne": nil}}
-	opts := options.Find().SetSort(bson.D{{"startedAt", -1}})
+	filter := bson.M{"userId": userID}
+	opts := options.Find()
+	if isCompletedOnly {
+		filter = bson.M{"userId": userID, "completedAt": bson.M{"$ne": nil}}
+		opts = opts.SetSort(bson.D{{"startedAt", -1}})
+	}
 
 	var sessions []core.UserTestSession
 	cursor, err := r.userTestSession.Find(ctx, filter, opts)

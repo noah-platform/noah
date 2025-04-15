@@ -13,7 +13,7 @@ type QuestionBankRepository interface {
 
 type UserTestSessionRepository interface {
 	GetSession(ctx context.Context, userID, testID string) (*core.UserTestSession, error)
-	GetManySessionsByUserID(ctx context.Context, userID string) ([]core.UserTestSession, error)
+	GetManySessionsByUserID(ctx context.Context, userID string, isCompletedOnly bool) ([]core.UserTestSession, error)
 	SaveSession(ctx context.Context, session *core.UserTestSession) error
 }
 
