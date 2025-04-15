@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Question } from '~/common/types';
 import { Button } from '~/components/ui/button';
 import { useExam } from '../../context';
@@ -21,15 +21,23 @@ interface VoiceQuestionProps {
   question: Question;
 }
 function VoiceQuestion({ index, question }: VoiceQuestionProps) {
-  const { isReviewing } = useExam();
+  const { isReviewing, volume } = useExam();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [questionRepeatCount, setQuestionRepeatCount] = useState(0);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(question.maximumAnswerDuration);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    audioRef.current.volume = Math.max(0.1, volume / 100);
+  }, [audioRef, volume]);
 
   const handlePlayAudio = () => {
     const audio = new Audio(question.audioUrl);
+    audio.volume = Math.max(0.1, volume / 100);
     audio.addEventListener('play', () => {
       setIsAudioPlaying(true);
     });
@@ -37,6 +45,7 @@ function VoiceQuestion({ index, question }: VoiceQuestionProps) {
       setIsAudioPlaying(false);
       setQuestionRepeatCount((prev) => prev + 1);
     });
+    audioRef.current = audio;
     audio.play();
   };
 
