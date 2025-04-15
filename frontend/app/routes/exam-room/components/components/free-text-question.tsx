@@ -47,7 +47,7 @@ function TextArea({ questionId }: TextAreaProps) {
             value={value}
             {...rest}
           />
-          <p>{!value ? '0 word' : `${(value ?? '').split(' ').length} words`}</p>
+          <p>{!value ? '0 word' : `${(value ?? '').trim().split(/\s+/).length} words`}</p>
         </div>
       )}
     />
