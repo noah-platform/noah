@@ -109,9 +109,9 @@ const Reviewbar = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {/* <div className="rounded-full px-4 py-2 text-lg text-black" style={{ backgroundColor: '#D9D9D9' }}>
-              {section.score}/{maxScore}
-            </div> */}
+            <div className="rounded-full px-4 py-2 text-lg text-black" style={{ backgroundColor: '#D9D9D9' }}>
+              7.5/9
+            </div>
             <Link to={`/test/${section.test.testId}/start`}>
               <button className="rounded-lg px-5 py-2 text-black" style={{ backgroundColor: '#D9D9D9' }}>
                 Review
