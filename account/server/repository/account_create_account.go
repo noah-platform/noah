@@ -25,7 +25,7 @@ func (r *AccountRepository) CreateAccount(ctx context.Context, tx *pgx.Tx, accou
 		Password:          pgtype.Text{Valid: false},
 		GoogleAccountID:   pgtype.Text{Valid: false},
 		IsVerified:        account.IsVerified,
-		VerificationToken: pgtype.Text{Valid: true, String: account.VerificationToken},
+		VerificationToken: lo.Ternary(account.VerificationToken != "", pgtype.Text{Valid: true, String: account.VerificationToken}, pgtype.Text{Valid: false}),
 	}
 	if account.GoogleAccountID != nil {
 		params.GoogleAccountID = pgtype.Text{String: *account.GoogleAccountID, Valid: true}
