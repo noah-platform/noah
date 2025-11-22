@@ -3,16 +3,29 @@ package repository
 import (
 	"context"
 
-	"github.com/noah-platform/noah/account/server/core"
-	"github.com/noah-platform/noah/pkg/messaging"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
+
+	"github.com/noah-platform/noah/account/server/core"
+	"github.com/noah-platform/noah/account/server/generated/avro"
+	"github.com/noah-platform/noah/pkg/messaging"
 )
 
 func (e *EmailRepository) ProduceOutgoingEmail(ctx context.Context, traceID string, message core.OutgoingEmailMessage) error {
 	l := log.Ctx(ctx)
 
-	partition, offset, err := e.producer.SendMessage(e.topic, messaging.EventOutgoingEmail, traceID, message)
+	producerMessage := avro.OutgoingEmailEvent{
+		Event: string(messaging.EventOutgoingEmail),
+		Payload: avro.EmailPayload{
+			To:            message.To,
+			SenderName:    message.SenderName,
+			From:          message.From,
+			RecipientName: message.RecipientName,
+			Subject:       message.Subject,
+			Body:          message.Body,
+		},
+	}
+	partition, offset, err := e.producer.SendAvroMessage(e.topic, traceID, producerMessage)
 	if err != nil {
 		l.Error().Err(err).Msg("[EmailRepository.ProduceOutgoingEmail] failed to produce outgoing email")
 

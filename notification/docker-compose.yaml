@@ -1,6 +1,6 @@
 services:
   kafka:
-    image: bitnami/kafka:3.8
+    image: bitnamilegacy/kafka:3.8
     ports:
       - 9092:9092
     environment:
@@ -12,9 +12,21 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
 
-  kafka-console:
-    image: docker.redpanda.com/redpandadata/console:latest
+  kafbat-ui:
+    image: ghcr.io/kafbat/kafka-ui:latest
     ports:
-      - 8000:8080
+      - 8080:8080
     environment:
-      - KAFKA_BROKERS=kafka:9092
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_SCHEMAREGISTRY=http://schema-registry:8081
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:8.1.0
+    container_name: schema-registry
+    ports:
+      - '8082:8081'
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:9092'
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081

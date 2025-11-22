@@ -2,6 +2,7 @@ package messaging
 
 import (
 	"encoding/json"
+	"io"
 	"time"
 )
 
@@ -21,4 +22,9 @@ type ProducerMessage struct {
 	Event     Event     `json:"event" validate:"required"`
 	Payload   any       `json:"payload" validate:"required"`
 	Timestamp time.Time `json:"timestamp" validate:"required"`
+}
+
+type AvroMessage interface {
+	Schema() string
+	Serialize(w io.Writer) error
 }

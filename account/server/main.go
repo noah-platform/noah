@@ -11,11 +11,12 @@ import (
 type Config struct {
 	Environment string `env:"APP_ENV,required"`
 
-	Port            string   `env:"PORT,required"`
-	JWTSecret       string   `env:"JWT_SECRET,required"`
-	DatabaseUrl     string   `env:"DATABASE_URL,required"`
-	KafkaBrokers    []string `env:"KAFKA_BROKERS,required"`
-	FrontendBaseUrl string   `env:"FRONTEND_BASE_URL,required"`
+	Port              string   `env:"PORT,required"`
+	JWTSecret         string   `env:"JWT_SECRET,required"`
+	DatabaseUrl       string   `env:"DATABASE_URL,required"`
+	KafkaBrokers      []string `env:"KAFKA_BROKERS,required"`
+	SchemaRegistryURL string   `env:"SCHEMA_REGISTRY_URL,required"`
+	FrontendBaseUrl   string   `env:"FRONTEND_BASE_URL,required"`
 
 	EmailFrom       string `env:"EMAIL_FROM,required"`
 	EmailKafkaTopic string `env:"EMAIL_KAFKA_TOPIC,required"`
@@ -46,8 +47,9 @@ func main() {
 			DatabaseUrl: cfg.DatabaseUrl,
 		},
 		ProducerConfig: di.ProducerConfig{
-			Brokers:  cfg.KafkaBrokers,
-			ClientID: "account-server",
+			Brokers:           cfg.KafkaBrokers,
+			ClientID:          "account-server",
+			SchemaRegistryURL: cfg.SchemaRegistryURL,
 		},
 		EmailRepoConfig: di.EmailRepoConfig{
 			KafkaTopic: cfg.EmailKafkaTopic,

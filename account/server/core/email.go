@@ -1,5 +1,10 @@
 package core
 
-import "github.com/noah-platform/noah/pkg/messaging"
-
-type OutgoingEmailMessage = messaging.OutgoingEmailMessage
+type OutgoingEmailMessage struct {
+	From          string `json:"from" validate:"required,email"`
+	SenderName    string `json:"senderName" validate:"required"`
+	To            string `json:"to" validate:"required,email"`
+	RecipientName string `json:"recipientName" validate:"required"`
+	Subject       string `json:"subject" validate:"required"`
+	Body          string `json:"body" validate:"required"`
+}

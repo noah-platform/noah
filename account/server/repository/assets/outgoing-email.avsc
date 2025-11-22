@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "name": "OutgoingEmailEvent",
+  "fields": [
+    {
+      "name": "event",
+      "type": "string"
+    },
+    {
+      "name": "payload",
+      "type": {
+        "type": "record",
+        "name": "EmailPayload",
+        "fields": [
+          { "name": "from", "type": "string" },
+          { "name": "senderName", "type": "string" },
+          { "name": "to", "type": "string" },
+          { "name": "recipientName", "type": "string" },
+          { "name": "subject", "type": "string" },
+          { "name": "body", "type": "string" }
+        ]
+      }
+    }
+  ]
+}

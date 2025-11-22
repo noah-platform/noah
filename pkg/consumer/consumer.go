@@ -3,9 +3,7 @@ package consumer
 import (
 	"context"
 	"encoding/json"
-	"os"
 	"os/signal"
-	"sync"
 	"syscall"
 
 	"github.com/IBM/sarama"
@@ -56,13 +54,12 @@ func NewConsumer(deps Dependencies, cfg Config) *Consumer {
 
 		handler:   deps.Handler,
 		validator: deps.Validator,
-
-		ready: make(chan bool),
 	}
 }
 
 func (c *Consumer) Start() {
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer cancel()
 
 	l := log.With().Strs("brokers", c.brokers).Strs("topics", c.topics).Str("groupId", c.groupID).Logger()
 
@@ -71,52 +68,27 @@ func (c *Consumer) Start() {
 		l.Fatal().Err(err).Msg("failed to create consumer group")
 	}
 
-	wg := &sync.WaitGroup{}
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		for {
-			if err := client.Consume(ctx, c.topics, c); err != nil {
-				if errors.Is(err, sarama.ErrClosedConsumerGroup) {
-					return
-				}
+	c.ready = make(chan bool)
 
+	go func() {
+		for {
+			if err := client.Consume(ctx, c.topics, c); err != nil && !errors.Is(err, sarama.ErrClosedConsumerGroup) {
 				l.Fatal().Err(err).Msg("failed to join consumer group")
 			}
 
 			if ctx.Err() != nil {
 				return
 			}
-
-			c.ready = make(chan bool)
 		}
 	}()
 
 	<-c.ready
-
 	l.Info().Msg("consumer is up and running")
 
-	sigterm := make(chan os.Signal, 1)
-	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
+	<-ctx.Done()
+	l.Info().Msg("consumer is shutting down")
 
-	keepRunning := true
-	for keepRunning {
-		select {
-		case <-ctx.Done():
-			l.Info().Msg("consumer is shutting down due to context cancellation")
-
-			keepRunning = false
-		case <-sigterm:
-			l.Info().Msg("consumer is shutting down")
-
-			keepRunning = false
-		}
-	}
-	cancel()
-
-	wg.Wait()
-
-	if err = client.Close(); err != nil {
+	if err := client.Close(); err != nil {
 		l.Fatal().Err(err).Msg("failed to close consumer")
 	}
 }
