@@ -2,6 +2,7 @@ package producer
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/binary"
 	"encoding/json"
 	"time"
@@ -10,6 +11,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/riferrei/srclient"
 	"github.com/rs/zerolog/log"
+	"github.com/xdg-go/scram"
 
 	"github.com/noah-platform/noah/pkg/messaging"
 	"github.com/noah-platform/noah/pkg/validator"
@@ -29,12 +31,32 @@ type Config struct {
 	Brokers           []string
 	SchemaRegistryURL string
 	ClientID          string
+	EnforceTLS        bool
+	AuthEnabled       bool
+	Username          string
+	Password          string
 }
 
 func NewProducer(deps Dependencies, cfg Config) (*Producer, error) {
 	config := sarama.NewConfig()
 	config.ClientID = cfg.ClientID
 	config.Producer.Return.Successes = true
+	if cfg.EnforceTLS {
+		config.Net.TLS.Enable = true
+		config.Net.TLS.Config = &tls.Config{
+			MinVersion:         tls.VersionTLS12,
+			InsecureSkipVerify: false,
+		}
+	}
+	if cfg.AuthEnabled {
+		config.Net.SASL.Enable = true
+		config.Net.SASL.User = cfg.Username
+		config.Net.SASL.Password = cfg.Password
+		config.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA512
+		config.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient {
+			return &XDGSCRAMClient{HashGeneratorFcn: scram.SHA512}
+		}
+	}
 
 	producer, err := sarama.NewSyncProducer(cfg.Brokers, config)
 	if err != nil {
