@@ -6,6 +6,7 @@ ENV CGO_ENABLED=0
 
 RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 RUN go install github.com/swaggo/swag/v2/cmd/swag@v2.0.0-rc4
+RUN go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
 
 WORKDIR /app
 
